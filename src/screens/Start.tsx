@@ -13,8 +13,8 @@ export function Start() {
   const [code, setCode] = useState(() => localStorage.getItem('visual-archive:lastCode') || 'MATH3')
 
   if (session) {
-    const seen = localStorage.getItem('visual-archive:introSeen')
-    return <Navigate to={session.role === 'teacher' ? '/t/capture' : seen ? '/archive' : '/welcome/1'} replace />
+    // Students see the intro on every sign-in (each test participant should get it)
+    return <Navigate to={session.role === 'teacher' ? '/t/capture' : '/welcome/1'} replace />
   }
 
   const go = () => {
@@ -97,12 +97,11 @@ const STEPS = [
 export function Welcome() {
   const n = Math.min(3, Math.max(1, Number(useParams().step) || 1))
   const s = STEPS[n - 1]
-  const done = () => localStorage.setItem('visual-archive:introSeen', '1')
   return (
     <Shell nav={false}>
       <div className="spread" style={{ marginTop: 28 }}>
         <span className="mono">{n} of 3</span>
-        <Link className="linkbtn" to="/archive" onClick={done}>
+        <Link className="linkbtn" to="/archive">
           Skip intro
         </Link>
       </div>
@@ -123,7 +122,7 @@ export function Welcome() {
             Next →
           </Link>
         ) : (
-          <Link className="pill primary" to="/archive" onClick={done}>
+          <Link className="pill primary" to="/archive">
             Browse topics →
           </Link>
         )}
