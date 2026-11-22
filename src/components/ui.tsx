@@ -90,7 +90,13 @@ export function Shell({ children, nav = true }: { children: ReactNode; nav?: boo
   return (
     <>
       <header className="topbar no-print">
-        <Link to={session ? '/archive' : '/'} className="wordmark">
+        <Link to={session ? '/archive' : '/'} className="wordmark" aria-label={APP_NAME}>
+          {/* logo: a little chalkboard with a "bring it back" arrow, in zine colours */}
+          <svg className="logo" width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
+            <rect x="1.5" y="1.5" width="31" height="31" rx="8" fill="#D8EDF2" stroke="#000" strokeWidth="1.5" />
+            <path d="M23 12.5A8 8 0 1 0 25 19" fill="none" stroke="#0B8246" strokeWidth="2.4" strokeLinecap="round" />
+            <path d="M18.5 11.5L23.6 12.8L24.6 7.6" fill="none" stroke="#0B8246" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
           {APP_NAME}
         </Link>
         {session && nav && (

@@ -13,9 +13,12 @@
   --line: 1px solid var(--ink);
   --line-soft: 1px solid rgba(0, 0, 0, 0.18);
 
-  /* accent — the original wireframe blue */
-  --brand: #002bff;
+  /* UI states (selected, focus, primary) are black, per Gumroad's rules.
+     Colour comes only from the zine duotones in illustrations, tags and concept marks,
+     so two different blues never sit next to each other. */
+  --brand: #000000;
   --brand-soft: #e6e6e6;
+  --hover-fill: #fff584; /* zine yellow: hover on solid buttons */
 
   /* status */
   --warn: #b45309;
@@ -59,7 +62,8 @@ img { max-width: 100%; }
 .page { max-width: var(--page-w); margin: 0 auto; padding: 0 var(--gutter) 80px; }
 /* Top bar (Gumroad marketplace header) */
 .topbar { max-width: var(--page-w); margin: 0 auto; height: 84px; display: flex; align-items: center; gap: 20px; padding: 0 var(--gutter); }
-.wordmark { font-weight: 700; font-size: 30px; letter-spacing: -0.06em; text-decoration: none; white-space: nowrap; }
+.wordmark { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 28px; letter-spacing: -0.05em; text-decoration: none; white-space: nowrap; }
+.wordmark .logo { flex: none; }
 .searchbar { flex: 1; display: flex; align-items: center; gap: 10px; height: 50px; padding: 0 16px; background: var(--surface); border: var(--line); border-radius: var(--radius-input); }
 .searchbar input { flex: 1; border: 0; outline: 0; background: transparent; font-size: 17px; }
 .searchbar:focus-within { outline: 2px solid var(--brand); outline-offset: 1px; }
@@ -71,7 +75,7 @@ img { max-width: 100%; }
 .btn-outline { background: var(--surface); color: var(--ink); }
 .btn-solid { background: var(--ink); color: #fff; }
 .btn-outline:hover, .btn-solid:hover { transform: var(--lift); box-shadow: var(--shadow-hover); }
-.btn-solid:hover { background: var(--brand); }
+.btn-solid:hover { background: var(--hover-fill); color: var(--ink); }
 
 /* Second row: category tabs with dropdowns */
 .tabsrow { max-width: var(--page-w); margin: 0 auto; padding: 2px var(--gutter) 14px; display: flex; align-items: center; gap: 0; flex-wrap: nowrap; position: relative; z-index: 20; }
@@ -81,7 +85,7 @@ img { max-width: 100%; }
 }
 .tab:hover, .ctab:hover .ctab-link { border-color: var(--ink); }
 .tab.active, .ctab.active .ctab-link { background: var(--surface); border-color: var(--ink); box-shadow: 0 3px 0 var(--ink); }
-.tab .count { background: var(--brand); color: #fff; border-radius: 10px; font-size: 12px; padding: 1px 7px; }
+.tab .count { background: var(--ink); color: #fff; border-radius: 10px; font-size: 12px; padding: 1px 7px; }
 .tabs-sep { flex: 1; }
 .ctab { position: relative; }
 .ctab::after { content: ''; position: absolute; left: 0; right: 0; top: 100%; height: 14px; } /* hover bridge */
@@ -129,7 +133,8 @@ p { line-height: 1.5; }
 }
 .pill:hover { transform: var(--lift); box-shadow: var(--shadow-hover); }
 .pill:active { transform: none; box-shadow: none; }
-.pill.primary { background: var(--brand); color: #fff; border-color: var(--ink); }
+.pill.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+.pill.primary:hover { background: var(--hover-fill); color: var(--ink); }
 .pill.sm { height: 36px; font-size: 14px; padding: 0 14px; }
 .pill:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
 .pill .badge { background: var(--brand); color: #fff; border-radius: 10px; font-size: 12px; padding: 1px 7px; }
@@ -212,7 +217,7 @@ a.gcard:hover { transform: var(--lift); box-shadow: var(--shadow-hover); }
 .gcard.wide .gfoot { max-width: 34%; }
 .gcard.wide h3 { max-width: 34%; }
 .gcard .tag { align-self: flex-start; }
-.gcard.role.selected { border: 2px solid var(--brand); border-bottom: 0; box-shadow: none; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.gcard.role.selected { border: 2px solid var(--ink); border-bottom: 0; box-shadow: none; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
 .gcard.role.selected:hover { transform: none; }
 
 /* App window frame around illustrations */
@@ -253,7 +258,7 @@ input.text:focus, textarea.text:focus, select.text:focus { outline: 2px solid va
 .editline input { width: 100%; border: var(--line); border-radius: var(--radius-input); padding: 9px 11px; background: #fff; }
 math-field {
   width: 100%; border: var(--line); border-radius: var(--radius-input); padding: 4px 8px; background: #fff;
-  font-size: 22px; --primary: #002bff; --caret-color: #002bff;
+  font-size: 22px; --primary: #000000; --caret-color: #000000;
 }
 math-field:focus-within { outline: 2px solid var(--brand); outline-offset: 1px; }
 .iconbtn { width: 32px; height: 32px; border: var(--line); border-radius: 16px; background: #fff; cursor: pointer; font-weight: 600; }
@@ -293,7 +298,7 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 }
 .role-card .hint { display: block; margin-top: 4px; color: var(--muted); font-size: 15px; }
 .role-card:hover { transform: var(--lift); box-shadow: var(--shadow-hover); }
-.role-card.selected { border: 2px solid var(--brand); box-shadow: 5px 5px 0 var(--brand); padding: 23px; }
+.role-card.selected { border: 2px solid var(--ink); box-shadow: 5px 5px 0 var(--ink); padding: 23px; }
 .role-card .big { display: block; font-size: 26px; font-weight: 400; letter-spacing: -0.02em; }
 
 /* Entry screen: "Choose your view" + two role cards; the form appears after choosing */
@@ -322,7 +327,7 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 .scene .scene-note { position: absolute; top: 0; right: 70px; display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 12px; }
 .scene .scene-note svg { transform: translateY(5px); }
 .entry-form {
-  background: var(--surface); border: 2px solid var(--brand); border-top: 1px dashed rgba(0,0,0,.25);
+  background: var(--surface); border: 2px solid var(--ink); border-top: 1px dashed rgba(0,0,0,.25);
   border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 28px 52px 36px;
   display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px;
 }
