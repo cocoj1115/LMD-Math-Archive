@@ -39,48 +39,50 @@ export function Start() {
       <div className="entry">
         <div className="entry-roles">
           {roles.map((x) => (
-            <button key={x.r} type="button" className={`gcard role${role === x.r ? ' selected' : ''}`} onClick={() => setRole(x.r)} aria-pressed={role === x.r}>
-              <h3>{x.label}</h3>
-              <ul className="checks" style={tone(x.color)}>
-                {x.points.map((p) => (
-                  <li key={p}>{p}</li>
-                ))}
-              </ul>
-              <div className="scene" aria-hidden="true">
-                <span className="scene-note">
-                  {x.note}
-                  <svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"><path d="M1 3C8 1 16 2 22 9" strokeDasharray="2 3" /><path d="M17 9.5L22.5 9.5L21.5 4" /></svg>
-                </span>
-                <ArtWindow kind={x.main} color={x.color} className="scene-main" />
-                <span className="scene-tile" style={tone(x.tileColor)}>
-                  <ConceptBadge kind={x.tile} size={68} labels />
-                </span>
-              </div>
-            </button>
+            <div key={x.r} className="role-block">
+              <button type="button" className={`gcard role${role === x.r ? ' selected' : ''}`} onClick={() => setRole(x.r)} aria-pressed={role === x.r} aria-expanded={role === x.r}>
+                <h3>{x.label}</h3>
+                <ul className="checks" style={tone(x.color)}>
+                  {x.points.map((p) => (
+                    <li key={p}>{p}</li>
+                  ))}
+                </ul>
+                <div className="scene" aria-hidden="true">
+                  <span className="scene-note">
+                    {x.note}
+                    <svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"><path d="M1 3C8 1 16 2 22 9" strokeDasharray="2 3" /><path d="M17 9.5L22.5 9.5L21.5 4" /></svg>
+                  </span>
+                  <ArtWindow kind={x.main} color={x.color} className="scene-main" />
+                  <span className="scene-tile" style={tone(x.tileColor)}>
+                    <ConceptBadge kind={x.tile} size={68} labels />
+                  </span>
+                </div>
+              </button>
+              {/* the sign-in form opens right under the card you picked */}
+              {role === x.r && (
+                <form
+                  className="entry-form"
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    go()
+                  }}
+                >
+                  <label className="field">
+                    <span>{x.r === 'student' ? 'First name' : 'Your name'}</span>
+                    <input className="text" value={name} onChange={(e) => setName(e.target.value)} placeholder={x.r === 'student' ? 'e.g. Maya' : 'e.g. Ms. Rivera'} autoFocus />
+                  </label>
+                  <label className="field">
+                    <span>Class code</span>
+                    <input className="text" value={code} onChange={(e) => setCode(e.target.value)} autoCapitalize="characters" />
+                  </label>
+                  <button className="btn-solid entry-btn" type="submit">
+                    {x.r === 'student' ? 'Join class →' : 'Open teacher view →'}
+                  </button>
+                </form>
+              )}
+            </div>
           ))}
         </div>
-
-        {role && (
-          <form
-            className="entry-form"
-            onSubmit={(e) => {
-              e.preventDefault()
-              go()
-            }}
-          >
-            <label className="field">
-              <span>{role === 'student' ? 'First name' : 'Your name'}</span>
-              <input className="text" value={name} onChange={(e) => setName(e.target.value)} placeholder={role === 'student' ? 'e.g. Maya' : 'e.g. Ms. Rivera'} autoFocus />
-            </label>
-            <label className="field">
-              <span>Class code</span>
-              <input className="text" value={code} onChange={(e) => setCode(e.target.value)} autoCapitalize="characters" />
-            </label>
-            <button className="btn-solid entry-btn" type="submit">
-              {role === 'student' ? 'Join class →' : 'Open teacher view →'}
-            </button>
-          </form>
-        )}
       </div>
     </Shell>
   )

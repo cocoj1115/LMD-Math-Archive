@@ -212,7 +212,8 @@ a.gcard:hover { transform: var(--lift); box-shadow: var(--shadow-hover); }
 .gcard.wide .gfoot { max-width: 34%; }
 .gcard.wide h3 { max-width: 34%; }
 .gcard .tag { align-self: flex-start; }
-.gcard.role.selected { border: 2px solid var(--brand); box-shadow: 6px 6px 0 var(--brand); }
+.gcard.role.selected { border: 2px solid var(--brand); border-bottom: 0; box-shadow: none; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.gcard.role.selected:hover { transform: none; }
 
 /* App window frame around illustrations */
 .art-window { background: var(--surface); border: 2px solid var(--ink); border-radius: 12px; box-shadow: 6px 6px 0 var(--ink); overflow: hidden; }
@@ -298,7 +299,8 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 /* Entry screen: "Choose your view" + two role cards; the form appears after choosing */
 .entry { position: relative; max-width: 1080px; margin: 72px auto 120px; }
 .entry-roles { display: grid; grid-template-columns: 1fr; gap: 40px; }
-.entry-roles .gcard { min-height: 360px; padding: 44px 52px; text-align: left; cursor: pointer; font: inherit; color: inherit; justify-content: space-between; }
+.role-block { display: flex; flex-direction: column; }
+.entry-roles .gcard { width: 100%; min-height: 360px; padding: 44px 52px; text-align: left; cursor: pointer; font: inherit; color: inherit; justify-content: space-between; }
 .entry-roles .gcard h3 { font-size: 48px; max-width: 40%; }
 
 /* Gumroad-style checklist */
@@ -319,7 +321,11 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 .scene .scene-tile { position: absolute; right: 0; bottom: 4px; transform: rotate(6deg); }
 .scene .scene-note { position: absolute; top: 0; right: 70px; display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 12px; }
 .scene .scene-note svg { transform: translateY(5px); }
-.entry-form { margin-top: 48px; background: var(--surface); border: var(--line); border-radius: var(--radius-lg); padding: 28px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+.entry-form {
+  background: var(--surface); border: 2px solid var(--brand); border-top: 1px dashed rgba(0,0,0,.25);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 28px 52px 36px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px;
+}
 .entry-form .entry-btn { grid-column: 1 / -1; }
 .entry-btn { width: 100%; justify-content: center; margin-top: 4px; }
 
