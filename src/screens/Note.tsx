@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { Back, NoteLines, Shell, timeAgo } from '../components/ui'
 import { useApp } from '../lib/app'
-import { folderById, topicById } from '../lib/content'
+import { folderById, tone, topicById } from '../lib/content'
 
 export function NotePage() {
   const { id = '' } = useParams()
@@ -37,7 +37,7 @@ export function NotePage() {
         </div>
       </div>
       <div className="row" style={{ marginTop: 12 }}>
-        {t && <span className="tag">{t.name}</span>}
+        {t && <span className="tag tone" style={tone(t.color)}>{t.name}</span>}
         {!n.builtIn && <span className="tag">Board photo · {timeAgo(n.created_at)}</span>}
         {!n.builtIn && <span className="tag solid">Checked by teacher</span>}
       </div>

@@ -4,7 +4,7 @@ import { Dictate } from '../components/Dictate'
 import { PhotoInput } from '../components/PhotoInput'
 import { NoteLines, Shell, timeAgo } from '../components/ui'
 import { useApp } from '../lib/app'
-import { TOPICS, topicById } from '../lib/content'
+import { TOPICS, tone, topicById } from '../lib/content'
 import { transcribe } from '../lib/ocr'
 import type { Line, Post } from '../lib/types'
 
@@ -22,8 +22,9 @@ export function PostCard({ p, open: openInit = false, teacherTools }: { p: Post;
 
   return (
     <article className="post" id={`post-${p.id}`}>
-      <div className="mono sm">
-        {p.role === 'teacher' ? 'Teacher' : 'Student'} / {t?.name ?? p.topic}
+      <div className="mono sm row" style={{ gap: 8 }}>
+        <span className="tag tone" style={tone(t?.color)}>{t?.name ?? p.topic}</span>
+        {p.role === 'teacher' ? 'Teacher' : 'Student'}
         {note && (
           <>
             {' '}· about <Link to={`/note/${note.id}`}>{note.title}</Link>
@@ -138,7 +139,7 @@ export function Discussion() {
       <div className="row" style={{ margin: '22px 0' }}>
         <button className={`pill sm${!topic ? ' primary' : ''}`} onClick={() => setParams({})}>All</button>
         {TOPICS.map((t) => (
-          <button key={t.id} className={`pill sm${topic === t.id ? ' primary' : ''}`} onClick={() => setParams({ topic: t.id })}>
+          <button key={t.id} className={`pill sm chip${topic === t.id ? ' primary' : ''}`} style={tone(t.color)} onClick={() => setParams({ topic: t.id })}>
             {t.name}
           </button>
         ))}

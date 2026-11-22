@@ -1,7 +1,8 @@
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { Back, RichText, Shell, TeX, Triangle } from '../components/ui'
 import { useApp } from '../lib/app'
-import { EXAMPLES, WORKSHEETS, topicById } from '../lib/content'
+import { Art } from '../components/Art'
+import { EXAMPLES, WORKSHEETS, tone, topicById } from '../lib/content'
 import { NoteRow } from './Archive'
 
 export function TopicPage() {
@@ -17,10 +18,13 @@ export function TopicPage() {
   return (
     <Shell>
       <Back to="/folder/solving-triangles">All topics</Back>
-      <div className="eyebrow">Solving triangles / {t.lesson}</div>
-      <h1 className="tight" style={{ marginTop: 6 }}>{t.name}</h1>
-      <p className="sub">{t.summary}</p>
-      <div className="grid-2">
+      <div className="hero" style={tone(t.color)}>
+        <div className="mono sm">Solving triangles / {t.lesson}</div>
+        <h1>{t.name}</h1>
+        <p className="sub">{t.summary}</p>
+        <Art kind={t.art} className="hero-art" />
+      </div>
+      <div className="grid-2" style={{ marginTop: 24 }}>
         <Link to={`/example/${id}`} className="card" style={{ textDecoration: 'none' }}>
           <div className="mono sm">Worked example</div>
           <h3 style={{ marginTop: 8 }}>{ex.title}</h3>
@@ -65,7 +69,7 @@ export function Example() {
       <div className="eyebrow">{t.name} / Worked example</div>
       <h1 className="tight" style={{ marginTop: 6 }}>{ex.title}</h1>
       <div className="card" style={{ display: 'grid', gridTemplateColumns: '355px 1fr', gap: 30, marginTop: 20 }}>
-        <div className="inset">
+        <div className="inset" style={{ background: t.color.bg, color: t.color.ink, borderColor: t.color.ink }}>
           <Triangle t={ex.triangle} />
           <div style={{ fontSize: 20, marginTop: 6 }}>
             <TeX tex={ex.formula} />

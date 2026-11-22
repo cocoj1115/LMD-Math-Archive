@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
+import { Art, Asterisk, Glyphs, Target } from '../components/Art'
 import { Shell } from '../components/ui'
 import { useApp } from '../lib/app'
 import type { Role } from '../lib/types'
@@ -23,8 +24,24 @@ export function Start() {
 
   return (
     <Shell nav={false}>
-      <h1 style={{ marginTop: 120 }}>Choose your view</h1>
-      <div className="grid-2" style={{ marginTop: 32, maxWidth: 760 }}>
+      <div className="cover" aria-label="Making learning visible">
+        <div className="mono" style={{ color: 'var(--brand)' }}>Math 3 · City of Bridges class archive</div>
+        <div className="display" style={{ marginTop: 18 }}>
+          <span className="dash">Making</span>
+          <br />
+          <span className="block">Learning</span>
+          <br />
+          <span className="cloud">Visible</span>
+        </div>
+        <div className="deco" style={{ right: 0, top: 10, width: 300 }}>
+          <Art kind="unit-circle" width={300} />
+          <div style={{ marginTop: 8 }}><Glyphs /></div>
+        </div>
+        <div className="deco" style={{ right: 120, top: 260 }}><Target /></div>
+        <div className="deco" style={{ right: 40, top: 300 }}><Asterisk /></div>
+      </div>
+      <h2 style={{ marginTop: 56, fontSize: 28 }}>Choose your view</h2>
+      <div className="grid-2" style={{ marginTop: 16, maxWidth: 760 }}>
         {(['student', 'teacher'] as Role[]).map((r) => (
           <button key={r} className={`role-card${role === r ? ' selected' : ''}`} onClick={() => setRole(r)}>
             <div className="big">{r === 'student' ? 'Student' : 'Teacher'}</div>
@@ -63,10 +80,10 @@ export function Start() {
 }
 
 const STEPS = [
-  { kicker: 'YOUR MATH 3', title: 'CLASS ARCHIVE', body: 'Find the worksheets, examples, and board notes from class.' },
-  { kicker: 'CHOOSE', title: 'A TOPIC', body: 'Open the lesson you’re working on or catching up on.' },
-  { kicker: 'FIND YOUR', title: 'NEXT STEP', body: 'Follow a worked example, try the class worksheet, or ask the class when you’re stuck.' },
-]
+  { kicker: 'YOUR MATH 3', title: 'CLASS ARCHIVE', body: 'Find the worksheets, examples, and board notes from class.', art: 'unit-circle', bg: '#E6E6E6', ink: '#002BFF' },
+  { kicker: 'CHOOSE', title: 'A TOPIC', body: 'Open the lesson you’re working on or catching up on.', art: 'triangles', bg: '#FFF584', ink: '#0966DF' },
+  { kicker: 'FIND YOUR', title: 'NEXT STEP', body: 'Follow a worked example, try the class worksheet, or ask the class when you’re stuck.', art: 'sine', bg: '#EECED8', ink: '#DD0C00' },
+] as const
 
 export function Welcome() {
   const n = Math.min(3, Math.max(1, Number(useParams().step) || 1))
@@ -80,10 +97,11 @@ export function Welcome() {
           Skip intro
         </Link>
       </div>
-      <div style={{ marginTop: 90 }}>
+      <div className="hero" style={{ marginTop: 28, minHeight: 380, background: s.bg, color: s.ink, padding: '56px 48px' }}>
         <div className="mono">{s.kicker}</div>
-        <div style={{ fontSize: 72, fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1 }}>{s.title}</div>
-        <p style={{ fontSize: 22, maxWidth: 560 }}>{s.body}</p>
+        <div className="display" style={{ marginTop: 10 }}>{s.title}</div>
+        <p style={{ fontSize: 22, maxWidth: 520 }}>{s.body}</p>
+        <Art kind={s.art} className="hero-art" width={360} />
       </div>
       <div className="row" style={{ marginTop: 40 }}>
         {n > 1 && (

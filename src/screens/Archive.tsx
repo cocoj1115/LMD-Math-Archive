@@ -1,7 +1,8 @@
 import { Link, useParams } from 'react-router-dom'
 import { Back, Shell, timeAgo } from '../components/ui'
 import { useApp } from '../lib/app'
-import { FOLDERS, TOPICS, folderById, topicById } from '../lib/content'
+import { Art } from '../components/Art'
+import { FOLDERS, TOPICS, folderById, tone, topicById } from '../lib/content'
 import type { Note } from '../lib/types'
 
 const isNew = (n: Note) => !n.builtIn && Date.now() - new Date(n.created_at).getTime() < 3 * 86400_000
@@ -18,9 +19,10 @@ function FolderCard({ id }: { id: string }) {
   const fresh = notes.some(isNew)
   const count = id === 'solving-triangles' ? `${f.topics.length} topics${notes.length ? ` · ${notes.length} note${notes.length > 1 ? "s" : ""}` : ''}` : `${notes.length} file${notes.length === 1 ? '' : 's'}`
   return (
-    <Link to={`/folder/${id}`} className="folder">
+    <Link to={`/folder/${id}`} className="folder" style={tone(f.color)}>
       {fresh && <span className="tag solid fnew">New</span>}
       <span className="fname">{f.name}</span>
+      <Art kind={f.art} className="fart" />
       <span className="fcount">{count}</span>
     </Link>
   )
@@ -48,9 +50,11 @@ export function Archive() {
 
 export function NoteRow({ n }: { n: Note }) {
   const { bookmarks } = useApp()
+  const t = topicById(n.topic)
   return (
-    <Link to={`/note/${n.id}`} className="listcard">
-      <div>
+    <Link to={`/note/${n.id}`} className="listcard" style={tone(t?.color)}>
+      <span className="swatch" />
+      <div style={{ flex: 1 }}>
         <div style={{ fontSize: 20, fontWeight: 700 }}>
           {n.title} {bookmarks.includes(n.id) && <span title="Bookmarked">★</span>}
         </div>
@@ -61,6 +65,7 @@ export function NoteRow({ n }: { n: Note }) {
         </div>
       </div>
       <div className="row">
+        {t && <span className="tag tone">{t.name}</span>}
         {isNew(n) && <span className="tag solid">New</span>}
         <span>→</span>
       </div>
@@ -76,22 +81,29 @@ export function Folder() {
   const triangles = id === 'solving-triangles'
   return (
     <Shell>
-      <h1>{f.name}</h1>
-      <p className="sub">
-        <Link to="/archive">Class archive</Link> &nbsp;/&nbsp; {f.name}
-      </p>
+      <div className="hero" style={tone(f.color)}>
+        <div className="mono sm">
+          <Link to="/archive">Class archive</Link> &nbsp;/&nbsp; {f.name}
+        </div>
+        <h1>{f.name}</h1>
+        <p className="sub">{triangles ? 'Law of Sines and Law of Cosines — this week’s topics.' : topicById(f.topics[0])?.summary}</p>
+        <Art kind={f.art} className="hero-art" />
+      </div>
+      <div style={{ height: 32 }} />
       {triangles && (
         <>
           <h2>Topics</h2>
           {f.topics.map((tid) => {
             const t = topicById(tid)!
             return (
-              <Link key={tid} to={`/topic/${tid}`} className="listcard">
-                <div>
+              <Link key={tid} to={`/topic/${tid}`} className="listcard" style={tone(t.color)}>
+                <span className="swatch" />
+                <div style={{ flex: 1 }}>
                   <div className="mono sm">{t.lesson}</div>
                   <div style={{ fontSize: 24, fontWeight: 700 }}>{t.name}</div>
                   <div>{t.summary}</div>
                 </div>
+                <Art kind={t.art} width={150} className="no-print" />
                 <span className="pill">Open topic →</span>
               </Link>
             )
@@ -115,8 +127,9 @@ export function TopicMap() {
     const q = posts.filter((p) => p.topic === id).length
     const to = t.folder === 'solving-triangles' ? `/topic/${id}` : `/folder/${t.folder}`
     return (
-      <Link to={to} className="panel" style={{ display: 'block', textDecoration: 'none', minWidth: 210 }}>
-        <div style={{ fontWeight: 700, fontSize: 20 }}>{t.name}</div>
+      <Link to={to} className="panel lift" style={{ display: 'block', textDecoration: 'none', minWidth: 220, background: t.color.bg, color: t.color.ink }}>
+        <Art kind={t.art} width={150} />
+        <div style={{ fontWeight: 700, fontSize: 22, letterSpacing: '-0.03em', marginTop: 6 }}>{t.name}</div>
         <div className="mono sm" style={{ marginTop: 4 }}>
           {t.lesson ?? 'Review'} {q > 0 && `· ${q} question${q > 1 ? 's' : ''}`}
         </div>

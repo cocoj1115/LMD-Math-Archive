@@ -2,38 +2,61 @@
 // Teacher-published board notes from the database are merged into these folders.
 import type { Note } from './types'
 
+/**
+ * Duotone pairs from the team's Discovery Research Zine (Figma "Design Research Zine").
+ * Each concept gets one pastel background + one ink colour, used together everywhere
+ * (folder, topic header, tags, illustrations) so students can recognise a concept by colour.
+ */
+export const DUOTONES = {
+  blue: { bg: '#E6E6E6', ink: '#002BFF' }, // zine cover · brand
+  red: { bg: '#EECED8', ink: '#DD0C00' },
+  brown: { bg: '#D5F2BC', ink: '#824326' },
+  green: { bg: '#D8EDF2', ink: '#0B8246' },
+  sky: { bg: '#FFF584', ink: '#0966DF' },
+  orange: { bg: '#F5EBFF', ink: '#EF6801' },
+} as const
+export type Duotone = (typeof DUOTONES)[keyof typeof DUOTONES]
+
+export type ArtKind = 'unit-circle' | 'radians' | 'sine' | 'reference' | 'sines' | 'cosines' | 'triangles'
+
 export interface Topic {
   id: string
   name: string
   folder: string // folder id in the Class archive
   lesson?: string
   summary: string
+  color: Duotone
+  art: ArtKind
 }
 
 export interface Folder {
   id: string
   name: string
   topics: string[]
+  color: Duotone
+  art: ArtKind
 }
 
 export const TOPICS: Topic[] = [
-  { id: 'radians-degrees', name: 'Radians & Degrees', folder: 'radians-degrees', summary: 'Convert between degrees and radians.' },
-  { id: 'unit-circle', name: 'Unit Circle', folder: 'unit-circle', summary: 'Points on the circle are (cos θ, sin θ).' },
-  { id: 'trig-graphs', name: 'Trig Graphs', folder: 'trig-graphs', summary: 'Read sine and cosine as graphs.' },
-  { id: 'special-angles', name: 'Special Angles', folder: 'special-angles', summary: 'Exact values at π/6, π/4, π/3.' },
-  { id: 'law-of-sines', name: 'Law of Sines', folder: 'solving-triangles', lesson: 'LESSON 5.1', summary: 'You know a side and the angle across from it.' },
-  { id: 'law-of-cosines', name: 'Law of Cosines', folder: 'solving-triangles', lesson: 'LESSON 5.3', summary: 'You know two sides and the angle between them — or all three sides.' },
+  { id: 'radians-degrees', name: 'Radians & Degrees', folder: 'radians-degrees', summary: 'Convert between degrees and radians.', color: DUOTONES.orange, art: 'radians' },
+  { id: 'unit-circle', name: 'Unit Circle', folder: 'unit-circle', summary: 'Points on the circle are (cos θ, sin θ).', color: DUOTONES.red, art: 'unit-circle' },
+  { id: 'trig-graphs', name: 'Trig Graphs', folder: 'trig-graphs', summary: 'Read sine and cosine as graphs.', color: DUOTONES.brown, art: 'sine' },
+  { id: 'special-angles', name: 'Special Angles', folder: 'special-angles', summary: 'Exact values at π/6, π/4, π/3.', color: DUOTONES.green, art: 'reference' },
+  { id: 'law-of-sines', name: 'Law of Sines', folder: 'solving-triangles', lesson: 'LESSON 5.1', summary: 'You know a side and the angle across from it.', color: DUOTONES.sky, art: 'sines' },
+  { id: 'law-of-cosines', name: 'Law of Cosines', folder: 'solving-triangles', lesson: 'LESSON 5.3', summary: 'You know two sides and the angle between them — or all three sides.', color: DUOTONES.blue, art: 'cosines' },
 ]
 
 export const FOLDERS: Folder[] = [
-  { id: 'radians-degrees', name: 'Radians & Degrees', topics: ['radians-degrees'] },
-  { id: 'unit-circle', name: 'Unit Circle', topics: ['unit-circle'] },
-  { id: 'trig-graphs', name: 'Trig Graphs', topics: ['trig-graphs'] },
-  { id: 'special-angles', name: 'Special Angles', topics: ['special-angles'] },
-  { id: 'solving-triangles', name: 'Solving triangles', topics: ['law-of-sines', 'law-of-cosines'] },
+  { id: 'radians-degrees', name: 'Radians & Degrees', topics: ['radians-degrees'], color: DUOTONES.orange, art: 'radians' },
+  { id: 'unit-circle', name: 'Unit Circle', topics: ['unit-circle'], color: DUOTONES.red, art: 'unit-circle' },
+  { id: 'trig-graphs', name: 'Trig Graphs', topics: ['trig-graphs'], color: DUOTONES.brown, art: 'sine' },
+  { id: 'special-angles', name: 'Special Angles', topics: ['special-angles'], color: DUOTONES.green, art: 'reference' },
+  { id: 'solving-triangles', name: 'Solving triangles', topics: ['law-of-sines', 'law-of-cosines'], color: DUOTONES.sky, art: 'triangles' },
 ]
 
 export const topicById = (id: string) => TOPICS.find((t) => t.id === id)
+/** CSS custom properties for a concept's duotone: use as style={tone(t)} */
+export const tone = (c?: Duotone) => (c ? ({ '--tone-bg': c.bg, '--tone-ink': c.ink } as React.CSSProperties) : undefined)
 export const folderById = (id: string) => FOLDERS.find((f) => f.id === id)
 
 export interface WorkedExample {

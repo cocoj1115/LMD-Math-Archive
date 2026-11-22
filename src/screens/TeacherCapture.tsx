@@ -4,7 +4,7 @@ import { MathField } from '../components/MathField'
 import { PhotoInput } from '../components/PhotoInput'
 import { NoteLines, Shell, TeX } from '../components/ui'
 import { useApp } from '../lib/app'
-import { TOPICS, folderById, topicById } from '../lib/content'
+import { TOPICS, folderById, tone, topicById } from '../lib/content'
 import { rotateDataUrl } from '../lib/image'
 import { transcribe } from '../lib/ocr'
 import type { Line } from '../lib/types'
@@ -208,8 +208,9 @@ export function Capture() {
             </div>
             {stage === 'review' && (
               <>
-                <div className="mono sm" style={{ marginTop: 14 }}>
-                  Goes to: {folderById(topicById(topic)?.folder ?? '')?.name} / {topicById(topic)?.name}
+                <div className="mono sm row" style={{ marginTop: 14, gap: 8 }}>
+                  Goes to: {folderById(topicById(topic)?.folder ?? '')?.name} /
+                  <span className="tag tone" style={tone(topicById(topic)?.color)}>{topicById(topic)?.name}</span>
                 </div>
                 {err && <div className="banner warn">{err}</div>}
                 <div className="row" style={{ marginTop: 12 }}>

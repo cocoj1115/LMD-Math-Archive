@@ -49,7 +49,8 @@ export function Shell({ children, nav = true }: { children: ReactNode; nav?: boo
     <>
       <header className="header">
         <Link to="/archive" className="brand">
-          VISUAL ARCHIVE
+          <span className="brand-mark" />
+          Visual Archive
         </Link>
         <span className="mono">MATH 3 / CITY OF BRIDGES</span>
       </header>
