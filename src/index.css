@@ -296,13 +296,13 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 .role-card .big { display: block; font-size: 26px; font-weight: 400; letter-spacing: -0.02em; }
 
 /* Entry screen: "Choose your view" + two role cards; the form appears after choosing */
-.entry { position: relative; max-width: 1040px; margin: 96px auto 0; }
-.entry-roles { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
-.entry-roles .gcard { min-height: 330px; text-align: left; cursor: pointer; font: inherit; color: inherit; }
+.entry { position: relative; max-width: 1080px; margin: 140px auto 120px; }
+.entry-roles { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+.entry-roles .gcard { min-height: 400px; padding: 48px 52px; text-align: left; cursor: pointer; font: inherit; color: inherit; }
 .entry-roles .gcard h3 { font-size: 44px; max-width: 42%; }
-.entry-roles .gcard .art-window { width: 50%; top: 28px; right: -12px; } /* overflows only slightly */
+.entry-roles .gcard .art-window { width: 46%; top: 40px; right: -12px; } /* overflows only slightly */
 .entry-roles .gcard .gfoot { font-size: 19px; line-height: 1.4; max-width: 40%; }
-.entry-form { margin-top: 28px; background: var(--surface); border: var(--line); border-radius: var(--radius-lg); padding: 28px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+.entry-form { margin-top: 48px; background: var(--surface); border: var(--line); border-radius: var(--radius-lg); padding: 28px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
 .entry-form .entry-btn { grid-column: 1 / -1; }
 .entry-btn { width: 100%; justify-content: center; margin-top: 4px; }
 
