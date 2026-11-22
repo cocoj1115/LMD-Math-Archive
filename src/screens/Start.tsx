@@ -24,14 +24,13 @@ export function Start() {
   }
 
   const roles: { r: Role; label: string; hint: string; color: Duotone }[] = [
-    { r: 'student', label: 'Student', hint: 'Find class notes and worked examples, and ask the class when you’re stuck.', color: DUOTONES.sky },
-    { r: 'teacher', label: 'Teacher', hint: 'Capture the board after class, check the formulas, and answer questions.', color: DUOTONES.green },
+    { r: 'student', label: 'Student', hint: 'See what was on the board. Ask when you’re stuck.', color: DUOTONES.sky },
+    { r: 'teacher', label: 'Teacher', hint: 'Snap the board after class. Answer student questions.', color: DUOTONES.green },
   ]
 
   return (
     <Shell nav={false}>
       <div className="entry">
-        <h1 className="entry-title">Choose your view</h1>
         <div className="entry-roles">
           {roles.map(({ r, label, hint, color }) => (
             <button key={r} type="button" className={`gcard role${role === r ? ' selected' : ''}`} onClick={() => setRole(r)} aria-pressed={role === r}>
