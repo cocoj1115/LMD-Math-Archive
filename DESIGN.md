@@ -85,7 +85,7 @@ How to apply: `style={tone(topic.color)}` sets `--tone-bg` / `--tone-ink`, then 
 
 ## 5. Cards, windows and badges (Gumroad)
 - **Card** (`.gcard`): white, 1px black, 24px radius, generous padding. Title top-left (regular weight), short description and DM Mono metadata bottom-left, illustration on the right.
-- **Illustration window** (`<ArtWindow>`): a little app window with a title bar and three dots (red / yellow / green), 2px black outline, `6px 6px 0` black shadow, concept-coloured body. Windows may overlap the card edge, as on gumroad.com.
+- **Illustration window** (`<ArtWindow>`): a little app window with a title bar and three dots (zine red / orange / green), 2px black outline, `6px 6px 0` black shadow, concept-coloured body. Windows may overlap the card edge, as on gumroad.com.
 - **Concept badge** (`<ConceptBadge>`): a square tile in the concept's pastel colour with its illustration, 1.5px black outline and a `3px 3px 0` shadow. Use it to mark a row's concept.
 - **Never** use thin vertical colour bars or side stripes as concept markers. Use a badge or a tag instead.
 

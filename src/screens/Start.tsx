@@ -25,11 +25,11 @@ export function Start() {
 
   const roles: { r: Role; label: string; points: string[]; main: ArtKind; tile: ArtKind; note: string; color: Duotone; tileColor: Duotone }[] = [
     {
-      r: 'student', label: 'Student', main: 'notes', tile: 'bubble', note: 'today’s board', color: DUOTONES.sky, tileColor: DUOTONES.red,
+      r: 'student', label: 'I’m a student', main: 'notes', tile: 'bubble', note: 'today’s board', color: DUOTONES.sky, tileColor: DUOTONES.red,
       points: ['See what was on the board', 'Open worked examples and worksheets', 'Ask a question when you’re stuck'],
     },
     {
-      r: 'teacher', label: 'Teacher', main: 'board', tile: 'phone', note: 'after class', color: DUOTONES.green, tileColor: DUOTONES.orange,
+      r: 'teacher', label: 'I’m a teacher', main: 'board', tile: 'phone', note: 'after class', color: DUOTONES.green, tileColor: DUOTONES.orange,
       points: ['Snap the board after class', 'Fix any formula the photo got wrong', 'See questions by topic'],
     },
   ]

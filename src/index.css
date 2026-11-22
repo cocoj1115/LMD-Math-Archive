@@ -218,7 +218,7 @@ a.gcard:hover { transform: var(--lift); box-shadow: var(--shadow-hover); }
 .art-window { background: var(--surface); border: 2px solid var(--ink); border-radius: 12px; box-shadow: 6px 6px 0 var(--ink); overflow: hidden; }
 .art-window .aw-bar { height: 22px; border-bottom: 2px solid var(--ink); display: flex; align-items: center; gap: 5px; padding: 0 9px; background: var(--surface); }
 .art-window .aw-bar i { width: 7px; height: 7px; border-radius: 50%; background: #dd0c00; }
-.art-window .aw-bar i:nth-child(2) { background: #ffc900; }
+.art-window .aw-bar i:nth-child(2) { background: #ef6801; } /* zine orange */
 .art-window .aw-bar i:nth-child(3) { background: #0b8246; }
 .art-window .aw-body { background: var(--tone-bg); color: var(--tone-ink); padding: 14px 16px; }
 
