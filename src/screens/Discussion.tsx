@@ -130,7 +130,7 @@ export function Discussion() {
       <div className="spread" style={{ alignItems: 'flex-end' }}>
         <div>
           <h1>Class discussion</h1>
-          <p className="sub" style={{ marginBottom: 0 }}>Math 3 {topic && <> / {topicById(topic)?.name}</>}</p>
+          <p className="sub" style={{ marginBottom: 0 }}>{topic ? topicById(topic)?.name : 'All topics'}</p>
         </div>
         {session?.role === 'student' && (
           <Link className="pill primary" to={`/discussion/new${topic ? `?topic=${topic}` : ''}`}>New post</Link>

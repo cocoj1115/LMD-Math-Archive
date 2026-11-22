@@ -53,7 +53,7 @@ export function Archive() {
     <Shell>
       <h1>Class archive</h1>
       <p className="sub">
-        Everything from Math 3, by topic.
+        Everything from class, by topic.
         {session?.role === 'teacher' && ' Board notes you publish appear in their topic.'}
       </p>
       {error && <div className="banner warn">Could not load class data: {error}</div>}

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { Back, NoteLines, Shell, timeAgo } from '../components/ui'
 import { useApp } from '../lib/app'
-import { folderById, tone, topicById } from '../lib/content'
+import { APP_NAME, folderById, tone, topicById } from '../lib/content'
 
 export function NotePage() {
   const { id = '' } = useParams()
@@ -134,7 +134,7 @@ export function PrintPreview() {
       <h1 className="no-print">Print preview</h1>
       <div className="print-sheet">
         <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: 12 }}>
-          <span>MATH 3 / CITY OF BRIDGES</span>
+          <span>{APP_NAME.toUpperCase()}</span>
           <span>{t?.name} · {date}</span>
         </div>
         <h2 style={{ fontSize: 28, marginTop: 24 }}>{n.title}</h2>
@@ -150,7 +150,7 @@ export function PrintPreview() {
         <div className="write-space" />
         <div className="write-space" />
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, marginTop: 18 }}>
-          Class visual archive · {n.kind} · version of {date}
+          {APP_NAME} · {n.kind} · version of {date}
         </div>
       </div>
     </Shell>

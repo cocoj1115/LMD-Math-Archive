@@ -2,7 +2,7 @@ import katex from 'katex'
 import { Fragment, useMemo, useState, type ReactNode } from 'react'
 import { Link, NavLink, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Art } from './Art'
-import { TOPICS, folderById, tone, topicById } from '../lib/content'
+import { APP_NAME, TOPICS, folderById, tone, topicById } from '../lib/content'
 import { useApp } from '../lib/app'
 import type { Line } from '../lib/types'
 
@@ -91,7 +91,7 @@ export function Shell({ children, nav = true }: { children: ReactNode; nav?: boo
     <>
       <header className="topbar no-print">
         <Link to={session ? '/archive' : '/'} className="wordmark">
-          Visual Archive
+          {APP_NAME}
         </Link>
         {session && nav && (
           <form
@@ -109,7 +109,7 @@ export function Shell({ children, nav = true }: { children: ReactNode; nav?: boo
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search notes, concepts, questions" aria-label="Search" />
           </form>
         )}
-        {!(session && nav) && <span className="mono" style={{ marginLeft: 'auto' }}>Math 3 / City of Bridges</span>}
+        {!(session && nav) && <span style={{ marginLeft: 'auto' }} />}
         {session && nav && (
           <div className="row" style={{ gap: 10, flexWrap: 'nowrap' }}>
             <button

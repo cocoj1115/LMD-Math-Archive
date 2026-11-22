@@ -1,5 +1,5 @@
 /*
- * Visual Archive design tokens — see DESIGN.md
+ * Chalkback design tokens — see DESIGN.md
  * Colours: Discovery Research Zine duotones (Figma "Design Research Zine") + brand blue #002BFF
  * Components: Gumroad rules (warm off-white base, white cards, 1px black lines, 16/24px radius,
  *             pill nav, hard offset shadow only on hover)
@@ -287,18 +287,22 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 
 /* Start screen */
 .role-card {
-  display: block; text-align: left; width: 100%; padding: 28px; cursor: pointer; background: var(--surface);
+  display: flex; align-items: center; gap: 18px; text-align: left; width: 100%; padding: 24px; cursor: pointer; background: var(--surface);
   border: var(--line); border-radius: var(--radius-lg); transition: transform .12s ease, box-shadow .12s ease;
 }
+.role-card .hint { display: block; margin-top: 4px; color: var(--muted); font-size: 15px; }
 .role-card:hover { transform: var(--lift); box-shadow: var(--shadow-hover); }
-.role-card.selected { background: var(--brand); color: #fff; }
-.role-card .big { font-size: 40px; font-weight: 400; letter-spacing: -0.03em; }
+.role-card.selected { border: 2px solid var(--brand); box-shadow: 5px 5px 0 var(--brand); padding: 23px; }
+.role-card .big { display: block; font-size: 26px; font-weight: 400; letter-spacing: -0.02em; }
 
-/* Entry screen: two side-by-side sign-in panels, nothing else */
-.entry { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 880px; margin: 72px auto 0; }
-.entry-panel { background: var(--surface); border: var(--line); border-radius: var(--radius-lg); padding: 32px; }
-.entry-panel h2 { font-size: 32px; margin-bottom: 22px; }
-.entry-btn { width: 100%; justify-content: center; margin-top: 6px; }
+/* Entry screen: "Choose your view" + two role cards; the form appears after choosing */
+.entry { position: relative; max-width: 760px; margin: 80px auto 0; }
+.entry-title { text-align: center; font-size: 56px; margin: 0 0 32px; }
+.entry-roles { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.entry-form { margin-top: 20px; background: var(--surface); border: var(--line); border-radius: var(--radius-lg); padding: 28px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+.entry-form .entry-btn { grid-column: 1 / -1; }
+.entry-btn { width: 100%; justify-content: center; margin-top: 4px; }
+.entry .deco { position: absolute; pointer-events: none; }
 
 /* Print */
 @media print {

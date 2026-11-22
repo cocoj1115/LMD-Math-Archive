@@ -2,6 +2,10 @@
 // Teacher-published board notes from the database are merged into these folders.
 import type { Note } from './types'
 
+/** Product name: change it here and everywhere updates */
+export const APP_NAME = 'Chalkback'
+export const APP_TAGLINE = 'Your class board, back whenever you need it'
+
 /**
  * Duotone pairs from the team's Discovery Research Zine (Figma "Design Research Zine").
  * Each concept gets one pastel background + one ink colour, used together everywhere
