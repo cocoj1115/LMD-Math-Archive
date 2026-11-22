@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
-import { ArtWindow, Asterisk, ConceptBadge } from '../components/Art'
-import { DUOTONES, tone, type ArtKind, type Duotone } from '../lib/content'
+import { ArtWindow } from '../components/Art'
+import { DUOTONES, type Duotone } from '../lib/content'
 import { Shell } from '../components/ui'
 import { useApp } from '../lib/app'
 import type { Role } from '../lib/types'
@@ -23,29 +23,21 @@ export function Start() {
     start(role, name, code) // re-render redirects to the role's home screen
   }
 
-  const roles: { r: Role; label: string; hint: string; kind: ArtKind; color: Duotone }[] = [
-    { r: 'student', label: 'I’m a student', hint: 'Find class notes and ask questions', kind: 'cosines', color: DUOTONES.sky },
-    { r: 'teacher', label: 'I’m a teacher', hint: 'Capture the board and answer questions', kind: 'reference', color: DUOTONES.green },
+  const roles: { r: Role; label: string; hint: string; color: Duotone }[] = [
+    { r: 'student', label: 'Student', hint: 'Find class notes and worked examples, and ask the class when you’re stuck.', color: DUOTONES.sky },
+    { r: 'teacher', label: 'Teacher', hint: 'Capture the board after class, check the formulas, and answer questions.', color: DUOTONES.green },
   ]
 
   return (
     <Shell nav={false}>
       <div className="entry">
-        {/* small decorations */}
-        <div className="deco" style={{ left: -70, top: 30, transform: 'rotate(-12deg)', ...tone(DUOTONES.red) }}><ConceptBadge kind="unit-circle" size={72} /></div>
-        <div className="deco" style={{ right: -60, top: 0, transform: 'rotate(10deg)', ...tone(DUOTONES.orange) }}><ConceptBadge kind="radians" size={64} /></div>
-        <div className="deco" style={{ right: -90, top: 230, transform: 'rotate(-6deg)', ...tone(DUOTONES.brown) }}><ConceptBadge kind="sine" size={56} /></div>
-        <div className="deco muted" style={{ left: -40, top: 250 }}><Asterisk size={26} /></div>
-
         <h1 className="entry-title">Choose your view</h1>
         <div className="entry-roles">
-          {roles.map(({ r, label, hint, kind, color }) => (
-            <button key={r} type="button" className={`role-card${role === r ? ' selected' : ''}`} onClick={() => setRole(r)} aria-pressed={role === r} style={tone(color)}>
-              <ConceptBadge kind={kind} size={64} />
-              <span>
-                <span className="big">{label}</span>
-                <span className="hint">{hint}</span>
-              </span>
+          {roles.map(({ r, label, hint, color }) => (
+            <button key={r} type="button" className={`gcard role${role === r ? ' selected' : ''}`} onClick={() => setRole(r)} aria-pressed={role === r}>
+              <h3>{label}</h3>
+              <ArtWindow kind={r} color={color} />
+              <div className="gfoot">{hint}</div>
             </button>
           ))}
         </div>

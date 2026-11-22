@@ -7,7 +7,7 @@ import { tone, type ArtKind, type Duotone } from '../lib/content'
 /** path, flags: t = thin 1.3 stroke, f = filled + stroked, F = fill only, w = white stroke, d = dashed */
 type P = [string, string?]
 type G = [number, number, P[]] // translate x, y, paths
-type L = [number, number, number, number, string] // label box x, y, w, h, text
+type L = [number, number, number, number, string, number?] // label box x, y, w, h, text, optional font size
 
 interface Drawing {
   vb: [number, number, number, number]
@@ -113,6 +113,37 @@ const EXTRA: Record<'sines' | 'cosines', Drawing> = {
   },
 }
 
+/**
+ * Role illustrations for the entry screen, drawn in the library's style so their meaning matches the role.
+ * Student = a worksheet page + a question bubble (find notes, ask the class).
+ * Teacher = a board with a formula inside a camera viewfinder + a phone (capture the board).
+ */
+const ROLES: Record<'student' | 'teacher', Drawing> = {
+  student: {
+    vb: [0, 0, 300, 180],
+    groups: [[0, 0, [
+      ['M28 12H146L174 40V170H28Z'], ['M146 12V40H174', 't'],
+      ['M44 62H156M44 80H156M44 98H130', 't'],
+      ['M48 154H112L94 116Z', 't'],
+      ['M194 26H270C277.7 26 284 32.3 284 40V82C284 89.7 277.7 96 270 96H226L208 112V96H194C186.3 96 180 89.7 180 82V40C180 32.3 186.3 26 194 26Z'],
+      ['M150 166L200 116', 't'], ['M200 116L206 110L212 116L206 122Z', 'F'],
+    ]]],
+    labels: [[44, 30, 64, 10, 'LESSON 5.3', 9], [221, 44, 22, 36, '?', 40], [118, 150, 40, 12, 'my try', 10]],
+  },
+  teacher: {
+    vb: [0, 0, 300, 180],
+    groups: [[0, 0, [
+      ['M26 24H214V134H26Z'], ['M60 134V152M180 134V152', 't'], ['M44 152H196', 't'],
+      ['M150 120H202L186 66Z', 't'],
+      ['M12 28V10H30M210 10H228V28M12 130V148H30M228 130V148H210'],
+      ['M246 70H278C282.4 70 286 73.6 286 78V160C286 164.4 282.4 168 278 168H246C241.6 168 238 164.4 238 160V78C238 73.6 241.6 70 246 70Z'],
+      ['M262 116C267 116 271 112 271 107C271 102 267 98 262 98C257 98 253 102 253 107C253 112 257 116 262 116Z'],
+      ['M262 158C264.2 158 266 156.2 266 154C266 151.8 264.2 150 262 150C259.8 150 258 151.8 258 154C258 156.2 259.8 158 262 158Z', 'F'],
+    ]]],
+    labels: [[38, 46, 100, 13, 'c² = a² + b²', 13], [38, 70, 100, 13, '− 2ab cos C', 13], [38, 100, 60, 10, 'a = 5, b = 7', 10]],
+  },
+}
+
 /** Which library drawing each concept uses */
 const KIND: Record<ArtKind, Drawing> = {
   'unit-circle': DRAWINGS['unit-circle'],
@@ -122,6 +153,8 @@ const KIND: Record<ArtKind, Drawing> = {
   triangles: DRAWINGS['right-triangles'],
   sines: EXTRA.sines,
   cosines: EXTRA.cosines,
+  student: ROLES.student,
+  teacher: ROLES.teacher,
 }
 
 function pathProps(flags = '') {
@@ -147,8 +180,8 @@ function Draw({ d, labels = true }: { d: Drawing; labels?: boolean }) {
       </g>
       {labels && (
         <g fill="currentColor" style={{ fontFamily: 'DM Mono, monospace' }}>
-          {d.labels.map(([x, y, w, h, s], i) => {
-            const size = Math.min(16, Math.max(9, w / (s.length * 0.6)))
+          {d.labels.map(([x, y, w, h, s, fixed], i) => {
+            const size = fixed ?? Math.min(16, Math.max(9, w / (s.length * 0.6)))
             return (
               <text key={i} x={x} y={y + Math.min(h, size * 0.8)} fontSize={size}>
                 {s}
