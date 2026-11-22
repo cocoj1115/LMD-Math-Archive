@@ -21,7 +21,7 @@ export const DUOTONES = {
 } as const
 export type Duotone = { readonly bg: string; readonly ink: string }
 
-export type ArtKind = 'unit-circle' | 'radians' | 'sine' | 'reference' | 'sines' | 'cosines' | 'triangles' | 'student' | 'teacher'
+export type ArtKind = 'unit-circle' | 'radians' | 'sine' | 'reference' | 'sines' | 'cosines' | 'triangles' | 'notes' | 'bubble' | 'board' | 'phone'
 
 export interface Topic {
   id: string

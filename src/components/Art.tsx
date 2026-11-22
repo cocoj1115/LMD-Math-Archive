@@ -118,29 +118,42 @@ const EXTRA: Record<'sines' | 'cosines', Drawing> = {
  * Student = a worksheet page + a question bubble (find notes, ask the class).
  * Teacher = a board with a formula inside a camera viewfinder + a phone (capture the board).
  */
-const ROLES: Record<'student' | 'teacher', Drawing> = {
-  student: {
-    vb: [0, 0, 300, 180],
+const ROLES: Record<'notes' | 'bubble' | 'board' | 'phone', Drawing> = {
+  // Student main window: a class-notes page with the board formula and a sketch
+  notes: {
+    vb: [0, 0, 300, 170],
     groups: [[0, 0, [
-      ['M28 12H146L174 40V170H28Z'], ['M146 12V40H174', 't'],
-      ['M44 62H156M44 80H156M44 98H130', 't'],
-      ['M48 154H112L94 116Z', 't'],
-      ['M194 26H270C277.7 26 284 32.3 284 40V82C284 89.7 277.7 96 270 96H226L208 112V96H194C186.3 96 180 89.7 180 82V40C180 32.3 186.3 26 194 26Z'],
-      ['M150 166L200 116', 't'], ['M200 116L206 110L212 116L206 122Z', 'F'],
+      ['M40 10H226L260 44V164H40Z'], ['M226 10V44H260', 't'],
+      ['M60 104H236M60 122H236M60 140H180', 't'],
+      ['M190 98H244L226 58Z', 't'],
     ]]],
-    labels: [[44, 30, 64, 10, 'LESSON 5.3', 9], [221, 44, 22, 36, '?', 40], [118, 150, 40, 12, 'my try', 10]],
+    labels: [[60, 24, 80, 10, 'BOARD NOTES · 5.3', 10], [60, 58, 120, 14, 'c² = a² + b²', 14], [60, 82, 120, 14, '− 2ab cos C', 14]],
   },
-  teacher: {
-    vb: [0, 0, 300, 180],
+  // Student satellite: a question bubble
+  bubble: {
+    vb: [0, 0, 60, 60],
+    groups: [[0, 0, [['M12 10H48C52.4 10 56 13.6 56 18V36C56 40.4 52.4 44 48 44H28L18 54V44H12C7.6 44 4 40.4 4 36V18C4 13.6 7.6 10 12 10Z']]]],
+    labels: [[23, 14, 14, 24, '?', 26]],
+  },
+  // Teacher main window: the board, framed by a camera viewfinder
+  board: {
+    vb: [0, 0, 300, 170],
     groups: [[0, 0, [
-      ['M26 24H214V134H26Z'], ['M60 134V152M180 134V152', 't'], ['M44 152H196', 't'],
-      ['M150 120H202L186 66Z', 't'],
-      ['M12 28V10H30M210 10H228V28M12 130V148H30M228 130V148H210'],
-      ['M246 70H278C282.4 70 286 73.6 286 78V160C286 164.4 282.4 168 278 168H246C241.6 168 238 164.4 238 160V78C238 73.6 241.6 70 246 70Z'],
-      ['M262 116C267 116 271 112 271 107C271 102 267 98 262 98C257 98 253 102 253 107C253 112 257 116 262 116Z'],
-      ['M262 158C264.2 158 266 156.2 266 154C266 151.8 264.2 150 262 150C259.8 150 258 151.8 258 154C258 156.2 259.8 158 262 158Z', 'F'],
+      ['M36 24H264V138H36Z'], ['M90 138V156M210 138V156', 't'], ['M70 156H230', 't'],
+      ['M196 124H250L232 68Z', 't'],
+      ['M20 28V12H38M262 12H280V28M20 134V150H38M280 134V150H262'],
     ]]],
-    labels: [[38, 46, 100, 13, 'c² = a² + b²', 13], [38, 70, 100, 13, '− 2ab cos C', 13], [38, 100, 60, 10, 'a = 5, b = 7', 10]],
+    labels: [[52, 48, 120, 14, 'c² = a² + b²', 14], [52, 74, 120, 14, '− 2ab cos C', 14], [52, 104, 80, 10, 'a = 5, b = 7', 11]],
+  },
+  // Teacher satellite: a phone camera
+  phone: {
+    vb: [0, 0, 60, 60],
+    groups: [[0, 0, [
+      ['M20 4H40C43.3 4 46 6.7 46 10V50C46 53.3 43.3 56 40 56H20C16.7 56 14 53.3 14 50V10C14 6.7 16.7 4 20 4Z'],
+      ['M30 30C34.4 30 38 26.4 38 22C38 17.6 34.4 14 30 14C25.6 14 22 17.6 22 22C22 26.4 25.6 30 30 30Z'],
+      ['M30 50C31.7 50 33 48.7 33 47C33 45.3 31.7 44 30 44C28.3 44 27 45.3 27 47C27 48.7 28.3 50 30 50Z', 'F'],
+    ]]],
+    labels: [],
   },
 }
 
@@ -153,8 +166,10 @@ const KIND: Record<ArtKind, Drawing> = {
   triangles: DRAWINGS['right-triangles'],
   sines: EXTRA.sines,
   cosines: EXTRA.cosines,
-  student: ROLES.student,
-  teacher: ROLES.teacher,
+  notes: ROLES.notes,
+  bubble: ROLES.bubble,
+  board: ROLES.board,
+  phone: ROLES.phone,
 }
 
 function pathProps(flags = '') {
@@ -236,12 +251,12 @@ export function Asterisk({ size = 30 }: { size?: number }) {
  * Concept badge: a small tile in the concept's duotone with a black outline and a hard
  * shadow, like Gumroad's app-icon tiles. Replaces the old vertical colour bars.
  */
-export function ConceptBadge({ kind, size = 56 }: { kind: ArtKind; size?: number }) {
+export function ConceptBadge({ kind, size = 56, labels = false }: { kind: ArtKind; size?: number; labels?: boolean }) {
   const d = KIND[kind]
   return (
     <span className="badge-tile" style={{ width: size, height: size }} aria-hidden="true">
       <svg viewBox={d.vb.join(' ')} width="100%" height="100%" fill="none">
-        <Draw d={d} labels={false} />
+        <Draw d={d} labels={labels} />
       </svg>
     </span>
   )

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
-import { ArtWindow } from '../components/Art'
-import { DUOTONES, type Duotone } from '../lib/content'
+import { ArtWindow, ConceptBadge } from '../components/Art'
+import { DUOTONES, tone, type ArtKind, type Duotone } from '../lib/content'
 import { Shell } from '../components/ui'
 import { useApp } from '../lib/app'
 import type { Role } from '../lib/types'
@@ -23,20 +23,39 @@ export function Start() {
     start(role, name, code) // re-render redirects to the role's home screen
   }
 
-  const roles: { r: Role; label: string; hint: string; color: Duotone }[] = [
-    { r: 'student', label: 'Student', hint: 'See what was on the board. Ask when you’re stuck.', color: DUOTONES.sky },
-    { r: 'teacher', label: 'Teacher', hint: 'Snap the board after class. Answer student questions.', color: DUOTONES.green },
+  const roles: { r: Role; label: string; points: string[]; main: ArtKind; tile: ArtKind; note: string; color: Duotone; tileColor: Duotone }[] = [
+    {
+      r: 'student', label: 'Student', main: 'notes', tile: 'bubble', note: 'today’s board', color: DUOTONES.sky, tileColor: DUOTONES.red,
+      points: ['See what was on the board', 'Open worked examples and worksheets', 'Ask a question when you’re stuck'],
+    },
+    {
+      r: 'teacher', label: 'Teacher', main: 'board', tile: 'phone', note: 'after class', color: DUOTONES.green, tileColor: DUOTONES.orange,
+      points: ['Snap the board after class', 'Fix any formula the photo got wrong', 'See questions by topic'],
+    },
   ]
 
   return (
     <Shell nav={false}>
       <div className="entry">
         <div className="entry-roles">
-          {roles.map(({ r, label, hint, color }) => (
-            <button key={r} type="button" className={`gcard role${role === r ? ' selected' : ''}`} onClick={() => setRole(r)} aria-pressed={role === r}>
-              <h3>{label}</h3>
-              <ArtWindow kind={r} color={color} />
-              <div className="gfoot">{hint}</div>
+          {roles.map((x) => (
+            <button key={x.r} type="button" className={`gcard role${role === x.r ? ' selected' : ''}`} onClick={() => setRole(x.r)} aria-pressed={role === x.r}>
+              <h3>{x.label}</h3>
+              <ul className="checks" style={tone(x.color)}>
+                {x.points.map((p) => (
+                  <li key={p}>{p}</li>
+                ))}
+              </ul>
+              <div className="scene" aria-hidden="true">
+                <span className="scene-note">
+                  {x.note}
+                  <svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"><path d="M1 3C8 1 16 2 22 9" strokeDasharray="2 3" /><path d="M17 9.5L22.5 9.5L21.5 4" /></svg>
+                </span>
+                <ArtWindow kind={x.main} color={x.color} className="scene-main" />
+                <span className="scene-tile" style={tone(x.tileColor)}>
+                  <ConceptBadge kind={x.tile} size={68} labels />
+                </span>
+              </div>
             </button>
           ))}
         </div>
