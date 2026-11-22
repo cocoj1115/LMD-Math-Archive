@@ -18,7 +18,7 @@
      so two different blues never sit next to each other. */
   --brand: #000000;
   --brand-soft: #e6e6e6;
-  --hover-fill: #fff584; /* zine yellow: hover on solid buttons */
+  --hover-fill: #002bff; /* blue highlight on hover (original wireframe blue) */
 
   /* status */
   --warn: #b45309;
@@ -74,7 +74,7 @@ img { max-width: 100%; }
 .btn-outline { background: var(--surface); color: var(--ink); }
 .btn-solid { background: var(--ink); color: #fff; }
 .btn-outline:hover, .btn-solid:hover { transform: var(--lift); box-shadow: var(--shadow-hover); }
-.btn-solid:hover { background: var(--hover-fill); color: var(--ink); }
+.btn-solid:hover { background: var(--hover-fill); color: #fff; border-color: var(--hover-fill); }
 
 /* Second row: category tabs with dropdowns */
 .tabsrow { max-width: var(--page-w); margin: 0 auto; padding: 2px var(--gutter) 14px; display: flex; align-items: center; gap: 0; flex-wrap: nowrap; position: relative; z-index: 20; }
@@ -133,7 +133,7 @@ p { line-height: 1.5; }
 .pill:hover { transform: var(--lift); box-shadow: var(--shadow-hover); }
 .pill:active { transform: none; box-shadow: none; }
 .pill.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
-.pill.primary:hover { background: var(--hover-fill); color: var(--ink); }
+.pill.primary:hover { background: var(--hover-fill); color: #fff; border-color: var(--hover-fill); }
 .pill.sm { height: 36px; font-size: 14px; padding: 0 14px; }
 .pill:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
 .pill .badge { background: var(--brand); color: #fff; border-radius: 10px; font-size: 12px; padding: 1px 7px; }

@@ -22,7 +22,7 @@ All tokens live at the top of `src/index.css`. Concept colours live in `src/lib/
 | `--ink` | `#000000` | All body text and **every border** |
 | `--muted` | `rgba(0,0,0,.55)` | Secondary text, subtitles |
 | `--brand` | `#000000` | UI states are black: primary buttons, selected cards, active tab, focus ring, "NEW" tag, teacher reply bar |
-| `--hover-fill` | `#FFF584` (zine yellow) | Hover fill on solid buttons |
+| `--hover-fill` | `#002BFF` (original blue) | Hover highlight on solid buttons |
 
 **Rule:** text, lines and every UI state (selected, focused, active, primary) are black. Colour comes only from the zine duotones, in illustrations, tags and concept marks. Never put two different blues (or two concept colours) next to each other. The zine cover blue `#002BFF` is now only the Law of Cosines ink.
 
@@ -72,7 +72,7 @@ How to apply: `style={tone(topic.color)}` sets `--tone-bg` / `--tone-ink`, then 
 **Rule:** surfaces are flat at rest. The hard offset shadow appears on hover, which makes the element feel like paper you can pick up. Don't add soft or blurred shadows anywhere.
 
 ### Buttons
-- **Primary**: black fill, white text; hover fills zine yellow with black text. One per screen area (Publish to archive, Post question, Ask the class a question).
+- **Primary**: black fill, white text; hover highlights in blue `#002BFF` with white text. One per screen area (Publish to archive, Post question, Ask the class a question).
 - **Secondary**: white fill, black border.
 - **Navigation pills**: no border at rest, border on hover, **solid black when active**.
 - **Filter chips**: when a chip is active it takes its concept duotone.
