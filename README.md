@@ -1,15 +1,11 @@
 # Visual Archive · Math 3 / City of Bridges
 
-这是给周一 school prototype testing 用的 working prototype。Teacher 端和 Student 端用同一个网址，共享一份数据。
-
-- **Teacher**：拍板书或上传照片 → Claude 识别文字和公式 → 对照原图逐行修改公式（MathLive）→ 选 concept → publish → 按 concept 看学生的问题 → 回复 → 学生同意后，把学生的作业加进 class notes
-- **Student**：Topic map / Class archive → board notes、worked example、worksheet → 卡住了就选 concept、写问题、拍纸上的作答、用语音补充 → 发到 class discussion → 同意或拒绝老师分享自己的作业 → bookmark、打印
-
-Design tokens 是从 Figma「Wire-frame → higher fidelity wireframes → Guided class archive (V3)」提取的，见 `src/index.css` 顶部。
+- **Teacher**: photograph or upload the board → Claude transcribes the text and formulas → check each line against the photo and correct formulas (MathLive) → choose a concept → publish → read student questions grouped by concept → reply → with the student's permission, add their work to the class notes
+- **Student**: Topic map / Class archive → board notes, worked examples, worksheets → when stuck, choose a concept, write a question, attach a photo of the paper attempt, add voice → post to the class discussion → accept or decline the teacher's request to share their work → bookmark, print
 
 ---
 
-## 1. 在 VS Code 里跑起来（5 分钟）
+## 1. Run it in VS Code 
 
 ```bash
 npm install
@@ -64,13 +60,13 @@ src/lib/store.ts           数据层（localStorage）
 src/lib/app.tsx            全局状态和所有写操作（publishNote, addPost, addReply, share…）
 src/components/            Shell/导航、KaTeX 渲染、MathField（MathLive）、PhotoInput（上传和摄像头）、Dictate（语音）
 src/screens/
-  Start.tsx                选身份和 class code、student intro（3 步）
-  Archive.tsx              Class archive、folder、Topic map
-  Topic.tsx                Topic overview、worked example、worksheet 阅读器
-  Note.tsx                 Note 页（原图对照、version history、同学作业）、print preview
-  Discussion.tsx           讨论区、发新帖（照片、语音、自动识别）
-  TeacherCapture.tsx       拍板书 → 识别 → 改公式 → details → publish
-  TeacherQuestions.tsx     按 concept 分组的问题 inbox、征得同意后分享作业
+  Start.tsx                Choose role and class code; 3-step student intro
+  Archive.tsx              Class archive, folders, Topic map
+  Topic.tsx                Topic overview, worked example, worksheet reader
+  Note.tsx                 Note page (original photo side by side, version history, classmate work), print preview
+  Discussion.tsx           Discussion board, new post (photo, voice, automatic transcription)
+  TeacherCapture.tsx       Photograph board → transcribe → correct formulas → details → publish
+  TeacherQuestions.tsx     Question inbox grouped by concept; share student work with permission
 ```
 
 建议这样分工：一个人负责 Teacher 端（`TeacherCapture`、`TeacherQuestions`、`server/ocr.ts`），另一个人负责 Student 端（`Archive`、`Topic`、`Note`、`Discussion`）。改共享的 `src/lib/*` 之前，在群里先说一声。
