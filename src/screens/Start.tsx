@@ -25,7 +25,7 @@ export function Start() {
 
   const roles: { r: Role; label: string; points: string[]; main: ArtKind; tile: ArtKind; note: string; color: Duotone; tileColor: Duotone }[] = [
     {
-      r: 'student', label: 'I’m a student', main: 'notes', tile: 'bubble', note: 'today’s board', color: DUOTONES.blue, tileColor: DUOTONES.red,
+      r: 'student', label: 'I’m a student', main: 'notes', tile: 'bubble', note: 'today’s board', color: DUOTONES.sky, tileColor: DUOTONES.red,
       points: ['See what was on the board', 'Open worked examples and worksheets', 'Ask a question when you’re stuck'],
     },
     {
@@ -90,8 +90,8 @@ export function Start() {
 
 const STEPS = [
   { kicker: 'Your class', title: 'Class archive', body: 'Find the worksheets, examples, and board notes from class.', art: 'unit-circle', bg: '#E6E6E6', ink: '#002BFF' },
-  { kicker: 'Choose', title: 'A topic', body: 'Open the lesson you’re working on or catching up on.', art: 'triangles', bg: '#E6E6E6', ink: '#002BFF' },
-  { kicker: 'Find your', title: 'Next step', body: 'Follow a worked example, try the class worksheet, or ask the class when you’re stuck.', art: 'sine', bg: '#E6E6E6', ink: '#002BFF' },
+  { kicker: 'Choose', title: 'A topic', body: 'Open the lesson you’re working on or catching up on.', art: 'triangles', bg: '#FFF584', ink: '#0966DF' },
+  { kicker: 'Find your', title: 'Next step', body: 'Follow a worked example, try the class worksheet, or ask the class when you’re stuck.', art: 'sine', bg: '#EECED8', ink: '#DD0C00' },
 ] as const
 
 export function Welcome() {
