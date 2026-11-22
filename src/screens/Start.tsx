@@ -110,7 +110,7 @@ export function Welcome() {
         <div className="mono">{s.kicker}</div>
         <h1 style={{ fontSize: 80 }}>{s.title}</h1>
         <p style={{ fontSize: 22, maxWidth: 480 }}>{s.body}</p>
-        <ArtWindow kind={s.art} color={{ bg: s.bg, ink: s.ink }} className="hero-art" style={{ top: 'auto', bottom: -26, width: 380 }} />
+        <ArtWindow kind={s.art} color={{ bg: s.bg, ink: s.ink }} className="hero-art" />
       </div>
       <div className="row" style={{ marginTop: 40 }}>
         {n > 1 && (

@@ -86,7 +86,7 @@ How to apply: `style={tone(topic.color)}` sets `--tone-bg` / `--tone-ink`, then 
 
 ## 5. Cards, windows and badges (Gumroad)
 - **Card** (`.gcard`): white, 1px black, 24px radius, generous padding. Title top-left (regular weight), short description and DM Mono metadata bottom-left, illustration on the right.
-- **Illustration window** (`<ArtWindow>`): a little app window with a title bar and three dots (zine red / orange / green), 2px black outline, `6px 6px 0` black shadow, concept-coloured body. Windows may overlap the card edge, as on gumroad.com.
+- **Illustration window** (`<ArtWindow>`): a little app window with a title bar and three dots (zine red / orange / green), 2px black outline, `6px 6px 0` black shadow, concept-coloured body. Windows always stay **inside** their card or hero; never let them break out of the frame.
 - **Concept badge** (`<ConceptBadge>`): a square tile in the concept's pastel colour with its illustration, 1.5px black outline and a `3px 3px 0` shadow. Use it to mark a row's concept.
 - **Never** use thin vertical colour bars or side stripes as concept markers. Use a badge or a tag instead.
 
@@ -112,7 +112,7 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 ## 7. Layout
 - Page max width 1160px, side gutter 40px
 - Class archive: a 2-column grid of cards, with this week's topic as a full-width card on top
-- Topic and folder pages open with a **hero card** (white) with the concept's illustration window overlapping its top edge
+- Topic and folder pages open with a **hero card** (white) with the concept's illustration window inside it on the right, vertically centred
 
 ## 8. Accessibility notes
 - Every duotone pair has its ink on its own background at large text sizes (headings, tags). Body text is always black on white or on `--bg`.
