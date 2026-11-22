@@ -1,6 +1,8 @@
 import katex from 'katex'
-import { Fragment, useMemo, type ReactNode } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { Fragment, useMemo, useState, type ReactNode } from 'react'
+import { Link, NavLink, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { Art } from './Art'
+import { TOPICS, folderById, tone, topicById } from '../lib/content'
 import { useApp } from '../lib/app'
 import type { Line } from '../lib/types'
 
@@ -37,62 +39,121 @@ export function NoteLines({ lines, highlightUncertain = false }: { lines: Line[]
   )
 }
 
-/* ---------- Shell ---------- */
+/* ---------- Shell: Gumroad-style two-row navigation ---------- */
+function ConceptTab({ topicId, active }: { topicId: string; active: boolean }) {
+  const { notes, posts } = useApp()
+  const t = topicById(topicId)!
+  const f = folderById(t.folder)!
+  const triangles = t.folder === 'solving-triangles'
+  const own = notes.filter((n) => n.topic === topicId)
+  const q = posts.filter((p) => p.topic === topicId).length
+  return (
+    <div className={`ctab${active ? ' active' : ''}`}>
+      <NavLink to={triangles ? `/topic/${topicId}` : `/folder/${f.id}`} className="ctab-link">
+        {t.name}
+      </NavLink>
+      <div className="ctab-menu" style={tone(t.color)}>
+        {triangles ? (
+          <>
+            <Link to={`/topic/${topicId}`}>All {t.name}</Link>
+            <Link to={`/example/${topicId}`}>Worked example</Link>
+            <Link to={`/worksheet/${topicId}/1`}>Class worksheet</Link>
+          </>
+        ) : (
+          <Link to={`/folder/${f.id}`}>All {t.name}</Link>
+        )}
+        {own.slice(0, 4).map((n) => (
+          <Link key={n.id} to={`/note/${n.id}`}>{n.title}</Link>
+        ))}
+        <Link to={`/discussion?topic=${topicId}`}>Questions{q ? ` (${q})` : ''}</Link>
+        <Art kind={t.art} className="ctab-art" />
+      </div>
+    </div>
+  )
+}
+
 export function Shell({ children, nav = true }: { children: ReactNode; nav?: boolean }) {
   const { session, signOut, posts, replies } = useApp()
   const navigate = useNavigate()
+  const loc = useLocation()
+  const [params] = useSearchParams()
+  const [q, setQ] = useState(params.get('q') || '')
   const teacher = session?.role === 'teacher'
   const unanswered = posts.filter((p) => p.role === 'student' && !replies.some((r) => r.post_id === p.id && r.role === 'teacher')).length
-  const pill = ({ isActive }: { isActive: boolean }) => `pill${isActive ? ' primary' : ''}`
+  const tab = ({ isActive }: { isActive: boolean }) => `tab${isActive ? ' active' : ''}`
+  // which concept is "current" for the active tab state
+  const path = loc.pathname
+  const currentTopic = TOPICS.find(
+    (t) => path.endsWith(`/${t.id}`) || path.includes(`/${t.id}/`) || (t.folder !== 'solving-triangles' && path === `/folder/${t.folder}`),
+  )?.id
 
   return (
     <>
-      <header className="header">
-        <Link to="/archive" className="brand">
-          <span className="brand-mark" />
+      <header className="topbar no-print">
+        <Link to={session ? '/archive' : '/'} className="wordmark">
           Visual Archive
         </Link>
-        <span className="mono">MATH 3 / CITY OF BRIDGES</span>
-      </header>
-      <div className="header-rule" />
-      <main className="page">
-        {nav && session && (
-          <div className="navrow no-print">
-            <nav className="pills">
-              {teacher ? (
-                <>
-                  <NavLink className={pill} to="/archive">Class archive</NavLink>
-                  <NavLink className={pill} to="/t/capture">Board notes</NavLink>
-                  <NavLink className={pill} to="/t/questions">
-                    Questions {unanswered > 0 && <span className="badge">{unanswered}</span>}
-                  </NavLink>
-                </>
-              ) : (
-                <>
-                  <NavLink className={pill} to="/map">Topic map</NavLink>
-                  <NavLink className={pill} to="/archive">Class archive</NavLink>
-                  <NavLink className={pill} to="/discussion">Discussion</NavLink>
-                </>
-              )}
-            </nav>
-            <div className="row">
-              <span className="mono sm">
-                {teacher ? 'Teacher view' : 'Student view'} · {session.name} · {session.classCode}
-              </span>
-              <button
-                className="linkbtn mono sm"
-                onClick={() => {
-                  signOut()
-                  navigate('/')
-                }}
-              >
-                Switch
-              </button>
-            </div>
+        {session && nav && (
+          <form
+            className="searchbar"
+            role="search"
+            onSubmit={(e) => {
+              e.preventDefault()
+              navigate(`/search?q=${encodeURIComponent(q.trim())}`)
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M20 20l-4-4" strokeLinecap="round" />
+            </svg>
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search notes, concepts, questions" aria-label="Search" />
+          </form>
+        )}
+        {!(session && nav) && <span className="mono" style={{ marginLeft: 'auto' }}>Math 3 / City of Bridges</span>}
+        {session && nav && (
+          <div className="row" style={{ gap: 10, flexWrap: 'nowrap' }}>
+            <button
+              className="btn-outline"
+              title={`${teacher ? 'Teacher' : 'Student'} · ${session.name} · ${session.classCode}`}
+              onClick={() => {
+                signOut()
+                navigate('/')
+              }}
+            >
+              {session.name} · Switch
+            </button>
+            {teacher ? (
+              <Link className="btn-solid" to="/t/capture">Capture board</Link>
+            ) : (
+              <Link className="btn-solid" to="/discussion/new">Ask a question</Link>
+            )}
           </div>
         )}
-        {children}
-      </main>
+      </header>
+      {session && nav && (
+        <nav className="tabsrow no-print" aria-label="Sections">
+          <NavLink className={tab} to="/archive" end>All</NavLink>
+          {TOPICS.map((t) => (
+            <ConceptTab key={t.id} topicId={t.id} active={currentTopic === t.id} />
+          ))}
+          <span className="tabs-sep" />
+          {teacher ? (
+            <>
+              <NavLink className={tab} to="/t/capture">Board notes</NavLink>
+              <NavLink className={tab} to="/t/questions">
+                Questions {unanswered > 0 && <span className="count">{unanswered}</span>}
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <NavLink className={tab} to="/discussion">Discussion</NavLink>
+              <NavLink className={tab} to="/map">Topic map</NavLink>
+            </>
+          )}
+        </nav>
+      )}
+      <div className="header-rule" />
+      <main className="page">{children}</main>
     </>
   )
 }

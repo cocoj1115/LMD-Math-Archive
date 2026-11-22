@@ -1,212 +1,234 @@
-// Line-art illustrations redrawn from the team's "Math Visual Library" (Design Research Zine, Figma).
-// Thin strokes + DM Mono labels, drawn in currentColor so each one takes its concept's ink colour.
-import type { ArtKind } from '../lib/content'
+// Illustrations from the team's "Math Visual Library" (Figma: Design Research Zine, node 45:488).
+// Shapes are the original vector paths exported from Figma. Labels, which were outlined text in
+// Figma, are re-set as live DM Mono text. Everything is drawn in currentColor so each
+// illustration takes its concept's ink colour.
+import { tone, type ArtKind, type Duotone } from '../lib/content'
 
-const mono = { fontFamily: 'DM Mono, monospace' }
-const S = { fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
+/** path, flags: t = thin 1.3 stroke, f = filled + stroked, F = fill only, w = white stroke, d = dashed */
+type P = [string, string?]
+type G = [number, number, P[]] // translate x, y, paths
+type L = [number, number, number, number, string] // label box x, y, w, h, text
 
-function Label({ x, y, children, size = 11, anchor = 'start' }: { x: number; y: number; children: string; size?: number; anchor?: 'start' | 'middle' | 'end' }) {
-  return (
-    <text x={x} y={y} fontSize={size} fill="currentColor" textAnchor={anchor} style={mono}>
-      {children}
-    </text>
-  )
+interface Drawing {
+  vb: [number, number, number, number]
+  groups: G[]
+  labels: L[]
 }
 
-/** 01 Unit circle */
-function UnitCircle() {
-  return (
-    <>
-      <circle cx="70" cy="80" r="52" {...S} />
-      <line x1="8" y1="80" x2="132" y2="80" {...S} />
-      <line x1="70" y1="18" x2="70" y2="142" {...S} />
-      <line x1="70" y1="80" x2="104" y2="41" {...S} />
-      <circle cx="104" cy="41" r="4" fill="currentColor" />
-      <path d="M84 80 A14 14 0 0 0 79 69" {...S} />
-      <Label x={86} y={74} size={10}>θ</Label>
-      <Label x={74} y={16} size={10}>y</Label>
-      <Label x={136} y={84} size={10}>x</Label>
-      <Label x={112} y={34} size={10}>(cos θ, sin θ)</Label>
-      <Label x={156} y={78} size={10}>x = cos θ</Label>
-      <Label x={156} y={94} size={10}>y = sin θ</Label>
-      <Label x={156} y={110} size={10}>r = 1</Label>
-    </>
-  )
+const CIRCLE_37 = 'M37 19C37 28.9 28.9 37 19 37C9.1 37 1 28.9 1 19C1 9.1 9.1 1 19 1C28.9 1 37 9.1 37 19Z'
+const glyphRow = (x: number, y: number): G[] => [
+  [x, y, [[CIRCLE_37], ['M1 19H37', 't'], ['M19 1V37', 't']]],
+  [x + 51, y, [[CIRCLE_37], ['M19 1C23.8 1 28.4 2.9 31.7 6.3C35.1 9.6 37 14.2 37 19C37 23.8 35.1 28.4 31.7 31.7C28.4 35.1 23.8 37 19 37V1Z', 'F']]],
+  [x + 102, y, [[CIRCLE_37], ['M7 31L31 7']]],
+  [x + 153, y, [[CIRCLE_37], ['M19 24C21.8 24 24 21.8 24 19C24 16.2 21.8 14 19 14C16.2 14 14 16.2 14 19C14 21.8 16.2 24 19 24Z', 'F']]],
+]
+
+const DRAWINGS: Record<string, Drawing> = {
+  'unit-circle': {
+    vb: [44, 144, 284, 224],
+    groups: [
+      [52, 152, [
+        ['M160 84C160 126 126 160 84 160C42 160 8 126 8 84C8 42 42 8 84 8C126 8 160 42 160 84Z'],
+        ['M1 84H168'], ['M84 167V1'], ['M84 84L138 30'],
+        ['M116 84C116.1 79.8 115.4 75.5 113.8 71.6C112.3 67.6 109.9 64 107 61'],
+        ['M138 34.5C140.5 34.5 142.5 32.5 142.5 30C142.5 27.5 140.5 25.5 138 25.5C135.5 25.5 133.5 27.5 133.5 30C133.5 32.5 135.5 34.5 138 34.5Z', 'f'],
+      ]],
+      ...glyphRow(49, 326),
+    ],
+    labels: [[144, 149, 10, 14, 'y'], [170, 213, 8, 14, 'θ'], [146, 211, 6, 9, '1'], [218, 171, 105, 13, '(cos θ, sin θ)'], [232, 211, 78, 11, 'x = cos θ'], [232, 236, 76, 14, 'y = sin θ'], [232, 261, 42, 10, 'r = 1']],
+  },
+  'reference-triangle': {
+    vb: [742, 150, 300, 164],
+    groups: [
+      [747, 165, [['M1 122H163V1L1 122Z'], ['M148 122V107H163', 't'], ['M23 122C23.4 117.7 25 113.6 27.7 110.3C30.3 106.9 33.9 104.4 38 103', 't']]],
+      [977.4, 155.3, [
+        ['M0.6 46.6H59.6V0.7L0.6 46.6Z', 't'], ['M49.6 46.6V36.6H59.6', 't'],
+        ['M0.6 89.7H59.6V43.6L0.6 89.7Z', 'ft'], ['M49.6 89.7V79.7H59.6', 'w'],
+        ['M0.6 133.7H59.6V87.7L0.6 133.7Z', 'dt'], ['M49.6 133.7V123.7H59.6', 't'],
+      ]],
+    ],
+    labels: [[810, 199, 8, 12, '1'], [919, 225, 40, 10, 'sin θ'], [813, 298, 43, 11, 'cos θ'], [786, 264, 8, 14, 'θ']],
+  },
+  'sine-cosine': {
+    vb: [42, 416, 328, 200],
+    groups: [
+      [47, 419, [
+        ['M1 108H307'], ['M35 175V1'],
+        ['M35 108C57 108 67 52 96 52C125 52 135 164 167 164C199 164 208 52 239 52C270 52 282 108 303 108'],
+        ['M35 52C57 52 67 164 96 164C125 164 135 52 167 52C199 52 208 164 239 164C270 164 282 52 303 52', 'd'],
+        ['M35 52H42', 't'], ['M35 164H42', 't'],
+      ]],
+      [262, 429, [['M1 1H42']]],
+      [262, 451, [['M1 1H42', 'd']]],
+    ],
+    labels: [[53, 458, 5, 8, '1'], [47, 580, 14, 8, '−1'], [73, 539, 6, 8, '0'], [140, 597, 30, 15, 'π/2'], [208, 601, 10, 9, 'π'], [281, 596, 41, 15, '3π/2'], [338, 596, 21, 14, '2π'], [357, 523, 9, 9, 'x'], [315, 424, 45, 13, 'sin(x)'], [315, 445, 49, 14, 'cos(x)']],
+  },
+  'radians-degrees': {
+    vb: [394, 420, 306, 196],
+    groups: [
+      [426, 424, [
+        ['M119 81C119 113.6 92.6 140 60 140C27.4 140 1 113.6 1 81C1 48.4 27.4 22 60 22C92.6 22 119 48.4 119 81Z'],
+        ['M60 81V1'], ['M60 81H132'], ['M60 6C79.9 6 99 13.9 113 28C127.1 42 135 61.1 135 81'],
+        ['M60 86C62.8 86 65 83.8 65 81C65 78.2 62.8 76 60 76C57.2 76 55 78.2 55 81C55 83.8 57.2 86 60 86Z', 'f'],
+      ]],
+      ...glyphRow(397, 574),
+    ],
+    labels: [[544, 429, 8, 14, 'θ'], [575, 443, 110, 11, '180° = π rad'], [575, 470, 122, 12, '360° = 2π rad'], [574, 497, 110, 11, 'π rad = 180°']],
+  },
+  'right-triangles': {
+    vb: [754, 708, 288, 166],
+    groups: [
+      [778, 715, [['M1 1V131H131L1 1Z'], ['M1 115H17V131', 't']]],
+      [978.4, 749.3, [
+        ['M0.6 34.6H46.6V0.7L0.6 34.6Z', 't'],
+        ['M0.6 77.7H46.6V43.6L0.6 77.7Z', 'ft'], ['M36.6 77.7V67.7H46.6', 'w'],
+        ['M0.6 120.7H46.6V86.7L0.6 120.7Z', 'dt'],
+      ]],
+    ],
+    labels: [[762, 775, 8, 10, 'a'], [842, 853, 9, 14, 'b'], [844, 762, 9, 10, 'c'], [926, 737, 110, 12, 'a² + b² = c²']],
+  },
 }
 
-/** 05 Radians / degrees */
-function Radians() {
-  return (
-    <>
-      <circle cx="70" cy="85" r="48" {...S} />
-      <path d="M70 37 A48 48 0 0 1 118 85" {...S} strokeWidth={6} opacity={0.25} />
-      <path d="M70 25 L70 37 M70 25 A60 60 0 0 1 130 85 L118 85" {...S} />
-      <line x1="70" y1="85" x2="118" y2="85" {...S} />
-      <circle cx="70" cy="85" r="4" fill="currentColor" />
-      <Label x={110} y={36} size={11}>θ</Label>
-      <Label x={142} y={68} size={10}>180° = π rad</Label>
-      <Label x={142} y={86} size={10}>360° = 2π rad</Label>
-      <Label x={142} y={104} size={10}>π rad = 180°</Label>
-    </>
-  )
+/** Law of Sines / Law of Cosines: drawn in the same style (the library has no oblique triangle). */
+const EXTRA: Record<'sines' | 'cosines', Drawing> = {
+  sines: {
+    vb: [-4, 0, 294, 162],
+    groups: [[0, 0, [
+      ['M14 136H160L112 24Z'],
+      ['M40 136C40.2 131.4 38.6 126.6 35.6 123', 't'],
+      ['M138 136C138.6 129.8 141.6 124 146 120.5', 't'],
+      ['M14 140.5C16.5 140.5 18.5 138.5 18.5 136C18.5 133.5 16.5 131.5 14 131.5C11.5 131.5 9.5 133.5 9.5 136C9.5 138.5 11.5 140.5 14 140.5Z', 'F'],
+      ['M160 140.5C162.5 140.5 164.5 138.5 164.5 136C164.5 133.5 162.5 131.5 160 131.5C157.5 131.5 155.5 133.5 155.5 136C155.5 138.5 157.5 140.5 160 140.5Z', 'F'],
+    ]]],
+    labels: [[0, 144, 9, 14, 'A'], [164, 144, 9, 14, 'B'], [107, 4, 9, 14, 'C'], [143, 70, 8, 12, 'a'], [50, 70, 8, 12, 'b'], [176, 60, 108, 13, 'a/sin A ='], [176, 82, 92, 13, 'b/sin B']],
+  },
+  cosines: {
+    vb: [0, 0, 290, 162],
+    groups: [[0, 0, [
+      ['M12 136H160L100 24Z'],
+      ['M86 50C93 56 103 57 112 51', 't'],
+      ['M100 28.5C102.5 28.5 104.5 26.5 104.5 24C104.5 21.5 102.5 19.5 100 19.5C97.5 19.5 95.5 21.5 95.5 24C95.5 26.5 97.5 28.5 100 28.5Z', 'F'],
+    ]]],
+    labels: [[96, 2, 9, 14, 'C'], [40, 72, 8, 12, 'b'], [136, 72, 8, 12, 'a'], [66, 144, 44, 14, 'c = ?'], [170, 60, 112, 13, 'c² = a² + b²'], [170, 82, 106, 13, '− 2ab cos C']],
+  },
 }
 
-/** 04 Sine / cosine */
-function Sine() {
-  const sin = Array.from({ length: 61 }, (_, i) => {
-    const x = 20 + i * 3.4
-    return `${i ? 'L' : 'M'}${x.toFixed(1)} ${(80 - 38 * Math.sin((i / 60) * 4 * Math.PI)).toFixed(1)}`
-  }).join(' ')
-  const cos = Array.from({ length: 61 }, (_, i) => {
-    const x = 20 + i * 3.4
-    return `${i ? 'L' : 'M'}${x.toFixed(1)} ${(80 - 38 * Math.cos((i / 60) * 4 * Math.PI)).toFixed(1)}`
-  }).join(' ')
-  return (
-    <>
-      <line x1="14" y1="80" x2="238" y2="80" {...S} />
-      <line x1="20" y1="28" x2="20" y2="132" {...S} />
-      <path d={sin} {...S} />
-      <path d={cos} {...S} strokeDasharray="5 4" />
-      <line x1="170" y1="20" x2="196" y2="20" {...S} />
-      <line x1="170" y1="34" x2="196" y2="34" {...S} strokeDasharray="5 4" />
-      <Label x={200} y={24} size={10}>sin(x)</Label>
-      <Label x={200} y={38} size={10}>cos(x)</Label>
-      <Label x={62} y={148} size={10}>π/2</Label>
-      <Label x={122} y={148} size={10}>π</Label>
-      <Label x={168} y={148} size={10}>3π/2</Label>
-      <Label x={218} y={148} size={10}>2π</Label>
-    </>
-  )
+/** Which library drawing each concept uses */
+const KIND: Record<ArtKind, Drawing> = {
+  'unit-circle': DRAWINGS['unit-circle'],
+  radians: DRAWINGS['radians-degrees'],
+  sine: DRAWINGS['sine-cosine'],
+  reference: DRAWINGS['reference-triangle'],
+  triangles: DRAWINGS['right-triangles'],
+  sines: EXTRA.sines,
+  cosines: EXTRA.cosines,
 }
 
-/** 03 Reference triangle */
-function Reference() {
-  return (
-    <>
-      <polygon points="20,130 170,130 170,30" {...S} />
-      <polyline points="158,130 158,118 170,118" {...S} />
-      <path d="M48 130 A28 28 0 0 0 45 117" {...S} />
-      <Label x={52} y={124} size={11}>θ</Label>
-      <Label x={86} y={70} size={11}>1</Label>
-      <Label x={176} y={84} size={11}>sin θ</Label>
-      <Label x={80} y={148} size={11}>cos θ</Label>
-      <polygon points="200,60 236,60 236,30" {...S} />
-      <polygon points="200,100 236,100 236,70" fill="currentColor" stroke="currentColor" strokeWidth={1.6} />
-      <polygon points="200,140 236,140 236,110" {...S} strokeDasharray="4 3" />
-    </>
-  )
+function pathProps(flags = '') {
+  return {
+    strokeWidth: flags.includes('t') ? 1.3 : 2,
+    stroke: flags.includes('F') ? 'none' : flags.includes('w') ? '#fff' : 'currentColor',
+    fill: flags.includes('f') || flags.includes('F') ? 'currentColor' : 'none',
+    strokeDasharray: flags.includes('d') ? '6 5' : undefined,
+  }
 }
 
-/** Oblique triangle with an opposite side–angle pair (Law of Sines) */
-function Sines() {
-  return (
-    <>
-      <polygon points="16,128 150,128 108,32" {...S} />
-      <path d="M42 128 A26 26 0 0 0 38 115" {...S} />
-      <path d="M128 128 A22 22 0 0 1 139 110" {...S} />
-      <circle cx="16" cy="128" r="3.5" fill="currentColor" />
-      <circle cx="150" cy="128" r="3.5" fill="currentColor" />
-      <circle cx="108" cy="32" r="3.5" fill="currentColor" />
-      <Label x={4} y={146} size={11}>A</Label>
-      <Label x={152} y={146} size={11}>B</Label>
-      <Label x={104} y={24} size={11}>C</Label>
-      <Label x={134} y={78} size={11}>a</Label>
-      <Label x={52} y={76} size={11}>b</Label>
-      <Label x={162} y={70} size={10}>a/sin A</Label>
-      <Label x={162} y={86} size={10}>= b/sin B</Label>
-    </>
-  )
-}
-
-/** Triangle with the included angle marked (Law of Cosines) */
-function Cosines() {
-  return (
-    <>
-      <polygon points="12,128 150,128 96,32" {...S} />
-      <path d="M84 52 A22 22 0 0 0 108 54" {...S} />
-      <circle cx="96" cy="32" r="3.5" fill="currentColor" />
-      <Label x={92} y={24} size={11}>C</Label>
-      <Label x={42} y={76} size={11}>b</Label>
-      <Label x={128} y={78} size={11}>a</Label>
-      <Label x={64} y={146} size={11}>c = ?</Label>
-      <Label x={160} y={70} size={10}>c² = a² + b²</Label>
-      <Label x={160} y={86} size={10}>− 2ab cos C</Label>
-    </>
-  )
-}
-
-/** 09 Right triangles */
-function Triangles() {
+function Draw({ d, labels = true }: { d: Drawing; labels?: boolean }) {
   return (
     <>
-      <polygon points="30,130 30,30 150,130" {...S} />
-      <polyline points="30,118 42,118 42,130" {...S} />
-      <Label x={14} y={84} size={11}>a</Label>
-      <Label x={86} y={148} size={11}>b</Label>
-      <Label x={96} y={74} size={11}>c</Label>
-      <Label x={168} y={44} size={10}>a² + b² = c²</Label>
-      <polygon points="186,80 226,80 226,56" {...S} />
-      <polygon points="186,112 226,112 226,88" fill="currentColor" stroke="currentColor" strokeWidth={1.6} />
-      <polygon points="186,144 226,144 226,120" {...S} strokeDasharray="4 3" />
+      <g strokeLinecap="round" strokeLinejoin="round">
+        {d.groups.map(([x, y, paths], i) => (
+          <g key={i} transform={`translate(${x} ${y})`}>
+            {paths.map(([p, f], j) => (
+              <path key={j} d={p} {...pathProps(f)} />
+            ))}
+          </g>
+        ))}
+      </g>
+      {labels && (
+        <g fill="currentColor" style={{ fontFamily: 'DM Mono, monospace' }}>
+          {d.labels.map(([x, y, w, h, s], i) => {
+            const size = Math.min(16, Math.max(9, w / (s.length * 0.6)))
+            return (
+              <text key={i} x={x} y={y + Math.min(h, size * 0.8)} fontSize={size}>
+                {s}
+              </text>
+            )
+          })}
+        </g>
+      )}
     </>
   )
-}
-
-const ART: Record<ArtKind, () => React.JSX.Element> = {
-  'unit-circle': UnitCircle,
-  radians: Radians,
-  sine: Sine,
-  reference: Reference,
-  sines: Sines,
-  cosines: Cosines,
-  triangles: Triangles,
 }
 
 export function Art({ kind, width = 240, className }: { kind: ArtKind; width?: number | string; className?: string }) {
-  const Draw = ART[kind]
+  const d = KIND[kind]
   return (
-    <svg viewBox="0 0 250 155" width={width} className={className} aria-hidden="true" style={{ overflow: 'visible' }}>
-      <Draw />
+    <svg viewBox={d.vb.join(' ')} width={width} className={className} aria-hidden="true" fill="none">
+      <Draw d={d} />
     </svg>
   )
 }
 
-/** The library's small symbol row: ⊕ ◐ ⊘ ⊙ */
+/* ---------- Small library symbols ---------- */
 export function Glyphs({ size = 22 }: { size?: number }) {
-  const r = size / 2 - 1.5
-  const c = size / 2
-  const g = (k: number, child: React.ReactNode) => (
-    <svg key={k} width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden="true">
-      <circle cx={c} cy={c} r={r} {...S} />
-      {child}
+  return (
+    <svg width={(size * 192) / 38} height={size} viewBox="-1 -1 194 40" aria-hidden="true" fill="none">
+      <Draw d={{ vb: [0, 0, 192, 38], groups: glyphRow(0, 0), labels: [] }} />
     </svg>
   )
+}
+
+export function Target({ size = 34 }: { size?: number }) {
   return (
-    <span style={{ display: 'inline-flex', gap: 6 }}>
-      {g(0, <><line x1={c - r} y1={c} x2={c + r} y2={c} {...S} /><line x1={c} y1={c - r} x2={c} y2={c + r} {...S} /></>)}
-      {g(1, <path d={`M${c} ${c - r} A${r} ${r} 0 0 1 ${c} ${c + r} Z`} fill="currentColor" />)}
-      {g(2, <line x1={c - r * 0.7} y1={c + r * 0.7} x2={c + r * 0.7} y2={c - r * 0.7} {...S} />)}
-      {g(3, <circle cx={c} cy={c} r={2.6} fill="currentColor" />)}
+    <svg width={size} height={size} viewBox="0 0 34 34" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="17" cy="17" r="15" />
+      <circle cx="17" cy="17" r="9.5" />
+      <circle cx="17" cy="17" r="4" />
+    </svg>
+  )
+}
+
+export function Asterisk({ size = 30 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 30 30" aria-hidden="true" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      {[0, 45, 90, 135].map((a) => (
+        <line key={a} x1="15" y1="2" x2="15" y2="28" transform={`rotate(${a} 15 15)`} />
+      ))}
+    </svg>
+  )
+}
+
+/**
+ * Concept badge: a small tile in the concept's duotone with a black outline and a hard
+ * shadow, like Gumroad's app-icon tiles. Replaces the old vertical colour bars.
+ */
+export function ConceptBadge({ kind, size = 56 }: { kind: ArtKind; size?: number }) {
+  const d = KIND[kind]
+  return (
+    <span className="badge-tile" style={{ width: size, height: size }} aria-hidden="true">
+      <svg viewBox={d.vb.join(' ')} width="100%" height="100%" fill="none">
+        <Draw d={d} labels={false} />
+      </svg>
     </span>
   )
 }
 
-/** Concentric target + asterisk, used as small decorations */
-export function Target({ size = 34 }: { size?: number }) {
+/**
+ * Gumroad-style "app window": white title bar with three dots, concept-coloured body,
+ * 2px black outline and a hard shadow. Used for illustrations on cards and page heroes.
+ */
+export function ArtWindow({ kind, color, className, style }: { kind: ArtKind; color: Duotone; className?: string; style?: React.CSSProperties }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 34 34" aria-hidden="true">
-      <circle cx="17" cy="17" r="15" {...S} />
-      <circle cx="17" cy="17" r="9.5" {...S} />
-      <circle cx="17" cy="17" r="4" {...S} />
-    </svg>
-  )
-}
-export function Asterisk({ size = 30 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 30 30" aria-hidden="true">
-      {[0, 45, 90, 135].map((a) => (
-        <line key={a} x1="15" y1="2" x2="15" y2="28" {...S} transform={`rotate(${a} 15 15)`} />
-      ))}
-    </svg>
+    <div className={`art-window ${className ?? ''}`} style={{ ...tone(color), ...style }} aria-hidden="true">
+      <div className="aw-bar">
+        <i />
+        <i />
+        <i />
+      </div>
+      <div className="aw-body">
+        <Art kind={kind} width="100%" />
+      </div>
+    </div>
   )
 }

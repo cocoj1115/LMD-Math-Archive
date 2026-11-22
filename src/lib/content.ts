@@ -15,7 +15,7 @@ export const DUOTONES = {
   sky: { bg: '#FFF584', ink: '#0966DF' },
   orange: { bg: '#F5EBFF', ink: '#EF6801' },
 } as const
-export type Duotone = (typeof DUOTONES)[keyof typeof DUOTONES]
+export type Duotone = { readonly bg: string; readonly ink: string }
 
 export type ArtKind = 'unit-circle' | 'radians' | 'sine' | 'reference' | 'sines' | 'cosines' | 'triangles'
 

@@ -1,8 +1,8 @@
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { Back, RichText, Shell, TeX, Triangle } from '../components/ui'
 import { useApp } from '../lib/app'
-import { Art } from '../components/Art'
-import { EXAMPLES, WORKSHEETS, tone, topicById } from '../lib/content'
+import { ArtWindow } from '../components/Art'
+import { EXAMPLES, WORKSHEETS, topicById } from '../lib/content'
 import { NoteRow } from './Archive'
 
 export function TopicPage() {
@@ -18,13 +18,13 @@ export function TopicPage() {
   return (
     <Shell>
       <Back to="/folder/solving-triangles">All topics</Back>
-      <div className="hero" style={tone(t.color)}>
+      <div className="hero">
         <div className="mono sm">Solving triangles / {t.lesson}</div>
         <h1>{t.name}</h1>
         <p className="sub">{t.summary}</p>
-        <Art kind={t.art} className="hero-art" />
+        <ArtWindow kind={t.art} color={t.color} className="hero-art" />
       </div>
-      <div className="grid-2" style={{ marginTop: 24 }}>
+      <div className="grid-2" style={{ marginTop: 32 }}>
         <Link to={`/example/${id}`} className="card" style={{ textDecoration: 'none' }}>
           <div className="mono sm">Worked example</div>
           <h3 style={{ marginTop: 8 }}>{ex.title}</h3>

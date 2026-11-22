@@ -37,7 +37,7 @@ Each pair is one pastel background + one ink colour, taken directly from the zin
 | Brown | `#D5F2BC` | `#824326` | Trig Graphs |
 | Green | `#D8EDF2` | `#0B8246` | Special Angles |
 
-How to apply: `style={tone(topic.color)}` sets `--tone-bg` / `--tone-ink`, then use the classes `.tag.tone`, `.hero`, `.folder`, `.listcard .swatch`, `.pill.chip`.
+How to apply: `style={tone(topic.color)}` sets `--tone-bg` / `--tone-ink`, then use `.tag.tone`, `.pill.chip`, `<ArtWindow>`, `<ConceptBadge>` or the dropdown `.ctab-menu`.
 
 ### Status
 `--warn #B45309` on `--warn-soft #FFF4D6`, used only for "check this line" in the teacher transcription and for errors.
@@ -47,9 +47,11 @@ How to apply: `style={tone(topic.color)}` sets `--tone-bg` / `--tone-ink`, then 
 ## 2. Typography
 | Role | Font | Size / weight | Notes |
 |---|---|---|---|
-| Display (start screen, intro) | Inter | 84px / 700, uppercase | tracking −0.06em; zine cover lockup |
-| H1 | Inter | 56px / 700 (48px on detail pages) | tracking −0.045em, line-height 0.98 |
-| H2 | Inter | 22px / 700 | tracking −0.02em |
+| Wordmark | Inter | 30px / 700 | tracking −0.06em |
+| Display (start screen) | Inter | 88px / 400 | Gumroad style: large and **regular weight**, never bold |
+| H1 | Inter | 64px / 400 (52px on detail pages) | tracking −0.035em, line-height 1 |
+| Card title | Inter | 38px / 400 | top-left of a card |
+| H2 | Inter | 26px / 400 | tracking −0.02em |
 | Body | Inter | 17px / 400 | line-height 1.5 |
 | Labels, eyebrows, tags, metadata | DM Mono | 11.5–13px / 400, uppercase | letter-spacing 0.02–0.04em |
 | Math | KaTeX | — | Formulas are always typeset, never plain text |
@@ -59,7 +61,7 @@ How to apply: `style={tone(topic.color)}` sets `--tone-bg` / `--tone-ink`, then 
 ## 3. Shape & elevation (Gumroad rules)
 | Element | Radius | Border | Shadow |
 |---|---|---|---|
-| Large card / hero / folder body | 24px | 1px black | none |
+| Large card / hero | 24px | 1px black | none |
 | Panel, list row, post, photo frame | 16px | 1px black | none |
 | Input, textarea, select | 4px | 1px black, background `--bg` | none; focus = 2px brand outline |
 | Pill button / tag | full | 1px black | none |
@@ -76,8 +78,19 @@ How to apply: `style={tone(topic.color)}` sets `--tone-bg` / `--tone-ink`, then 
 
 ---
 
-## 4. Illustrations: Math Visual Library
-Redrawn as SVG components from the zine's *Math Visual Library* (`<Art kind="…" />`). Thin 1.6px strokes and DM Mono labels, drawn in `currentColor` so each illustration takes its concept's ink colour.
+## 4. Navigation (Gumroad marketplace header)
+- **Row 1:** wordmark, then a wide search bar (`/search`), then an outline button (name · Switch) and a solid black button. The solid button is "Ask a question" for students and "Capture board" for teachers. Both buttons have a 4px radius, not pill-shaped.
+- **Row 2: tabs.** "All", then one tab per concept, then Discussion / Topic map (students) or Board notes / Questions (teachers). Tabs have no border at rest; the active tab is white with a black border and a 3px black under-shadow.
+- **Concept dropdown:** hovering a concept tab opens a panel in that concept's pastel colour, with a caret, underlined links (overview, worked example, worksheet, board notes, questions), and the concept illustration at the bottom.
+
+## 5. Cards, windows and badges (Gumroad)
+- **Card** (`.gcard`): white, 1px black, 24px radius, generous padding. Title top-left (regular weight), short description and DM Mono metadata bottom-left, illustration on the right.
+- **Illustration window** (`<ArtWindow>`): a little app window with a title bar and three dots (red / yellow / green), 2px black outline, `6px 6px 0` black shadow, concept-coloured body. Windows may overlap the card edge, as on gumroad.com.
+- **Concept badge** (`<ConceptBadge>`): a square tile in the concept's pastel colour with its illustration, 1.5px black outline and a `3px 3px 0` shadow. Use it to mark a row's concept.
+- **Never** use thin vertical colour bars or side stripes as concept markers. Use a badge or a tag instead.
+
+## 6. Illustrations: Math Visual Library
+Shapes are the **original vector paths exported from Figma** (node 45:488) and live in `src/components/Art.tsx` (`<Art kind="…" />`). Labels, which were outlined text in Figma, are re-set as live DM Mono text. Everything is drawn in `currentColor`, so each illustration takes its concept's ink colour. Law of Sines and Law of Cosines have no drawing in the library, so they are drawn in the same style.
 
 | `kind` | Drawing | Used for |
 |---|---|---|
@@ -95,13 +108,12 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 
 ---
 
-## 5. Layout
+## 7. Layout
 - Page max width 1160px, side gutter 40px
-- Header: brand dot + "Visual Archive" on the left, `MATH 3 / CITY OF BRIDGES` (DM Mono) on the right, 1px black rule underneath
-- Folder grid: `repeat(auto-fill, minmax(250px, 1fr))`, 24px gap
-- Topic and folder pages open with a **hero band** in the concept's duotone with its illustration
+- Class archive: a 2-column grid of cards, with this week's topic as a full-width card on top
+- Topic and folder pages open with a **hero card** (white) with the concept's illustration window overlapping its top edge
 
-## 6. Accessibility notes
+## 8. Accessibility notes
 - Every duotone pair has its ink on its own background at large text sizes (headings, tags). Body text is always black on white or on `--bg`.
 - Concept colour is never the only cue: concept names always appear as text too.
 - Focus states use a 2px brand-blue outline.

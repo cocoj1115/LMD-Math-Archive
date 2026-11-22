@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
-import { Art, Asterisk, Glyphs, Target } from '../components/Art'
+import { ArtWindow, ConceptBadge } from '../components/Art'
+import { DUOTONES, tone } from '../lib/content'
 import { Shell } from '../components/ui'
 import { useApp } from '../lib/app'
 import type { Role } from '../lib/types'
@@ -24,29 +25,23 @@ export function Start() {
 
   return (
     <Shell nav={false}>
-      <div className="cover" aria-label="Making learning visible">
-        <div className="mono" style={{ color: 'var(--brand)' }}>Math 3 · City of Bridges class archive</div>
-        <div className="display" style={{ marginTop: 18 }}>
-          <span className="dash">Making</span>
-          <br />
-          <span className="block">Learning</span>
-          <br />
-          <span className="cloud">Visible</span>
-        </div>
-        <div className="deco" style={{ right: 0, top: 10, width: 300 }}>
-          <Art kind="unit-circle" width={300} />
-          <div style={{ marginTop: 8 }}><Glyphs /></div>
-        </div>
-        <div className="deco" style={{ right: 120, top: 260 }}><Target /></div>
-        <div className="deco" style={{ right: 40, top: 300 }}><Asterisk /></div>
+      <div className="start-hero">
+        <div className="float" style={{ left: 10, top: 40, transform: 'rotate(-12deg)', ...tone(DUOTONES.red) }}><ConceptBadge kind="unit-circle" size={96} /></div>
+        <div className="float" style={{ right: 20, top: 20, transform: 'rotate(10deg)', ...tone(DUOTONES.sky) }}><ConceptBadge kind="triangles" size={84} /></div>
+        <div className="float" style={{ left: 120, top: 250, transform: 'rotate(8deg)', ...tone(DUOTONES.brown) }}><ConceptBadge kind="sine" size={70} /></div>
+        <div className="float" style={{ right: 110, top: 240, transform: 'rotate(-8deg)', ...tone(DUOTONES.orange) }}><ConceptBadge kind="radians" size={76} /></div>
+        <div className="mono" style={{ marginBottom: 18 }}>Math 3 · City of Bridges</div>
+        <h1>Your class,<br />all in one place</h1>
+        <p className="sub">Board notes, worked examples, worksheets, and questions from Math 3, organized by topic.</p>
       </div>
-      <h2 style={{ marginTop: 56, fontSize: 28 }}>Choose your view</h2>
-      <div className="grid-2" style={{ marginTop: 16, maxWidth: 760 }}>
+      <h2 style={{ textAlign: 'center', marginTop: 40 }}>Choose your view</h2>
+      <div className="grid-2" style={{ marginTop: 8, maxWidth: 900, marginInline: 'auto' }}>
         {(['student', 'teacher'] as Role[]).map((r) => (
-          <button key={r} className={`role-card${role === r ? ' selected' : ''}`} onClick={() => setRole(r)}>
-            <div className="big">{r === 'student' ? 'Student' : 'Teacher'}</div>
-            <div style={{ marginTop: 8 }}>
-              {r === 'student' ? 'Find class notes, worked examples, and ask questions.' : 'Capture board notes, correct them, and answer questions.'}
+          <button key={r} className={`gcard role${role === r ? ' selected' : ''}`} style={{ minHeight: 260, textAlign: 'left', cursor: 'pointer', font: 'inherit' }} onClick={() => setRole(r)}>
+            <h3>{r === 'student' ? 'Student' : 'Teacher'}</h3>
+            <ArtWindow kind={r === 'student' ? 'cosines' : 'reference'} color={r === 'student' ? DUOTONES.blue : DUOTONES.green} />
+            <div className="gfoot">
+              {r === 'student' ? 'Find class notes and worked examples, and ask the class when you’re stuck.' : 'Capture the board after class, check the formulas, and answer questions.'}
             </div>
           </button>
         ))}
@@ -54,7 +49,7 @@ export function Start() {
       {role && (
         <form
           className="card"
-          style={{ marginTop: 24, maxWidth: 760 }}
+          style={{ marginTop: 24, maxWidth: 900, marginInline: 'auto' }}
           onSubmit={(e) => {
             e.preventDefault()
             go()
@@ -70,7 +65,7 @@ export function Start() {
               <input className="text" value={code} onChange={(e) => setCode(e.target.value)} />
             </label>
           </div>
-          <button className="pill primary" type="submit">
+          <button className="btn-solid" type="submit">
             Continue →
           </button>
         </form>
@@ -80,9 +75,9 @@ export function Start() {
 }
 
 const STEPS = [
-  { kicker: 'YOUR MATH 3', title: 'CLASS ARCHIVE', body: 'Find the worksheets, examples, and board notes from class.', art: 'unit-circle', bg: '#E6E6E6', ink: '#002BFF' },
-  { kicker: 'CHOOSE', title: 'A TOPIC', body: 'Open the lesson you’re working on or catching up on.', art: 'triangles', bg: '#FFF584', ink: '#0966DF' },
-  { kicker: 'FIND YOUR', title: 'NEXT STEP', body: 'Follow a worked example, try the class worksheet, or ask the class when you’re stuck.', art: 'sine', bg: '#EECED8', ink: '#DD0C00' },
+  { kicker: 'Your Math 3', title: 'Class archive', body: 'Find the worksheets, examples, and board notes from class.', art: 'unit-circle', bg: '#E6E6E6', ink: '#002BFF' },
+  { kicker: 'Choose', title: 'A topic', body: 'Open the lesson you’re working on or catching up on.', art: 'triangles', bg: '#FFF584', ink: '#0966DF' },
+  { kicker: 'Find your', title: 'Next step', body: 'Follow a worked example, try the class worksheet, or ask the class when you’re stuck.', art: 'sine', bg: '#EECED8', ink: '#DD0C00' },
 ] as const
 
 export function Welcome() {
@@ -97,11 +92,11 @@ export function Welcome() {
           Skip intro
         </Link>
       </div>
-      <div className="hero" style={{ marginTop: 28, minHeight: 380, background: s.bg, color: s.ink, padding: '56px 48px' }}>
+      <div className="hero" style={{ marginTop: 56, minHeight: 380, padding: '56px 48px' }}>
         <div className="mono">{s.kicker}</div>
-        <div className="display" style={{ marginTop: 10 }}>{s.title}</div>
-        <p style={{ fontSize: 22, maxWidth: 520 }}>{s.body}</p>
-        <Art kind={s.art} className="hero-art" width={360} />
+        <h1 style={{ fontSize: 80 }}>{s.title}</h1>
+        <p style={{ fontSize: 22, maxWidth: 480 }}>{s.body}</p>
+        <ArtWindow kind={s.art} color={{ bg: s.bg, ink: s.ink }} className="hero-art" style={{ top: 'auto', bottom: -26, width: 380 }} />
       </div>
       <div className="row" style={{ marginTop: 40 }}>
         {n > 1 && (
