@@ -1,0 +1,151 @@
+// Built-in class materials for Math 3 / City of Bridges.
+// Teacher-published board notes from the database are merged into these folders.
+import type { Note } from './types'
+
+export interface Topic {
+  id: string
+  name: string
+  folder: string // folder id in the Class archive
+  lesson?: string
+  summary: string
+}
+
+export interface Folder {
+  id: string
+  name: string
+  topics: string[]
+}
+
+export const TOPICS: Topic[] = [
+  { id: 'radians-degrees', name: 'Radians & Degrees', folder: 'radians-degrees', summary: 'Convert between degrees and radians.' },
+  { id: 'unit-circle', name: 'Unit Circle', folder: 'unit-circle', summary: 'Points on the circle are (cos θ, sin θ).' },
+  { id: 'trig-graphs', name: 'Trig Graphs', folder: 'trig-graphs', summary: 'Read sine and cosine as graphs.' },
+  { id: 'special-angles', name: 'Special Angles', folder: 'special-angles', summary: 'Exact values at π/6, π/4, π/3.' },
+  { id: 'law-of-sines', name: 'Law of Sines', folder: 'solving-triangles', lesson: 'LESSON 5.1', summary: 'You know a side and the angle across from it.' },
+  { id: 'law-of-cosines', name: 'Law of Cosines', folder: 'solving-triangles', lesson: 'LESSON 5.3', summary: 'You know two sides and the angle between them — or all three sides.' },
+]
+
+export const FOLDERS: Folder[] = [
+  { id: 'radians-degrees', name: 'Radians & Degrees', topics: ['radians-degrees'] },
+  { id: 'unit-circle', name: 'Unit Circle', topics: ['unit-circle'] },
+  { id: 'trig-graphs', name: 'Trig Graphs', topics: ['trig-graphs'] },
+  { id: 'special-angles', name: 'Special Angles', topics: ['special-angles'] },
+  { id: 'solving-triangles', name: 'Solving triangles', topics: ['law-of-sines', 'law-of-cosines'] },
+]
+
+export const topicById = (id: string) => TOPICS.find((t) => t.id === id)
+export const folderById = (id: string) => FOLDERS.find((f) => f.id === id)
+
+export interface WorkedExample {
+  topic: string
+  title: string
+  formula: string // LaTeX
+  prompt: string
+  steps: string[] // may contain inline $LaTeX$
+  hint: string
+  triangle: { A: string; B: string; C: string; a: string; b: string; c: string; angleA?: string; angleB?: string; angleC?: string }
+}
+
+export const EXAMPLES: Record<string, WorkedExample> = {
+  'law-of-sines': {
+    topic: 'law-of-sines',
+    title: 'Start with an opposite pair',
+    formula: '\\frac{a}{\\sin A} = \\frac{b}{\\sin B}',
+    prompt: 'Find side b when A = 30°, B = 45°, and a = 8.',
+    steps: [
+      'Match each side to its opposite angle.',
+      'Substitute: $\\frac{8}{\\sin 30^\\circ} = \\frac{b}{\\sin 45^\\circ}$',
+      'Multiply by $\\sin 45^\\circ$: $b = 8\\sqrt{2} \\approx 11.3$',
+    ],
+    hint: 'Start by circling a known side–angle pair.',
+    triangle: { A: 'A', B: 'B', C: 'C', a: 'a = 8', b: 'b = ?', c: '', angleA: '30°', angleB: '45°' },
+  },
+  'law-of-cosines': {
+    topic: 'law-of-cosines',
+    title: 'Use the angle between the sides',
+    formula: 'c^2 = a^2 + b^2 - 2ab\\cos C',
+    prompt: 'Find side c when a = 5, b = 7, and C = 60°.',
+    steps: [
+      'C is the angle between sides a and b.',
+      'Substitute: $c^2 = 5^2 + 7^2 - 2(5)(7)\\cos 60^\\circ$',
+      'Simplify: $c^2 = 39$, so $c = \\sqrt{39} \\approx 6.2$',
+    ],
+    hint: 'Start by marking the angle between the given sides.',
+    triangle: { A: 'A', B: 'B', C: 'C', a: 'a = 5', b: 'b = 7', c: 'c = ?', angleC: '60°' },
+  },
+}
+
+export const WORKSHEETS: Record<string, { title: string; pages: string[] }> = {
+  'law-of-sines': { title: 'A Telltale Sign', pages: ['/assets/sines-p1.png', '/assets/sines-p2.png'] },
+  'law-of-cosines': { title: '“Fixing” Pythagoras', pages: ['/assets/cosines-p1.png', '/assets/cosines-p2.png'] },
+}
+
+const t0 = '2026-11-02T15:00:00Z'
+const base = { class_code: '*', student_work: [], created_at: t0, updated_at: t0, builtIn: true }
+
+export const BUILT_IN_NOTES: Note[] = [
+  {
+    ...base,
+    id: 'radians-and-degrees',
+    topic: 'radians-degrees',
+    title: 'Radians and Degrees',
+    kind: 'Class notes',
+    lines: [
+      { type: 'text', value: 'A full turn is 360° or 2π radians.' },
+      { type: 'math', value: '360^\\circ = 2\\pi' },
+      { type: 'text', value: 'Multiply degrees by π/180 to convert to radians.' },
+      { type: 'math', value: '60^\\circ \\times \\frac{\\pi}{180} = \\frac{\\pi}{3}' },
+    ],
+  },
+  {
+    ...base,
+    id: 'intro-unit-circle',
+    topic: 'unit-circle',
+    title: 'Introduction to the Unit Circle',
+    kind: 'Slides',
+    lines: [
+      { type: 'text', value: 'The unit circle has radius 1.' },
+      { type: 'text', value: 'At angle θ, the point is (cos θ, sin θ).' },
+      { type: 'math', value: '(x, y) = (\\cos\\theta, \\sin\\theta)' },
+      { type: 'text', value: 'Cosine is the horizontal coordinate. Sine is the vertical coordinate.' },
+    ],
+  },
+  {
+    ...base,
+    id: 'unit-circle-board',
+    topic: 'unit-circle',
+    title: 'Unit Circle Board Notes',
+    kind: 'Board notes',
+    lines: [
+      { type: 'text', value: 'Points on the unit circle' },
+      { type: 'math', value: 'x = \\cos\\theta \\qquad y = \\sin\\theta' },
+      { type: 'text', value: 'At θ = π/3, the point is:' },
+      { type: 'math', value: '\\left(\\tfrac{1}{2}, \\tfrac{\\sqrt{3}}{2}\\right)' },
+    ],
+  },
+  {
+    ...base,
+    id: 'reading-trig-graphs',
+    topic: 'trig-graphs',
+    title: 'Reading Trig Graphs',
+    kind: 'Slides',
+    lines: [
+      { type: 'text', value: 'Plot the y-coordinate as the angle increases.' },
+      { type: 'text', value: 'At 0, π/2, π, 3π/2, and 2π, sine is 0, 1, 0, −1, and 0.' },
+      { type: 'text', value: 'The graph repeats after one full turn.' },
+    ],
+  },
+  {
+    ...base,
+    id: 'special-angles-practice',
+    topic: 'special-angles',
+    title: 'Special Angles Practice',
+    kind: 'Handout',
+    lines: [
+      { type: 'text', value: 'Mark π/6, π/4, and π/3 on a unit circle.' },
+      { type: 'text', value: 'Use a reference triangle to find each pair of coordinates.' },
+      { type: 'text', value: 'Check: at π/4, both coordinates are √2/2.' },
+      { type: 'math', value: '\\left(\\tfrac{\\sqrt{2}}{2}, \\tfrac{\\sqrt{2}}{2}\\right)' },
+    ],
+  },
+]
