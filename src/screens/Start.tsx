@@ -1,75 +1,68 @@
 import { useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
-import { ArtWindow, ConceptBadge } from '../components/Art'
-import { DUOTONES, tone } from '../lib/content'
+import { ArtWindow } from '../components/Art'
 import { Shell } from '../components/ui'
 import { useApp } from '../lib/app'
 import type { Role } from '../lib/types'
 
 export function Start() {
   const { session, start } = useApp()
-  const [role, setRole] = useState<Role | null>(null)
-  const [name, setName] = useState('')
-  const [code, setCode] = useState(() => localStorage.getItem('visual-archive:lastCode') || 'MATH3')
+  const last = localStorage.getItem('visual-archive:lastCode') || 'MATH3'
+  const [sName, setSName] = useState('')
+  const [sCode, setSCode] = useState(last)
+  const [tName, setTName] = useState('')
+  const [tCode, setTCode] = useState(last)
 
   if (session) {
     const seen = localStorage.getItem('visual-archive:introSeen')
     return <Navigate to={session.role === 'teacher' ? '/t/capture' : seen ? '/archive' : '/welcome/1'} replace />
   }
 
-  const go = () => {
-    if (!role) return
+  const go = (role: Role, name: string, code: string) => {
     localStorage.setItem('visual-archive:lastCode', code.trim().toUpperCase())
     start(role, name, code) // re-render redirects to the role's home screen
   }
 
   return (
     <Shell nav={false}>
-      <div className="start-hero">
-        <div className="float" style={{ left: 10, top: 40, transform: 'rotate(-12deg)', ...tone(DUOTONES.red) }}><ConceptBadge kind="unit-circle" size={96} /></div>
-        <div className="float" style={{ right: 20, top: 20, transform: 'rotate(10deg)', ...tone(DUOTONES.sky) }}><ConceptBadge kind="triangles" size={84} /></div>
-        <div className="float" style={{ left: 120, top: 250, transform: 'rotate(8deg)', ...tone(DUOTONES.brown) }}><ConceptBadge kind="sine" size={70} /></div>
-        <div className="float" style={{ right: 110, top: 240, transform: 'rotate(-8deg)', ...tone(DUOTONES.orange) }}><ConceptBadge kind="radians" size={76} /></div>
-        <div className="mono" style={{ marginBottom: 18 }}>Math 3 · City of Bridges</div>
-        <h1>Your class,<br />all in one place</h1>
-        <p className="sub">Board notes, worked examples, worksheets, and questions from Math 3, organized by topic.</p>
-      </div>
-      <h2 style={{ textAlign: 'center', marginTop: 40 }}>Choose your view</h2>
-      <div className="grid-2" style={{ marginTop: 8, maxWidth: 900, marginInline: 'auto' }}>
-        {(['student', 'teacher'] as Role[]).map((r) => (
-          <button key={r} className={`gcard role${role === r ? ' selected' : ''}`} style={{ minHeight: 260, textAlign: 'left', cursor: 'pointer', font: 'inherit' }} onClick={() => setRole(r)}>
-            <h3>{r === 'student' ? 'Student' : 'Teacher'}</h3>
-            <ArtWindow kind={r === 'student' ? 'cosines' : 'reference'} color={r === 'student' ? DUOTONES.blue : DUOTONES.green} />
-            <div className="gfoot">
-              {r === 'student' ? 'Find class notes and worked examples, and ask the class when you’re stuck.' : 'Capture the board after class, check the formulas, and answer questions.'}
-            </div>
-          </button>
-        ))}
-      </div>
-      {role && (
+      <div className="entry">
         <form
-          className="card"
-          style={{ marginTop: 24, maxWidth: 900, marginInline: 'auto' }}
+          className="entry-panel"
           onSubmit={(e) => {
             e.preventDefault()
-            go()
+            go('student', sName, sCode)
           }}
         >
-          <div className="grid-2" style={{ gap: 20 }}>
-            <label className="field">
-              <span>{role === 'student' ? 'Your first name' : 'Your name'}</span>
-              <input className="text" value={name} onChange={(e) => setName(e.target.value)} placeholder={role === 'student' ? 'e.g. Maya' : 'e.g. Ms. Rivera'} autoFocus />
-            </label>
-            <label className="field">
-              <span>Class code</span>
-              <input className="text" value={code} onChange={(e) => setCode(e.target.value)} />
-            </label>
-          </div>
-          <button className="btn-solid" type="submit">
-            Continue →
-          </button>
+          <h2>Student</h2>
+          <label className="field">
+            <span>Class code</span>
+            <input className="text" value={sCode} onChange={(e) => setSCode(e.target.value)} autoCapitalize="characters" />
+          </label>
+          <label className="field">
+            <span>First name</span>
+            <input className="text" value={sName} onChange={(e) => setSName(e.target.value)} placeholder="e.g. Maya" autoFocus />
+          </label>
+          <button className="btn-solid entry-btn" type="submit">Join class →</button>
         </form>
-      )}
+        <form
+          className="entry-panel"
+          onSubmit={(e) => {
+            e.preventDefault()
+            go('teacher', tName, tCode)
+          }}
+        >
+          <h2>Teacher</h2>
+          <label className="field">
+            <span>Class code</span>
+            <input className="text" value={tCode} onChange={(e) => setTCode(e.target.value)} autoCapitalize="characters" />
+          </label>
+          <label className="field">
+            <span>Your name</span>
+            <input className="text" value={tName} onChange={(e) => setTName(e.target.value)} placeholder="e.g. Ms. Rivera" />
+          </label>
+          <button className="btn-outline entry-btn" type="submit">Open teacher view →</button>
+        </form>
+      </div>
     </Shell>
   )
 }
