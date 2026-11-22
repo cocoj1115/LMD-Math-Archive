@@ -19,7 +19,6 @@ interface AppValue {
   session: Session | null
   start(role: Role, name: string, classCode: string): void
   signOut(): void
-  mode: 'supabase' | 'local'
   loading: boolean
   error: string | null
   notes: Note[]
@@ -95,7 +94,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const notes = [...data.notes, ...BUILT_IN_NOTES]
     return {
       session,
-      mode: backend.mode,
       loading,
       error,
       notes,

@@ -39,7 +39,7 @@ export function NoteLines({ lines, highlightUncertain = false }: { lines: Line[]
 
 /* ---------- Shell ---------- */
 export function Shell({ children, nav = true }: { children: ReactNode; nav?: boolean }) {
-  const { session, signOut, posts, replies, mode } = useApp()
+  const { session, signOut, posts, replies } = useApp()
   const navigate = useNavigate()
   const teacher = session?.role === 'teacher'
   const unanswered = posts.filter((p) => p.role === 'student' && !replies.some((r) => r.post_id === p.id && r.role === 'teacher')).length
@@ -55,11 +55,6 @@ export function Shell({ children, nav = true }: { children: ReactNode; nav?: boo
       </header>
       <div className="header-rule" />
       <main className="page">
-        {mode === 'local' && (
-          <div className="banner warn no-print">
-            Local mode: data is only saved in this browser. Add Supabase keys to sync teacher and student computers.
-          </div>
-        )}
         {nav && session && (
           <div className="navrow no-print">
             <nav className="pills">
