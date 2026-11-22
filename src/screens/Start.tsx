@@ -106,7 +106,7 @@ export function Welcome() {
           Skip intro
         </Link>
       </div>
-      <div className="hero" style={{ marginTop: 56, minHeight: 380, padding: '56px 48px' }}>
+      <div className="hero inside" style={{ marginTop: 56, minHeight: 380, padding: '56px 48px' }}>
         <div className="mono">{s.kicker}</div>
         <h1 style={{ fontSize: 80 }}>{s.title}</h1>
         <p style={{ fontSize: 22, maxWidth: 480 }}>{s.body}</p>

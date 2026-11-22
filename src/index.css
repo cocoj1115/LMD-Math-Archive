@@ -62,8 +62,7 @@ img { max-width: 100%; }
 .page { max-width: var(--page-w); margin: 0 auto; padding: 0 var(--gutter) 80px; }
 /* Top bar (Gumroad marketplace header) */
 .topbar { max-width: var(--page-w); margin: 0 auto; height: 84px; display: flex; align-items: center; gap: 20px; padding: 0 var(--gutter); }
-.wordmark { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 28px; letter-spacing: -0.05em; text-decoration: none; white-space: nowrap; }
-.wordmark .logo { flex: none; }
+.wordmark { font-weight: 700; font-size: 28px; letter-spacing: -0.05em; text-decoration: none; white-space: nowrap; }
 .searchbar { flex: 1; display: flex; align-items: center; gap: 10px; height: 50px; padding: 0 16px; background: var(--surface); border: var(--line); border-radius: var(--radius-input); }
 .searchbar input { flex: 1; border: 0; outline: 0; background: transparent; font-size: 17px; }
 .searchbar:focus-within { outline: 2px solid var(--brand); outline-offset: 1px; }
@@ -198,7 +197,8 @@ a.card:hover, .lift:hover { transform: var(--lift); box-shadow: var(--shadow-hov
 .hero > :not(.hero-art) { max-width: calc(100% - 400px); }
 .hero h1 { margin: 10px 0 12px; max-width: 560px; }
 .hero .sub { max-width: 520px; margin-bottom: 0; }
-.hero .hero-art { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); width: 320px; } /* always inside the card */
+.hero .hero-art { position: absolute; right: 40px; top: -12px; width: 330px; } /* overflows slightly */
+.hero.inside .hero-art { top: 50%; transform: translateY(-50%); width: 320px; } /* onboarding: stays inside */
 
 /* Gumroad cards */
 .bento { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; margin-top: 12px; }
@@ -212,9 +212,9 @@ a.gcard:hover { transform: var(--lift); box-shadow: var(--shadow-hover); }
 .gcard h3 { font-size: 38px; margin: 0; max-width: 46%; }
 .gcard .gfoot { max-width: 42%; font-size: 17px; line-height: 1.5; }
 .gcard .gfoot .mono { display: block; margin-top: 10px; color: var(--muted); }
-.gcard .art-window { position: absolute; right: 32px; top: 32px; width: 48%; } /* inside the card */
-.gcard.wide .art-window { width: 30%; right: 40px; top: 32px; }
-.gcard.wide .art-window.second { right: 34%; top: 96px; width: 26%; transform: rotate(-3deg); }
+.gcard .art-window { position: absolute; right: -12px; top: 34px; width: 52%; }
+.gcard.wide .art-window { width: 30%; right: 40px; top: -12px; }
+.gcard.wide .art-window.second { right: 33%; top: 110px; width: 27%; transform: rotate(-3deg); }
 .gcard.wide .gfoot { max-width: 34%; }
 .gcard.wide h3 { max-width: 34%; }
 .gcard .tag { align-self: flex-start; }
@@ -322,8 +322,8 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 }
 
 /* Illustration scene: fills the right column, like Gumroad's composed illustrations */
-.scene { position: absolute; top: 32px; right: 40px; bottom: 32px; width: 44%; } /* inside the card */
-.scene .scene-main { position: absolute; top: 28px; right: 22px; width: 86%; }
+.scene { position: absolute; top: 30px; right: -12px; bottom: 30px; width: 46%; }
+.scene .scene-main { position: absolute; top: 30px; right: 40px; width: 84%; }
 .scene .scene-tile { position: absolute; right: 0; bottom: 4px; transform: rotate(6deg); }
 .scene .scene-note { position: absolute; top: 0; right: 70px; display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 12px; }
 .scene .scene-note svg { transform: translateY(5px); }
