@@ -29,12 +29,12 @@ function ThisWeek() {
         <span className="tag solid" style={{ marginBottom: 14, display: 'inline-flex' }}>This week</span>
         <h3>{f.name}</h3>
       </div>
-      <Link to={`/topic/${sines.id}`} className="aw-link second" aria-label={`Open ${sines.name}`}>
+      <div className="aw-link second">
         <ArtWindow kind="sines" color={sines.color} title={`${sines.name} · 5.1`} />
-      </Link>
-      <Link to={`/topic/${cosines.id}`} className="aw-link first" aria-label={`Open ${cosines.name}`}>
+      </div>
+      <div className="aw-link first">
         <ArtWindow kind="cosines" color={cosines.color} title={`${cosines.name} · 5.3`} />
-      </Link>
+      </div>
       <div className="gfoot">
         <span className="mono">
           2 topics · {plural(notes.length, 'board note')}
