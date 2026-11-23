@@ -131,7 +131,7 @@ export const BUILT_IN_NOTES: Note[] = [
       { type: 'text', value: '4. Multiply both sides by sin 101°.' },
       { type: 'math', value: 'AC = \\frac{13 \\sin 101^\\circ}{\\sin 59^\\circ} \\approx 14.9' },
       { type: 'text', value: 'Check: AC is across from the biggest angle (101°), so it should be the longest side. 14.9 > 13 ✓' },
-      { type: 'text', value: 'Calculator tip: make sure it is in degree mode.' },
+      { type: 'text', value: 'Calculator tip: tap Calculator above to open Desmos, and switch it to DEG before you use sin.' },
     ],
   },
   {

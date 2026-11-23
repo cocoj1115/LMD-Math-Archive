@@ -184,3 +184,16 @@ export function Triangle({ t }: { t: { A: string; B: string; C: string; a: strin
     </svg>
   )
 }
+
+/** Opens the Desmos scientific calculator in a new tab. Students set it to DEG for trig. */
+export function CalculatorLink() {
+  return (
+    <a className="pill" href="https://www.desmos.com/scientific" target="_blank" rel="noopener noreferrer" title="Opens Desmos in a new tab. Set it to DEG for sin, cos, tan.">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+        <rect x="5" y="2.5" width="14" height="19" rx="2" /><rect x="8" y="5.5" width="8" height="4" />
+        <path d="M8.5 13h.01M12 13h.01M15.5 13h.01M8.5 16.5h.01M12 16.5h.01M15.5 16.5h.01" strokeWidth="2.6" strokeLinecap="round" />
+      </svg>
+      Calculator
+    </a>
+  )
+}
