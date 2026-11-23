@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { ArtWindow, ConceptBadge } from '../components/Art'
 import { APP_NAME, DUOTONES, tone, type ArtKind, type Duotone } from '../lib/content'
 import { Shell } from '../components/ui'
@@ -151,19 +151,44 @@ export function Welcome() {
   const s = STEPS[n - 1]
   const body = useRef<HTMLDivElement>(null)
   const scale = useFitWidth(body, 1120)
+  const navigate = useNavigate()
+  const { session } = useApp()
   const ink = { color: s.ink }
+
+  // keyboard: → next, ← back, Esc skip
+  useEffect(() => {
+    const on = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') navigate(n < 3 ? `/welcome/${n + 1}` : '/archive')
+      if (e.key === 'ArrowLeft' && n > 1) navigate(`/welcome/${n - 1}`)
+      if (e.key === 'Escape') navigate('/archive')
+    }
+    window.addEventListener('keydown', on)
+    return () => window.removeEventListener('keydown', on)
+  }, [n, navigate])
+
   return (
     <div className="wel-page">
+      <header className="wel-top">
+        <span className="wordmark">{APP_NAME}</span>
+        <Link to="/archive" className="linkbtn">Skip intro</Link>
+      </header>
       {/* the onboarding page is shown as a big "screen" on the normal page background */}
       <div className="wel-screen">
         <div className="wel-bar">
           <i />
           <i />
           <i />
+          {/* progress: one segment per step */}
+          <div className="wel-progress" aria-label={`Step ${n} of 3`}>
+            {[1, 2, 3].map((k) => (
+              <span key={k} className={k <= n ? 'on' : ''} style={k <= n ? { background: s.ink } : undefined} />
+            ))}
+          </div>
         </div>
         <div className="wel-body" ref={body} style={{ background: s.bg }}>
-      <div className="wel-stage" style={{ transform: `scale(${scale})` }}>
-        <Link to="/archive" className="wel-brand" style={ink}>{APP_NAME.toUpperCase()}</Link>
+      {/* key={n} replays the entrance animation on every step */}
+      <div key={n} className="wel-stage" style={{ transform: `scale(${scale})` }}>
+        <p className="wel-brand" style={ink}>Hi{session?.name && session.name !== 'Student' ? `, ${session.name}` : ''}</p>
         <p className="wel-meta" style={ink}>WELCOME</p>
         <p className="wel-count" style={ink}>{n} of 3</p>
         <p className="wel-line1" style={ink}>{s.line1}</p>
@@ -175,7 +200,7 @@ export function Welcome() {
         </div>
         <p className="wel-desc" style={ink}>{s.desc}</p>
         {/* Zine margin / coordinate plot (exported from Figma) */}
-        <svg className="wel-plot" width="200" height="148" viewBox="0 0 200 148" fill="none" stroke={s.ink} strokeWidth="1.6" aria-hidden="true">
+        <svg className="wel-plot draw" width="200" height="148" viewBox="0 0 200 148" fill="none" stroke={s.ink} strokeWidth="1.6" aria-hidden="true">
           <path d="M5 73H194M97 4V142" />
           <path d="M149 73C149 101.7 125.7 125 97 125C68.3 125 45 101.7 45 73C45 44.3 68.3 21 97 21C125.7 21 149 44.3 149 73Z" />
           <path d="M97 73L98.5 71.5M134 73V70.9M100.8 69.2L103.8 66.2M106.1 63.9L109.1 60.9M111.3 58.7L114.4 55.6M116.6 53.4L119.7 50.3M121.9 48.1L124.9 45.1M127.2 42.8L130.2 39.8M132.5 37.5L134 36V38.1M134 41.3V45.5M134 48.7V52.9M134 56.1V60.3M134 63.5V67.7" />
