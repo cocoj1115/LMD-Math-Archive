@@ -143,6 +143,9 @@ p { line-height: 1.5; }
 /* filter chips that carry a concept colour */
 .pill.chip { border-color: var(--ink); }
 .pill.chip.primary { background: var(--tone-bg); color: var(--tone-ink); }
+.materials-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin: 40px 0 16px; }
+.materials-head h2 { margin: 0; }
+.filter-row { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .linkbtn { background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; font-weight: 500; }
 

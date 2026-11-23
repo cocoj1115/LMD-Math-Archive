@@ -181,8 +181,10 @@ export function Folder() {
   const { id = '' } = useParams()
   const f = folderById(id)
   const materials = useMaterials(f?.topics ?? [])
+  const [only, setOnly] = useState<string | null>(null) // topic filter for "All materials"
   if (!f) return <Shell><h1>Folder not found</h1></Shell>
   const multi = f.topics.length > 1
+  const shown = only ? materials.filter((m) => m.topic === only) : materials
   return (
     <Shell>
       <div className="crumb mono sm">
@@ -205,14 +207,29 @@ export function Folder() {
               )
             })}
           </div>
-          <h2 style={{ marginTop: 40 }}>All materials</h2>
+          <div className="materials-head">
+          <h2>All materials</h2>
+          <div className="filter-row" role="group" aria-label="Filter by topic">
+            <button type="button" className={`pill sm${only === null ? ' primary' : ''}`} aria-pressed={only === null} onClick={() => setOnly(null)}>
+              All
+            </button>
+            {f.topics.map((tid) => {
+              const t = topicById(tid)!
+              return (
+                <button key={tid} type="button" className={`pill sm chip${only === tid ? ' primary' : ''}`} style={tone(t.color)} aria-pressed={only === tid} onClick={() => setOnly(tid)}>
+                  {t.name}
+                </button>
+              )
+            })}
+          </div>
+          </div>
         </>
       )}
       {!multi && <div style={{ height: 20 }} />}
-      {materials.length === 0 ? (
+      {shown.length === 0 ? (
         <div className="panel">Nothing here yet.</div>
       ) : (
-        materials.map((m) => <MaterialRow key={m.id} m={m} showTopic={multi} />)
+        shown.map((m) => <MaterialRow key={m.id} m={m} showTopic={multi} />)
       )}
     </Shell>
   )
