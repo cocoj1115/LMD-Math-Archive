@@ -54,6 +54,7 @@ export function NotePage() {
         <div>
           {n.photo_url && showPhoto && <h2>Checked notes</h2>}
           <div className="card">
+            {n.figure && <img className="note-figure" src={n.figure} alt={`Diagram for ${n.title}`} />}
             <NoteLines lines={n.lines} />
             {n.diagram && <p className="muted" style={{ fontSize: 15 }}>Diagram on the board: {n.diagram}</p>}
           </div>

@@ -23,6 +23,8 @@ export interface Note {
   lines: Line[]
   original_lines?: Line[] | null
   diagram?: string | null
+  /** built-in figure shown above the notes (image path) */
+  figure?: string | null
   photo_url?: string | null
   student_work: StudentWork[]
   created_at: string

@@ -438,3 +438,5 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 .topic-card p { margin: 0 0 12px; color: var(--muted); }
 .topic-card .pill { align-self: flex-start; }
 .topic-card:hover { transform: var(--lift); box-shadow: var(--shadow-hover); }
+
+.note-figure { display: block; max-width: 440px; width: 100%; margin: 4px auto 18px; border: var(--line); border-radius: 12px; }
