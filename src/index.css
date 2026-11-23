@@ -665,3 +665,7 @@ section > h2, .section-head, .materials-head, .spread.section, .spread.no-print.
 .mono { font-size: 14px; }
 .mono.sm, .crumb { font-size: 13.5px; }
 .tag { font-size: 13px; }
+
+/* Navigation bar in DM Mono (the wordmark keeps its own face) */
+.topbar .tab, .topbar .searchbar input, .topbar .me-btn, .topbar .me-menu, .topbar .me-menu .pill, .topbar .pill.cta { font-family: var(--font-mono); letter-spacing: -0.02em; }
+.topbar .tab.active, .topbar .me-btn, .topbar .me-name { font-weight: 500; } /* DM Mono ships 400/500 only */
