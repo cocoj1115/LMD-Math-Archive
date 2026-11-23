@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 240" width="440" height="240" font-family="Inter, Arial, sans-serif">
+<rect width="440" height="240" fill="#FFF584"/>
+<g stroke="#0966DF" stroke-width="2" fill="none">
+<path d="M40.3 57.6 L66.0 190.0 L404.0 190.0 Z"/>
+<path d="M88.0 190.0 A22 22 0 0 0 61.8 168.4"/>
+<path d="M358.0 190.0 A46 46 0 0 1 360.8 174.3"/>
+</g>
+<g fill="#0966DF" font-size="16">
+<text x="32.3" y="49.6">A</text>
+<text x="48.0" y="208.0">B</text>
+<text x="410.0" y="206.0">C</text>
+<text x="76.0" y="164.0" font-size="14">101°</text>
+<text x="312.0" y="184.0" font-size="14">20°</text>
+<text x="225.0" y="212.0">13</text>
+<text x="230.1" y="113.8" font-weight="700">AC = ?</text>
+</g>
+</svg>

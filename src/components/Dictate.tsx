@@ -59,8 +59,12 @@ export function Dictate({ onText, onUsed }: { onText: (text: string) => void; on
 
   return (
     <span className="row">
-      <button type="button" className={`pill sm${on ? ' primary' : ''}`} onClick={toggle} aria-pressed={on}>
-        {on ? '● Stop recording' : '🎙 Record by voice'}
+      <button type="button" className={`pill mic${on ? ' primary' : ''}`} onClick={toggle} aria-pressed={on}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+          <rect x="9" y="3" width="6" height="11" rx="3" />
+          <path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
+        </svg>
+        {on ? 'Stop recording' : 'Record by voice'}
       </button>
       {err && <span style={{ color: 'var(--warn)', fontSize: 14 }}>{err}</span>}
     </span>

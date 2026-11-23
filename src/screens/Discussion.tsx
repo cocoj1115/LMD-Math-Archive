@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { AnchorPreview } from '../components/Annotate'
 import { Dictate } from '../components/Dictate'
 import { PhotoInput } from '../components/PhotoInput'
-import { NoteLines, Shell, timeAgo } from '../components/ui'
+import { NoteLines, Shell } from '../components/ui'
 import { useApp } from '../lib/app'
-import { TOPICS, topicById } from '../lib/content'
+import { TOPICS, tone, topicById } from '../lib/content'
 import { transcribe } from '../lib/ocr'
 import type { Line, Post } from '../lib/types'
 
@@ -21,16 +22,18 @@ export function PostCard({ p, open: openInit = false, teacherTools }: { p: Post;
   const isAuthor = p.author_id === session?.deviceId
 
   return (
-    <article className="post" id={`post-${p.id}`}>
-      <div className="mono sm">
-        {p.role === 'teacher' ? 'Teacher' : 'Student'} / {t?.name ?? p.topic}
-        {note && (
+    <article className={`post${mine.length ? '' : ' open-q'}`} id={`post-${p.id}`}>
+      <div className="mono sm row" style={{ gap: 8 }}>
+        <span className="tag tone" style={tone(t?.color)}>{t?.name ?? p.topic}</span>
+        {p.role === 'teacher' && 'Teacher'}
+        {note && !p.anchor && (
           <>
             {' '}· about <Link to={`/note/${note.id}`}>{note.title}</Link>
           </>
         )}
       </div>
       <h3 style={{ margin: '8px 0 6px' }}>{p.title}</h3>
+      <AnchorPreview p={p} />
       {p.body && <p style={{ margin: '0 0 10px', whiteSpace: 'pre-wrap' }}>{p.body}</p>}
       {p.photo_url && (
         <div className="row" style={{ alignItems: 'flex-start' }}>
@@ -50,7 +53,7 @@ export function PostCard({ p, open: openInit = false, teacherTools }: { p: Post;
         </div>
       )}
       <div className="mono sm" style={{ marginTop: 10 }}>
-        {p.author_name} · {timeAgo(p.created_at)} {p.voice && '· recorded by voice'} · {mine.length} repl{mine.length === 1 ? 'y' : 'ies'}
+        {p.author_name} · {mine.length} repl{mine.length === 1 ? 'y' : 'ies'}
       </div>
 
       {isAuthor && p.share_status === 'asked' && (
@@ -71,7 +74,6 @@ export function PostCard({ p, open: openInit = false, teacherTools }: { p: Post;
           {mine.map((r) => (
             <div key={r.id} className={`reply${r.role === 'teacher' ? ' teacher' : ''}`}>
               <strong>{r.role === 'teacher' ? `${r.author_name} (teacher)` : r.author_name}</strong>
-              <span className="muted"> · {timeAgo(r.created_at)}</span>
               <div style={{ whiteSpace: 'pre-wrap' }}>{r.body}</div>
             </div>
           ))}
@@ -126,24 +128,26 @@ export function Discussion() {
 
   return (
     <Shell>
-      <div className="spread" style={{ alignItems: 'flex-end' }}>
-        <div>
-          <h1>Class discussion</h1>
-          <p className="sub" style={{ marginBottom: 0 }}>Math 3 {topic && <> / {topicById(topic)?.name}</>}</p>
-        </div>
+      <div className="page-head">
+        <h1>Class discussion</h1>
         {session?.role === 'student' && (
           <Link className="pill primary" to={`/discussion/new${topic ? `?topic=${topic}` : ''}`}>New post</Link>
         )}
       </div>
-      <div className="row" style={{ margin: '22px 0' }}>
+      <div className="row" style={{ margin: '32px 0 24px' }}>
         <button className={`pill sm${!topic ? ' primary' : ''}`} onClick={() => setParams({})}>All</button>
         {TOPICS.map((t) => (
-          <button key={t.id} className={`pill sm${topic === t.id ? ' primary' : ''}`} onClick={() => setParams({ topic: t.id })}>
+          <button key={t.id} className={`pill sm chip${topic === t.id ? ' primary' : ''}`} style={tone(t.color)} onClick={() => setParams({ topic: t.id })}>
             {t.name}
           </button>
         ))}
       </div>
-      {list.length === 0 ? <div className="panel">No posts yet. Be the first to ask.</div> : list.map((p) => <PostCard key={p.id} p={p} open={p.id === focus} />)}
+      {list.length === 0 ? (
+        <div className="empty">
+          <strong>No questions yet.</strong>
+          Ask from any class material, or start a new post.
+        </div>
+      ) : list.map((p) => <PostCard key={p.id} p={p} open={p.id === focus} />)}
     </Shell>
   )
 }
@@ -154,6 +158,13 @@ export function NewPost() {
   const [params] = useSearchParams()
   const [topic, setTopic] = useState(params.get('topic') || 'law-of-cosines')
   const [noteId, setNoteId] = useState(params.get('note') || '')
+  const anchor = (() => {
+    try {
+      return params.get('anchor') ? (JSON.parse(params.get('anchor')!) as Post['anchor']) : null
+    } catch {
+      return null
+    }
+  })()
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [voice, setVoice] = useState(false)
@@ -188,7 +199,7 @@ export function NewPost() {
     setErr(null)
     try {
       const photo_url = photo ? await uploadPhoto(photo) : null
-      const id = await addPost({ topic, note_id: noteId || null, title: title.trim(), body: body.trim(), photo_url, photo_lines: photoLines, voice })
+      const id = await addPost({ topic, note_id: noteId || null, title: title.trim(), body: body.trim(), photo_url, photo_lines: photoLines, voice, anchor })
       navigate(`/discussion?post=${id}`)
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e))
@@ -198,74 +209,74 @@ export function NewPost() {
 
   return (
     <Shell>
-      <h1>New post</h1>
-      <p className="sub">Ask about the step that’s confusing you. Classmates and your teacher can reply.</p>
-      <div className="grid-2" style={{ gridTemplateColumns: '1.2fr 1fr', alignItems: 'start' }}>
-        <div className="card">
-          <div className="grid-2" style={{ gap: 16 }}>
-            <label className="field">
-              <span>1. Math concept</span>
-              <select className="text" value={topic} onChange={(e) => { setTopic(e.target.value); setNoteId('') }}>
-                {TOPICS.map((t) => (
-                  <option key={t.id} value={t.id}>{t.name}</option>
-                ))}
-              </select>
-            </label>
-            <label className="field">
-              <span>Class notes it’s about (optional)</span>
-              <select className="text" value={noteId} onChange={(e) => setNoteId(e.target.value)}>
-                <option value="">—</option>
-                {topicNotes.map((n) => (
-                  <option key={n.id} value={n.id}>{n.title}</option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <label className="field">
-            <span>2. Your question</span>
-            <input className="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Why do I get a negative number for c²?" />
-          </label>
-          <label className="field">
-            <span>What is unclear? Which step?</span>
-            <textarea className="text" value={body} onChange={(e) => setBody(e.target.value)} placeholder="I got to step 2 and then…" />
-          </label>
-          <Dictate
-            onText={(t) => setBody((b) => (b ? `${b} ${t}` : t))}
-            onUsed={() => setVoice(true)}
-          />
-        </div>
-
-        <div className="card">
-          <h2>3. Photo of your work <span className="muted" style={{ fontWeight: 400 }}>(optional)</span></h2>
-          {photo ? (
-            <>
-              <div className="photo-frame">
-                <img src={photo} alt="Your paper attempt" />
-              </div>
-              <div className="row" style={{ marginTop: 10 }}>
-                <button className="pill sm" onClick={() => { setPhoto(null); setPhotoLines(null) }}>Remove photo</button>
-              </div>
-              {reading && (
-                <p className="row"><span className="spinner" /> Reading your work…</p>
-              )}
-              {photoLines && photoLines.length > 0 && (
-                <div className="inset" style={{ marginTop: 10 }}>
-                  <div className="mono sm" style={{ marginBottom: 8 }}>Typed version (helps your teacher read it)</div>
-                  <NoteLines lines={photoLines} />
-                </div>
-              )}
-            </>
-          ) : (
-            <PhotoInput onPhoto={onPhoto} uploadLabel="Upload photo" cameraLabel="Use camera" dropzone hint="Just the problem you’re stuck on — leave your name out." />
-          )}
-        </div>
+      <div className="crumb">
+        <Link to="/discussion">Class discussion</Link> &nbsp;/&nbsp; New post
       </div>
-      {err && <div className="banner warn">{err}</div>}
-      <div className="row" style={{ marginTop: 22 }}>
-        <button className="pill" onClick={() => navigate(-1)}>Cancel</button>
-        <button className="pill primary" onClick={submit} disabled={busy}>
-          {busy ? 'Posting…' : 'Post question'}
-        </button>
+      <h1 style={{ marginTop: 12 }}>Ask the class</h1>
+      <div className="composer">
+        {anchor && <AnchorPreview p={{ id: 'draft', anchor } as Post} />}
+        <label className="field">
+          <span>Your question</span>
+          <input className="text big" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Why do I get a negative number for c²?" autoFocus />
+        </label>
+        <label className="field">
+          <span>Where did you get stuck? (optional)</span>
+          <textarea className="text" value={body} onChange={(e) => setBody(e.target.value)} placeholder="I got to step 2 and then…" />
+        </label>
+
+        <div className="composer-attach">
+          <div className="attach-photo">
+            {photo ? (
+              <div className="attached">
+                <img src={photo} alt="Your paper attempt" />
+                <div>
+                  <div className="mono sm">Photo of your work</div>
+                  {reading && <p className="row" style={{ margin: '6px 0 0' }}><span className="spinner" /> Reading your work…</p>}
+                  <button className="linkbtn sm" onClick={() => { setPhoto(null); setPhotoLines(null) }}>Remove</button>
+                </div>
+              </div>
+            ) : (
+              <PhotoInput onPhoto={onPhoto} uploadLabel="Upload photo" cameraLabel="Use camera" dropzone hint="Leave your name out." />
+            )}
+          </div>
+          <div className="attach-voice">
+            <div className="mono sm" style={{ marginBottom: 10 }}>Or say it out loud</div>
+            <Dictate onText={(t) => setBody((b) => (b ? `${b} ${t}` : t))} onUsed={() => setVoice(true)} />
+          </div>
+        </div>
+        {photoLines && photoLines.length > 0 && (
+          <div className="inset" style={{ marginTop: 12 }}>
+            <div className="mono sm" style={{ marginBottom: 8 }}>Typed version</div>
+            <NoteLines lines={photoLines} />
+          </div>
+        )}
+
+        <div className="composer-foot">
+          <label className="field inline">
+            <span>Topic</span>
+            <select className="text" value={topic} onChange={(e) => { setTopic(e.target.value); setNoteId('') }}>
+              {TOPICS.map((t) => (
+                <option key={t.id} value={t.id}>{t.name}</option>
+              ))}
+            </select>
+          </label>
+          <label className="field inline">
+            <span>Material</span>
+            <select className="text" value={noteId} onChange={(e) => setNoteId(e.target.value)}>
+              <option value="">None</option>
+              {topicNotes.map((n) => (
+                <option key={n.id} value={n.id}>{n.title}</option>
+              ))}
+            </select>
+          </label>
+          <div className="row composer-actions">
+            <button className="pill" onClick={() => navigate(-1)}>Cancel</button>
+            <button className="pill primary" onClick={submit} disabled={busy}>
+              {busy ? 'Posting…' : 'Post question'}
+            </button>
+          </div>
+        </div>
+        {err && <div className="banner warn" style={{ marginTop: 12 }}>{err}</div>}
       </div>
     </Shell>
   )

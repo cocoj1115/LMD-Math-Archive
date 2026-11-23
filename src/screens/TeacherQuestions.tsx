@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Shell } from '../components/ui'
 import { useApp } from '../lib/app'
-import { TOPICS } from '../lib/content'
+import { TOPICS, tone } from '../lib/content'
 import type { Post } from '../lib/types'
 import { PostCard } from './Discussion'
 
@@ -76,8 +76,8 @@ export function Questions() {
         return (
           <section key={t.id} style={{ marginBottom: 34 }}>
             <div className="spread" style={{ alignItems: 'center', marginBottom: 12 }}>
-              <h2 style={{ margin: 0 }}>
-                {t.name} <span className="muted" style={{ fontWeight: 400 }}>· {total} question{total > 1 ? 's' : ''}</span>
+              <h2 style={{ margin: 0 }} className="row">
+                <span className="tag tone" style={{ ...tone(t.color), fontSize: 13 }}>{t.name}</span> <span className="muted" style={{ fontWeight: 400 }}>· {total} question{total > 1 ? 's' : ''}</span>
               </h2>
               {total >= 2 && <span className="tag warn">Common question — consider explaining in class</span>}
             </div>

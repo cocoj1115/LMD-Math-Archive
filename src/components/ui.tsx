@@ -1,6 +1,7 @@
 import katex from 'katex'
-import { Fragment, useMemo, type ReactNode } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { Fragment, useMemo, useState, type ReactNode } from 'react'
+import { Link, NavLink, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { APP_NAME } from '../lib/content'
 import { useApp } from '../lib/app'
 import type { Line } from '../lib/types'
 
@@ -37,62 +38,103 @@ export function NoteLines({ lines, highlightUncertain = false }: { lines: Line[]
   )
 }
 
-/* ---------- Shell ---------- */
+/* ---------- Shell: Gumroad-style two-row navigation ---------- */
 export function Shell({ children, nav = true }: { children: ReactNode; nav?: boolean }) {
   const { session, signOut, posts, replies } = useApp()
   const navigate = useNavigate()
+  const loc = useLocation()
+  const [params] = useSearchParams()
+  const [q, setQ] = useState(params.get('q') || '')
   const teacher = session?.role === 'teacher'
   const unanswered = posts.filter((p) => p.role === 'student' && !replies.some((r) => r.post_id === p.id && r.role === 'teacher')).length
-  const pill = ({ isActive }: { isActive: boolean }) => `pill${isActive ? ' primary' : ''}`
+  const tab = ({ isActive }: { isActive: boolean }) => `tab${isActive ? ' active' : ''}`
+  // "Class archive" stays active anywhere inside the archive (folders, topics, notes, search)
+  const path = loc.pathname
+  const inArchive = ['/archive', '/folder/', '/topic/', '/note/', '/search'].some((p) => path === p || path.startsWith(p))
 
+  const [menu, setMenu] = useState(false)
   return (
     <>
-      <header className="header">
-        <Link to="/archive" className="brand">
-          VISUAL ARCHIVE
-        </Link>
-        <span className="mono">MATH 3 / CITY OF BRIDGES</span>
-      </header>
-      <div className="header-rule" />
-      <main className="page">
-        {nav && session && (
-          <div className="navrow no-print">
-            <nav className="pills">
+      <header className="topbar-wrap no-print">
+        <div className="topbar">
+          <Link to={session ? '/archive' : '/'} className="wordmark">
+            {APP_NAME}
+          </Link>
+          {session && nav && (
+            <nav className="tabs-inline" aria-label="Sections">
               {teacher ? (
                 <>
-                  <NavLink className={pill} to="/archive">Class archive</NavLink>
-                  <NavLink className={pill} to="/t/capture">Board notes</NavLink>
-                  <NavLink className={pill} to="/t/questions">
-                    Questions {unanswered > 0 && <span className="badge">{unanswered}</span>}
+                  <NavLink className={() => `tab${inArchive ? ' active' : ''}`} to="/archive">Class archive</NavLink>
+                  <NavLink className={tab} to="/t/capture">Board notes</NavLink>
+                  <NavLink className={tab} to="/t/questions">
+                    Questions {unanswered > 0 && <span className="count">{unanswered}</span>}
                   </NavLink>
                 </>
               ) : (
                 <>
-                  <NavLink className={pill} to="/map">Topic map</NavLink>
-                  <NavLink className={pill} to="/archive">Class archive</NavLink>
-                  <NavLink className={pill} to="/discussion">Discussion</NavLink>
+                  <NavLink className={tab} to="/map">Topic map</NavLink>
+                  <NavLink className={() => `tab${inArchive ? ' active' : ''}`} to="/archive">Class archive</NavLink>
+                  <NavLink className={tab} to="/discussion">Discussion</NavLink>
                 </>
               )}
             </nav>
-            <div className="row">
-              <span className="mono sm">
-                {teacher ? 'Teacher view' : 'Student view'} · {session.name} · {session.classCode}
-              </span>
-              <button
-                className="linkbtn mono sm"
-                onClick={() => {
-                  signOut()
-                  navigate('/')
+          )}
+          <span style={{ flex: 1 }} />
+          {session && nav && (
+            <>
+              <form
+                className="searchbar"
+                role="search"
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  navigate(`/search?q=${encodeURIComponent(q.trim())}`)
                 }}
               >
-                Switch
-              </button>
-            </div>
-          </div>
-        )}
-        {children}
-      </main>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="M20 20l-4-4" strokeLinecap="round" />
+                </svg>
+                <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search" aria-label="Search notes, concepts, questions" />
+              </form>
+              <div className="me">
+                <button className="me-btn" onClick={() => setMenu((v) => !v)} aria-expanded={menu} aria-label={`${session.name}, account menu`}>
+                  {session.name.slice(0, 1).toUpperCase()}
+                </button>
+                {menu && (
+                  <div className="me-menu" onMouseLeave={() => setMenu(false)}>
+                    <div className="me-name">{session.name}</div>
+                    <div className="mono sm">{teacher ? 'Teacher' : 'Student'} · {session.classCode}</div>
+                    <button
+                      className="pill sm"
+                      onClick={() => {
+                        signOut()
+                        navigate('/')
+                      }}
+                    >
+                      Switch user
+                    </button>
+                  </div>
+                )}
+              </div>
+              {teacher ? (
+                <Link className="pill primary cta" to="/t/capture"><PlusIcon /> Capture board</Link>
+              ) : (
+                <Link className="pill primary cta" to="/discussion/new"><PlusIcon /> Ask a question</Link>
+              )}
+            </>
+          )}
+        </div>
+      </header>
+      <main key={loc.pathname} className="page page-enter">{children}</main>
     </>
+  )
+}
+
+function PlusIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+      <path d="M7 1v12M1 7h12" />
+    </svg>
   )
 }
 

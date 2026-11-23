@@ -48,3 +48,6 @@ src/screens/
 ```
 
 Suggested split: one person owns the Teacher side (`TeacherCapture`, `TeacherQuestions`, `server/ocr.ts`), the other owns the Student side (`Archive`, `Topic`, `Note`, `Discussion`). Give each other a heads-up before changing the shared files in `src/lib/*`.
+
+## Resetting the demo
+Open `/reset` (for example `http://localhost:5173/reset`) to clear everything posted or published in this browser: questions, replies, notes published from the teacher view, bookmarks and the signed-in name. The built-in class materials stay. Do this between test participants.

@@ -23,6 +23,8 @@ export interface Note {
   lines: Line[]
   original_lines?: Line[] | null
   diagram?: string | null
+  /** built-in figure shown above the notes (image path) */
+  figure?: string | null
   photo_url?: string | null
   student_work: StudentWork[]
   created_at: string
@@ -30,6 +32,11 @@ export interface Note {
   /** built-in class material (not stored in the database) */
   builtIn?: boolean
 }
+
+/** Where a student's question points inside a material: one line of a note, or a spot on an image. */
+export type Anchor =
+  | { kind: 'line'; material: string; index: number; text: string; math?: boolean }
+  | { kind: 'pin'; material: string; image: string; x: number; y: number }
 
 export interface Post {
   id: string
@@ -45,6 +52,7 @@ export interface Post {
   author_id: string
   role: Role
   share_status?: 'asked' | 'yes' | 'no' | null
+  anchor?: Anchor | null
   created_at: string
 }
 

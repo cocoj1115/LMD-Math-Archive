@@ -1,42 +1,35 @@
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import { PinImage } from '../components/Annotate'
 import { Back, RichText, Shell, TeX, Triangle } from '../components/ui'
 import { useApp } from '../lib/app'
+import { ArtWindow } from '../components/Art'
 import { EXAMPLES, WORKSHEETS, topicById } from '../lib/content'
-import { NoteRow } from './Archive'
+import { MaterialRow, useMaterials } from './Archive'
 
 export function TopicPage() {
   const { id = '' } = useParams()
-  const { notes, posts } = useApp()
+  const { posts } = useApp()
   const t = topicById(id)
+  const materials = useMaterials([id])
   if (!t) return <Navigate to="/archive" replace />
   if (t.folder !== 'solving-triangles') return <Navigate to={`/folder/${t.folder}`} replace />
-  const ex = EXAMPLES[id]
-  const ws = WORKSHEETS[id]
-  const board = notes.filter((n) => n.topic === id)
   const q = posts.filter((p) => p.topic === id)
   return (
     <Shell>
-      <Back to="/folder/solving-triangles">All topics</Back>
-      <div className="eyebrow">Solving triangles / {t.lesson}</div>
-      <h1 className="tight" style={{ marginTop: 6 }}>{t.name}</h1>
-      <p className="sub">{t.summary}</p>
-      <div className="grid-2">
-        <Link to={`/example/${id}`} className="card" style={{ textDecoration: 'none' }}>
-          <div className="mono sm">Worked example</div>
-          <h3 style={{ marginTop: 8 }}>{ex.title}</h3>
-          <p>Diagram and a step-by-step example.</p>
-          <span className="pill">Open →</span>
-        </Link>
-        <Link to={`/worksheet/${id}/1`} className="card" style={{ textDecoration: 'none' }}>
-          <div className="mono sm">Class worksheet</div>
-          <h3 style={{ marginTop: 8 }}>{ws.title}</h3>
-          <p>The original two-page handout.</p>
-          <span className="pill">Open →</span>
-        </Link>
+      <div className="crumb">
+        <Link to="/archive">Class archive</Link> &nbsp;/&nbsp; <Link to="/folder/solving-triangles">Solving triangles</Link> &nbsp;/&nbsp; {t.name}
       </div>
-      <h2 style={{ marginTop: 36 }}>Board notes from class</h2>
-      {board.length ? board.map((n) => <NoteRow key={n.id} n={n} />) : <div className="panel">No board notes for this topic yet.</div>}
-      <div className="spread" style={{ marginTop: 36 }}>
+      <div className="hero" style={{ viewTransitionName: `topic-${id}` }}>
+        <div className="eyebrow" style={{ marginTop: 0 }}>{t.lesson?.replace('LESSON', 'Lesson')}</div>
+        <h1>{t.name}</h1>
+        <p className="sub">{t.summary}</p>
+        <ArtWindow kind={t.art} color={t.color} className="hero-art" />
+      </div>
+      <section className="section">
+        <h2>Class materials</h2>
+        {materials.length ? materials.map((m) => <MaterialRow key={m.id} m={m} />) : <div className="empty">Nothing here yet.</div>}
+      </section>
+      <div className="spread section">
         <h2>Class questions</h2>
         <Link className="pill primary" to={`/discussion/new?topic=${id}`}>Ask the class a question</Link>
       </div>
@@ -48,7 +41,10 @@ export function TopicPage() {
           <span>→</span>
         </Link>
       ) : (
-        <div className="panel">No questions yet.</div>
+        <div className="empty">
+          <strong>No questions yet.</strong>
+          Stuck on a line or a spot in a material? Open it and ask right there.
+        </div>
       )}
     </Shell>
   )
@@ -65,7 +61,7 @@ export function Example() {
       <div className="eyebrow">{t.name} / Worked example</div>
       <h1 className="tight" style={{ marginTop: 6 }}>{ex.title}</h1>
       <div className="card" style={{ display: 'grid', gridTemplateColumns: '355px 1fr', gap: 30, marginTop: 20 }}>
-        <div className="inset">
+        <div className="inset" style={{ background: t.color.bg, color: t.color.ink, borderColor: t.color.ink }}>
           <Triangle t={ex.triangle} />
           <div style={{ fontSize: 20, marginTop: 6 }}>
             <TeX tex={ex.formula} />
@@ -124,9 +120,11 @@ export function Worksheet() {
           )}
         </div>
       </div>
-      <img className="worksheet" src={ws.pages[p - 1]} alt={`${ws.title}, page ${p}`} />
+      <div style={{ viewTransitionName: p === 1 ? `mat-ws-${id}` : undefined }}>
+      <PinImage key={p} className="worksheet" src={ws.pages[p - 1]} alt={`${ws.title}, page ${p}`} material={`ws-${id}`} image={`p${p}`} topic={id} />
+      </div>
       <div className="row no-print" style={{ justifyContent: 'center', marginTop: 18 }}>
-        <Link className="pill primary" to={`/discussion/new?topic=${id}`}>Stuck? Ask the class a question</Link>
+        <Link className="pill primary" to={`/discussion/new?topic=${id}`}>Ask the class a question</Link>
       </div>
     </Shell>
   )
