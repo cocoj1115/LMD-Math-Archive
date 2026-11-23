@@ -178,4 +178,4 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 - **Things that open** (quick-ask box, spot thread, pin popover, account menu) fade and grow slightly from where you clicked. Pins drop a few pixels onto the page.
 - **Arriving from the discussion** at a line or pin briefly highlights it (yellow flash / blue ring).
 - `prefers-reduced-motion` turns all of it off.
-- **Favicon** (`public/favicon.svg`): the zine unit-circle doodle — black circle and axes, red radius and point; turns white in dark-mode tabs. No coloured block.
+- **Favicon** (`public/favicon.svg`): the zine sine-wave doodle in ink with its end point in the accent colour (`--hover-fill` #002BFF); the wave turns white in dark-mode tabs. No coloured block.
