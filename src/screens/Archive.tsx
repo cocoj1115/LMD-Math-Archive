@@ -76,6 +76,7 @@ export function NoteRow({ n }: { n: Note }) {
         <div className="title">
           {n.title} {bookmarks.includes(n.id) && <span title="Bookmarked">★</span>}
         </div>
+        {n.description && <div className="muted" style={{ marginTop: 4, fontSize: 14 }}>{n.description}</div>}
         <div className="mono sm" style={{ marginTop: 4, color: 'var(--muted)' }}>
           {n.kind}
           {!n.builtIn && ` · ${timeAgo(n.created_at)}`}
@@ -190,7 +191,7 @@ export function Search() {
   const q = (params.get('q') || '').trim().toLowerCase()
   const hit = (...xs: (string | null | undefined)[]) => !!q && xs.some((x) => x?.toLowerCase().includes(q))
   const topics = TOPICS.filter((t) => hit(t.name, t.summary))
-  const ns = notes.filter((n) => hit(n.title, n.kind, ...n.lines.map((l) => l.value), topicById(n.topic)?.name))
+  const ns = notes.filter((n) => hit(n.title, n.kind, n.description, ...n.lines.map((l) => l.value), topicById(n.topic)?.name))
   const ps = posts.filter((p) => hit(p.title, p.body, topicById(p.topic)?.name))
   return (
     <Shell>

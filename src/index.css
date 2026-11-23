@@ -109,6 +109,7 @@ img { max-width: 100%; }
 .spread { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
 .stack > * + * { margin-top: 12px; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.teacher-review-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 24px; align-items: start; }
 .grid-folders { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 24px; }
 
 /* ---------- Type ---------- */
@@ -267,7 +268,7 @@ math-field:focus-within { outline: 2px solid var(--brand); outline-offset: 1px; 
 
 /* Photo */
 .photo-frame { background: var(--surface); border: var(--line); border-radius: var(--radius-card); padding: 10px; min-height: 200px; display: flex; align-items: center; justify-content: center; }
-.photo-frame img { max-height: 420px; object-fit: contain; border-radius: 8px; }
+.photo-frame img { max-width: 100%; max-height: min(65vh, 560px); object-fit: contain; border-radius: 8px; }
 .dropzone { position: relative; border: 1.5px dashed var(--ink); border-radius: var(--radius-lg); background: var(--surface); padding: 48px 40px; text-align: center; overflow: hidden; }
 .dropzone.over { background: var(--brand-soft); }
 .thumb { width: 120px; height: 90px; object-fit: cover; border: var(--line); border-radius: 10px; }
@@ -345,3 +346,38 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 }
 .print-sheet { background: #fff; border: var(--line); border-radius: 6px; padding: 48px 56px; color: #111; max-width: 816px; margin: 24px auto; }
 .print-sheet .write-space { height: 80px; border-bottom: 1px dashed #aaa; margin-bottom: 8px; }
+
+.note-description { margin: 12px 0 0; max-width: 760px; }
+
+@media (max-width: 760px) {
+  :root { --gutter: 20px; }
+  .page { padding-bottom: 56px; }
+  .topbar { height: auto; min-height: 68px; padding-top: 12px; padding-bottom: 12px; gap: 12px; flex-wrap: wrap; }
+  .wordmark { font-size: 24px; }
+  .searchbar { order: 3; flex: 1 0 100%; min-width: 0; height: 44px; }
+  .topbar > .row { margin-left: auto; flex-wrap: wrap !important; justify-content: flex-end; gap: 8px; }
+  .topbar .btn-outline, .topbar .btn-solid { height: 40px; padding: 0 12px; font-size: 14px; }
+  .tabsrow { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; }
+  .tabsrow .tabs-sep { flex: 0 0 12px; }
+  h1, .h1 { font-size: 46px; margin-top: 32px; }
+  h1.tight { font-size: 40px; }
+  .grid-2, .teacher-review-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .teacher-fields { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .dropzone { padding: 32px 16px; }
+  .panel { padding: 18px; }
+  .editline { grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+  .editline select { grid-column: 1 / -1; }
+  .editline input, .editline math-field { min-width: 0; }
+  .teacher-actions .pill { white-space: normal; }
+  .note-description { font-size: 16px; }
+}
+
+@media (max-width: 420px) {
+  .topbar > .row { flex: 1 0 100%; justify-content: flex-start; margin-left: 0; }
+  .topbar > .row > * { min-width: 0; }
+  .row { gap: 8px; }
+  .pill { padding-right: 14px; padding-left: 14px; }
+  .editline { padding: 4px; }
+  .editline .row { gap: 4px; }
+  .iconbtn { flex: 0 0 32px; }
+}

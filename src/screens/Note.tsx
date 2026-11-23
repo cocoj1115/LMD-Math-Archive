@@ -36,32 +36,35 @@ export function NotePage() {
           <Link className="pill" to={`/print/${n.id}`}>Print preview</Link>
         </div>
       </div>
+      {n.description && <p className="sub note-description">{n.description}</p>}
       <div className="row" style={{ marginTop: 12 }}>
         {t && <span className="tag tone" style={tone(t.color)}>{t.name}</span>}
-        {!n.builtIn && <span className="tag">Board photo · {timeAgo(n.created_at)}</span>}
-        {!n.builtIn && <span className="tag solid">Checked by teacher</span>}
+        {!n.builtIn && <span className="tag">{n.lines.length > 0 ? `Board photo · ${timeAgo(n.created_at)}` : `Original image · ${timeAgo(n.created_at)}`}</span>}
+        {!n.builtIn && n.lines.length > 0 && <span className="tag solid">Checked by teacher</span>}
       </div>
 
-      <div className={n.photo_url && showPhoto ? 'grid-2' : ''} style={{ marginTop: 22 }}>
-        {n.photo_url && showPhoto && (
+      <div className={n.photo_url && showPhoto && n.lines.length > 0 ? 'grid-2' : ''} style={{ marginTop: 22 }}>
+        {n.photo_url && (showPhoto || n.lines.length === 0) && (
           <div>
-            <h2>Original board photo</h2>
+            <h2>{n.lines.length > 0 ? 'Original board photo' : 'Original classroom material'}</h2>
             <div className="photo-frame">
-              <img src={n.photo_url} alt="Original board photo" />
+              <img src={n.photo_url} alt={n.lines.length > 0 ? 'Original board photo' : n.title} />
             </div>
           </div>
         )}
-        <div>
-          {n.photo_url && showPhoto && <h2>Checked notes</h2>}
-          <div className="card">
-            <NoteLines lines={n.lines} />
-            {n.diagram && <p className="muted" style={{ fontSize: 15 }}>Diagram on the board: {n.diagram}</p>}
+        {n.lines.length > 0 ? (
+          <div>
+            {n.photo_url && showPhoto && <h2>Checked notes</h2>}
+            <div className="card">
+              <NoteLines lines={n.lines} />
+              {n.diagram && <p className="muted" style={{ fontSize: 15 }}>Diagram on the board: {n.diagram}</p>}
+            </div>
           </div>
-        </div>
+        ) : !n.photo_url ? <div className="panel">No image or transcription is available for this material.</div> : null}
       </div>
 
       <div className="row no-print" style={{ marginTop: 16 }}>
-        {n.photo_url && (
+        {n.photo_url && n.lines.length > 0 && (
           <button className="pill sm" onClick={() => setShowPhoto((v) => !v)}>
             {showPhoto ? 'Hide board photo' : 'Show original board photo'}
           </button>

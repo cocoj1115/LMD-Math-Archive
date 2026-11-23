@@ -30,7 +30,14 @@ function localBackend(): Backend {
     }
   }
   const write = (c: string, d: ClassData) => {
-    localStorage.setItem(k(c), JSON.stringify(d))
+    try {
+      localStorage.setItem(k(c), JSON.stringify(d))
+    } catch (e) {
+      if (e instanceof DOMException && (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED')) {
+        throw new Error('Browser storage is full. Remove some saved site data, then try saving this material again.')
+      }
+      throw new Error('Could not save this material in browser storage. Check your browser settings and try again.')
+    }
     bc?.postMessage(c)
   }
   return {

@@ -30,6 +30,7 @@ interface AppValue {
     topic: string
     title: string
     kind: string
+    description?: string
     lesson?: string
     lines: Line[]
     original_lines: Line[]
@@ -120,7 +121,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
           class_code: s.classCode,
           topic: n.topic,
           title: n.title,
-          kind: n.kind,
+          kind: n.lines.some((line) => line.value.trim()) ? n.kind : 'Class material',
+          description: n.description?.trim() || null,
           lesson: n.lesson ?? null,
           lines: n.lines.map(({ type, value }) => ({ type, value })),
           original_lines: n.original_lines,
