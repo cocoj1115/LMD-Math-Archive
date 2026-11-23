@@ -1,6 +1,6 @@
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { PinImage } from '../components/Annotate'
-import { Back, RichText, Shell, TeX, Triangle } from '../components/ui'
+import { Back, RichText, Shell, TeX, Triangle, CalculatorLink } from '../components/ui'
 import { useApp } from '../lib/app'
 import { ArtWindow } from '../components/Art'
 import { EXAMPLES, WORKSHEETS, topicById } from '../lib/content'
@@ -104,7 +104,10 @@ export function Worksheet() {
           <div className="eyebrow">{t.lesson}</div>
           <h1 className="tight" style={{ marginTop: 6 }}>{t.name}</h1>
         </div>
-        <button className="pill no-print" onClick={() => window.print()}>Print this page</button>
+        <div className="row no-print">
+          <CalculatorLink />
+          <button className="pill" onClick={() => window.print()}>Print this page</button>
+        </div>
       </div>
       <div style={{ height: 1, background: 'var(--blue)', margin: '16px 0' }} />
       <div className="spread no-print" style={{ alignItems: 'center', marginBottom: 18 }}>

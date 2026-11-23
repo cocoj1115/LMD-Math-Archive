@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { AnnotatableLines, PinImage } from '../components/Annotate'
-import { Back, NoteLines, Shell } from '../components/ui'
+import { Back, CalculatorLink, NoteLines, Shell } from '../components/ui'
 import { useApp } from '../lib/app'
 import { APP_NAME, folderById, topicById } from '../lib/content'
 
@@ -38,6 +38,7 @@ export function NotePage() {
               {marked ? '★ Bookmarked' : '☆ Bookmark'}
             </button>
           )}
+          {!teacher && <CalculatorLink />}
           <Link className="pill" to={`/print/${n.id}`}>Print preview</Link>
         </div>
       </div>
