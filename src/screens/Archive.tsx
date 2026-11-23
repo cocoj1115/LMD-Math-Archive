@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
-import { ArtWindow, Asterisk, ConceptBadge, Target } from '../components/Art'
+import { Art, ArtWindow, Asterisk, ConceptBadge, Target } from '../components/Art'
 import { Shell } from '../components/ui'
 import { useApp } from '../lib/app'
 import { TOPICS, WORKSHEETS, folderById, tone, topicById } from '../lib/content'
@@ -282,46 +282,71 @@ export function Folder() {
   )
 }
 
+/**
+ * Topic map: the unit drawn as a map on the graph paper. Each topic is a small zine page
+ * (its duotone, its drawing); dashed arrows show what builds on what.
+ */
+const MAP: { id: string; x: number; y: number }[] = [
+  { id: 'radians-degrees', x: 0, y: 100 },
+  { id: 'unit-circle', x: 280, y: 100 },
+  { id: 'special-angles', x: 560, y: 0 },
+  { id: 'trig-graphs', x: 560, y: 270 },
+  { id: 'law-of-sines', x: 852, y: 40 },
+  { id: 'law-of-cosines', x: 852, y: 300 },
+]
+const NODE_W = 208
+const NODE_H = 210
+
 export function TopicMap() {
   const { posts } = useApp()
-  const node = (id: string) => {
-    const t = topicById(id)!
-    const q = posts.filter((p) => p.topic === id).length
-    const to = t.folder === 'solving-triangles' ? `/topic/${id}` : `/folder/${t.folder}`
-    return (
-      <Link to={to} className="panel lift row" style={{ textDecoration: 'none', minWidth: 250, flexWrap: 'nowrap', ...tone(t.color) }}>
-        <ConceptBadge kind={t.art} size={60} />
-        <div>
-          <div style={{ fontSize: 22, letterSpacing: '-0.02em' }}>{t.name}</div>
-          <div className="mono sm" style={{ marginTop: 4, color: 'var(--muted)' }}>
-            {t.lesson} {q > 0 && `${t.lesson ? '· ' : ''}${plural(q, 'question')}`}
-          </div>
-        </div>
-      </Link>
-    )
-  }
-  const arrow = <span style={{ fontSize: 26 }}>→</span>
   return (
     <Shell>
       <h1>Topic map</h1>
-      <div className="card stack">
-        <div className="mono sm">Earlier in the unit</div>
-        <div className="row">
-          {node('radians-degrees')}
-          {arrow}
-          {node('unit-circle')}
-          {arrow}
-          <div className="stack">
-            {node('special-angles')}
-            {node('trig-graphs')}
-          </div>
+      <div className="tmap">
+        <span className="tmap-label mono sm">Earlier in the unit</span>
+        <div className="tmap-week">
+          <span className="tag solid">This week · Solving triangles</span>
         </div>
-        <div className="mono sm" style={{ marginTop: 28 }}>This week · Solving triangles</div>
-        <div className="row">
-          {node('law-of-sines')}
-          {arrow}
-          {node('law-of-cosines')}
-        </div>
+        <svg className="tmap-lines" viewBox="0 0 1080 540" aria-hidden="true">
+          {[
+            'M210 205 C 235 195, 255 195, 278 205',
+            'M490 190 C 515 150, 530 110, 556 104',
+            'M490 220 C 515 290, 530 360, 556 372',
+            'M770 104 C 800 104, 820 130, 848 142',
+            'M956 254 C 966 270, 966 284, 956 298',
+          ].map((d, i) => (
+            <g key={i}>
+              <path d={d} className="dash" />
+            </g>
+          ))}
+          {/* arrow tips */}
+          {[
+            [278, 205, 0],
+            [556, 104, -12],
+            [556, 372, 14],
+            [848, 142, 22],
+            [956, 298, 100],
+          ].map(([x, y, r], i) => (
+            <path key={i} d="M-9 -6 L0 0 L-9 6" transform={`translate(${x} ${y}) rotate(${r})`} className="tip" />
+          ))}
+        </svg>
+        {MAP.map(({ id, x, y }) => {
+          const t = topicById(id)!
+          const q = posts.filter((p) => p.topic === id).length
+          const to = t.folder === 'solving-triangles' ? `/topic/${id}` : `/folder/${t.folder}`
+          return (
+            <Link key={id} to={to} className="tmap-node" style={{ left: x, top: y + 40, width: NODE_W, height: NODE_H, ...tone(t.color) }}>
+              <span className="tmap-art">
+                <Art kind={t.art} width="100%" />
+              </span>
+              <span className="tmap-name">{t.name}</span>
+              <span className="mono sm">
+                {t.lesson ? t.lesson.replace('LESSON', 'Lesson') : '\u00a0'}
+                {q > 0 && `${t.lesson ? ' · ' : ''}${plural(q, 'question')}`}
+              </span>
+            </Link>
+          )
+        })}
       </div>
     </Shell>
   )

@@ -158,3 +158,5 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 - Background is white graph paper: #FFFFFF with a faint blue 28px grid (rgba(9,102,223,.07)), like a math notebook. Structure comes from 1–1.5px black lines, not grey fills.
 - Headings are Inter 600 with very tight tracking (−0.055em titles, −0.04em sections). Section headings sit on a full-width black rule.
 - "This week" stays a small black tag. The home arrow is the zine's dashed curve. Don't copy the portfolio's signature marks (circle stickers, looped arrows).
+- **Topic map** is drawn as a map on the graph paper: each topic is a small zine page (its duotone + its drawing), dashed curved arrows show what builds on what, and this week's topics sit in an outlined column with the black "This week" tag.
+- Graph-paper grid is very faint (rgba(9,102,223,.035)).

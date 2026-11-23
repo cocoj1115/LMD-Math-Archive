@@ -49,7 +49,7 @@ html, body, #root { margin: 0; min-height: 100%; }
 body {
   background-color: var(--bg);
   /* faint blue graph-paper grid, like a math notebook */
-  background-image: linear-gradient(rgba(9, 102, 223, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(9, 102, 223, 0.07) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(9, 102, 223, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(9, 102, 223, 0.035) 1px, transparent 1px);
   background-size: 28px 28px;
   color: var(--ink);
   font-family: var(--font-sans);
@@ -606,3 +606,22 @@ section > h2, .section-head, .materials-head, .spread.section, .spread.no-print.
 .gcard.thisweek { overflow: visible; }
 .ann-line:hover, .ann-line.active { background: #f6f6f3; }
 @media print { body { background-image: none; } }
+
+/* ---------- Topic map ---------- */
+.tmap { position: relative; width: 1080px; height: 600px; margin-top: 48px; }
+.tmap-label { position: absolute; left: 0; top: 0; color: var(--muted); }
+.tmap-week { position: absolute; left: 830px; top: 40px; width: 250px; height: 534px; border: 1.5px solid var(--ink); border-radius: var(--radius-lg); background: var(--surface); }
+.tmap-week .tag { position: absolute; left: 18px; top: -14px; }
+.tmap-lines { position: absolute; left: 0; top: 40px; width: 1080px; height: 540px; overflow: visible; pointer-events: none; z-index: 1; }
+.tmap-lines .dash { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-dasharray: 6 6; stroke-linecap: round; }
+.tmap-lines .tip { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.tmap-node {
+  position: absolute; z-index: 2; display: flex; flex-direction: column; justify-content: flex-end; gap: 6px; padding: 16px 18px;
+  background: var(--tone-bg); color: var(--ink); border: var(--line); border-radius: 18px; text-decoration: none;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.tmap-node:hover { transform: var(--lift); box-shadow: var(--shadow-hover); }
+.tmap-art { flex: 1; display: flex; align-items: center; justify-content: center; color: var(--tone-ink); min-height: 0; }
+.tmap-art svg { max-height: 110px; }
+.tmap-name { font-size: 22px; font-weight: 600; letter-spacing: -0.04em; line-height: 1.05; }
+.tmap-node .mono { color: var(--muted); }
