@@ -646,8 +646,8 @@ section > h2, .section-head, .materials-head, .spread.section, .spread.no-print.
 .me-menu .mono { color: var(--muted); margin-bottom: 8px; }
 .topbar .pill.primary { height: 42px; }
 
-/* Wordmark in a calligraphic script */
-.wordmark { font-family: 'Pinyon Script', cursive; font-weight: 400; font-size: 40px; letter-spacing: 0; line-height: 1; padding-top: 4px; }
+/* Wordmark in Helvetica Neue (the zine's display face for shapes); falls back to Helvetica/Arial */
+.wordmark { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 28px; letter-spacing: -0.04em; line-height: 1; }
 /* Tabs = where you are (underline). The black pill is kept only for the main action. */
 .tabs-inline .tab { border-radius: 0; padding: 0 12px; height: 72px; border: 0; position: relative; }
 .tabs-inline .tab:hover { border: 0; }

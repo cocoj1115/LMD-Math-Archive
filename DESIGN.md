@@ -164,4 +164,4 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 ## Navigation
 - One sticky row on white with a black rule under it: wordmark · section tabs · compact pill search · round initial avatar (opens a small menu with name, class and "Switch user") · black "+ Ask a question" pill.
 - **Where you are vs. what you can do look different**: the current tab is bold text with a black underline; the black filled pill is reserved for the main action (+ Ask a question / + Capture board).
-- The wordmark "Chalkback" is set in Pinyon Script (calligraphic); everything else stays Inter / DM Mono.
+- The wordmark "Chalkback" is set in Helvetica Neue Medium (−0.04em), falling back to Helvetica/Arial; everything else stays Inter / DM Mono.
