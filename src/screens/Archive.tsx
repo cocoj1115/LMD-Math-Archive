@@ -57,6 +57,10 @@ function UnitCard({ id }: { id: string }) {
   const notes = useFolderNotes(id)
   return (
     <Link to={`/folder/${id}`} className="unit-card" style={tone(f.color)}>
+      {/* angular folder outline: tab with a slanted edge */}
+      <svg className="unit-shape" viewBox="0 0 300 200" aria-hidden="true">
+        <path d="M1 199V3.5L3.5 1H118L138 25H296.5L299 27.5V196.5L296.5 199Z" />
+      </svg>
       <span className="unit-name">{f.name}</span>
       <span className="unit-foot">
         <span className="tag tone">{plural(notes.length, 'file')}</span>
@@ -83,10 +87,7 @@ function PreviousWeeks() {
   return (
     <section>
       <div className="section-head">
-        <div>
-          <h2>Previous weeks</h2>
-          <p className="muted">Scroll back to earlier units.</p>
-        </div>
+        <h2>Previous weeks</h2>
         <div className="row" style={{ gap: 8 }}>
           <button className="round-btn" onClick={() => go(-1)} disabled={edge.start} aria-label="Newer">←</button>
           <button className="round-btn" onClick={() => go(1)} disabled={edge.end} aria-label="Earlier">→</button>
