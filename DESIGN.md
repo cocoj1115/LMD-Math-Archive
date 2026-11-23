@@ -152,3 +152,4 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 - **Dashed = still open, solid = answered.** A question with no reply has a dashed outline (discussion card, spot list, pin, line count bubble); once someone replies it turns solid. The "?" ask button and the quick-ask box are dashed too.
 - **Loose margin marks** (◎ ✳ and a dashed curved arrow) only on the home page, never boxed.
 - **Inside a folder, illustrations stay inside their frame** (topic cards, topic hero). The slight overflow is only for the home page cards.
+- **Material rows show the material itself**: a small thumbnail of the board photo, the worksheet's first page, or the worked-example diagram. Materials with no picture get a thin line drawing of their kind (slides, page). No coloured tiles or hard shadows in lists.

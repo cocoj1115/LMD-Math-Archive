@@ -558,3 +558,11 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 .zine-arrow path { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-dasharray: 6 6; stroke-linecap: round; }
 .zine-arrow path.tip { stroke-dasharray: none; stroke-linejoin: round; }
 @media (max-width: 900px) { .zine-marks, .zine-arrow { display: none; } }
+
+/* material thumbnails: a small look at the material itself */
+.thumb-mini { flex: none; width: 76px; height: 56px; border: var(--line); border-radius: 8px; overflow: hidden; background: #fff; display: inline-flex; align-items: center; justify-content: center; }
+.thumb-mini img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb-mini.kind-handout img { object-position: 50% 4%; transform: scale(1.35); transform-origin: 50% 0; }
+.thumb-mini.kind-worked-example img { object-fit: cover; }
+.thumb-mini.glyph { color: var(--ink); background: transparent; }
+.thumb-mini.glyph svg { width: 100%; height: 100%; }

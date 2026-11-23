@@ -134,6 +134,7 @@ export interface Material {
   date?: string
   starred?: boolean
   extra?: string
+  thumb?: string
 }
 
 /** All materials for the given topics: teacher notes + the original class handouts, newest first. */
@@ -149,11 +150,12 @@ export function useMaterials(topicIds: string[]): Material[] {
       topic: n.topic,
       date: n.created_at,
       starred: bookmarks.includes(n.id),
+      thumb: n.photo_url ?? n.figure ?? undefined,
       extra: n.student_work.length ? plural(n.student_work.length, 'classmate example') : undefined,
     }))
   const handouts: Material[] = topicIds
     .filter((id) => WORKSHEETS[id])
-    .map((id) => ({ id: `ws-${id}`, to: `/worksheet/${id}/1`, title: WORKSHEETS[id].title, kind: 'Handout', topic: id, date: '2026-11-19T15:00:00Z' }))
+    .map((id) => ({ id: `ws-${id}`, to: `/worksheet/${id}/1`, title: WORKSHEETS[id].title, kind: 'Handout', topic: id, date: '2026-11-19T15:00:00Z', thumb: WORKSHEETS[id].pages[0] }))
   return [...fromNotes, ...handouts].sort((x, y) => (y.date ?? '').localeCompare(x.date ?? ''))
 }
 
@@ -161,7 +163,13 @@ export function MaterialRow({ m, showTopic = false }: { m: Material; showTopic?:
   const t = topicById(m.topic)
   return (
     <Link to={m.to} className="listcard material" style={tone(t?.color)}>
-      {t && <ConceptBadge kind={t.art} size={56} />}
+      {m.thumb ? (
+        <span className={`thumb-mini kind-${m.kind.toLowerCase().replace(/\s+/g, '-')}`}>
+          <img src={m.thumb} alt="" />
+        </span>
+      ) : (
+        <KindGlyph kind={m.kind} />
+      )}
       <div style={{ flex: 1 }}>
         <div className="title">
           {m.title} {m.starred && <span title="Bookmarked">★</span>}
@@ -176,6 +184,30 @@ export function MaterialRow({ m, showTopic = false }: { m: Material; showTopic?:
         <span aria-hidden="true">→</span>
       </div>
     </Link>
+  )
+}
+
+/** Thin line drawing for materials without a picture (zine style: no tile, no shadow). */
+function KindGlyph({ kind }: { kind: string }) {
+  const slides = /slide/i.test(kind)
+  return (
+    <span className="thumb-mini glyph" aria-hidden="true">
+      <svg viewBox="0 0 72 56" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+        {slides ? (
+          <>
+            <rect x="12" y="10" width="48" height="30" rx="2" />
+            <path d="M36 40v7M27 47h18" />
+            <path d="M20 32l9-9 7 6 9-11 7 8" strokeDasharray="3 3" />
+          </>
+        ) : (
+          <>
+            <path d="M22 6h22l8 8v36H22z" />
+            <path d="M44 6v8h8" />
+            <path d="M28 22h18M28 29h18M28 36h12" />
+          </>
+        )}
+      </svg>
+    </span>
   )
 }
 
