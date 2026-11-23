@@ -179,3 +179,11 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 - **Arriving from the discussion** at a line or pin briefly highlights it (yellow flash / blue ring).
 - `prefers-reduced-motion` turns all of it off.
 - **Favicon** (`public/favicon.svg`): the zine sine-wave doodle in ink with its end point in the accent colour (`--hover-fill` #002BFF); the wave turns white in dark-mode tabs. No coloured block.
+
+## Phone (≤ 760px)
+- Nav: wordmark · search icon · avatar · short action ("+ Ask" / "+ Capture") on one line; section tabs on a second line that scrolls sideways.
+- Illustrations never cover text: on the home card, folder topic cards and the topic header they drop below (or above) the text, inside the card.
+- One column everywhere (topic cards, note photo + notes, ask-the-class composer, teacher review). Formulas scroll sideways instead of overflowing.
+- Teacher review: the uploaded photo stays pinned under the nav while the teacher scrolls through the lines, so each line can be checked against it. Each line editor puts type + move/delete on top and a full-width field underneath. "Save to archive" is a full-width button.
+- Topic map keeps its wide shape (scaled to 72%) and scrolls sideways, with a "Swipe sideways" hint.
+- Touch screens have no hover, so the "?" ask button on note lines is always visible.

@@ -787,3 +787,107 @@ section > h2, .section-head, .materials-head, .spread.section, .spread.no-print.
   .iconbtn { flex: 0 0 32px; }
 }
 .listcard .desc { font-size: 15px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+/* ======================= Phone (≤ 760px) ======================= */
+.cta-short, .search-icon, .tmap-hint { display: none; }
+@media (hover: none) {
+  /* no hover on touch screens: the ask button is always visible */
+  .ann-ask { opacity: 1; transform: none; }
+}
+@media (max-width: 760px) {
+  :root { --gutter: 18px; }
+  body { -webkit-text-size-adjust: 100%; }
+  .page { padding-left: var(--gutter); padding-right: var(--gutter); overflow-x: clip; }
+
+  /* nav: wordmark + search + avatar + action on one line; tabs on a second, scrollable line */
+  .topbar { height: auto; min-height: 0; padding: 10px var(--gutter) 0; gap: 10px; flex-wrap: wrap; }
+  .topbar > span[style] { display: none; }
+  .wordmark { font-size: 24px; margin-right: auto; order: 0; }
+  .topbar .searchbar { display: none; }
+  .search-icon { display: inline-flex; order: 1; width: 40px; height: 40px; border-radius: 50%; border: var(--line); align-items: center; justify-content: center; color: var(--ink); }
+  .me { order: 2; }
+  .topbar .pill.cta { order: 3; height: 40px; padding: 0 14px; }
+  .cta-long { display: none; }
+  .cta-short { display: inline; }
+  .tabs-inline { order: 4; flex: 1 0 100%; margin: 0 calc(-1 * var(--gutter)); padding: 0 calc(var(--gutter) - 12px); overflow-x: auto; scrollbar-width: none; }
+  .tabs-inline::-webkit-scrollbar { display: none; }
+  .tabs-inline .tab { height: 46px; flex: none; font-size: 15px; }
+  .me-menu { right: -60px; }
+
+  /* type + rhythm */
+  h1, .h1 { font-size: 38px; margin-top: 28px; letter-spacing: -0.045em; }
+  h2, .h2 { font-size: 24px; }
+  .crumb { margin-top: 24px; font-size: 12.5px; }
+  .section { margin-top: 44px; }
+  .section-first { margin-top: 24px; }
+
+  /* home */
+  .zine-marks, .zine-arrow { display: none; }
+  .gcard.thisweek { min-height: 0; padding: 24px 20px; display: block; }
+  .tw-text { max-width: none; }
+  .tw-text h3 { font-size: 34px; }
+  .gcard.thisweek .aw-link { position: relative; display: inline-block; vertical-align: top; width: calc(50% - 8px) !important; right: auto !important; top: auto !important; margin-top: 20px; }
+  .gcard.thisweek .aw-link.first { margin-right: 12px; }
+  .gcard.thisweek .aw-link.second { transform: rotate(-2deg); }
+  .gcard.thisweek .gfoot { display: none; }
+  .unit-card { width: 250px; height: 170px; padding: 36px 18px 16px; }
+  .unit-name { font-size: 24px; }
+
+  /* folder: one topic card per row, illustration on top, inside the card */
+  .topic-cards { grid-template-columns: 1fr; gap: 16px; }
+  .topic-card2 { min-height: 0; padding: 20px; gap: 10px; }
+  .topic-card2 .art-window { position: static; width: 100%; order: -1; margin-bottom: 6px; }
+  .topic-card2 h3, .topic-card2 p { max-width: none; }
+  .topic-card2 h3 { font-size: 28px; }
+  .materials-head { align-items: flex-start; flex-direction: column; }
+
+  /* topic header: text first, drawing below it */
+  .hero { min-height: 0; padding: 22px 20px; }
+  .hero > :not(.hero-art) { max-width: none; }
+  .hero .hero-art { position: static; width: 100%; margin-top: 18px; }
+
+  /* material rows */
+  .listcard.material { gap: 14px; padding: 12px 14px; align-items: flex-start; }
+  .listcard.material .title { font-size: 18px; }
+  .thumb-mini { width: 60px; height: 46px; }
+  .listcard.material .row .tag { display: none; }
+
+  /* note page */
+  .page-head { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .page-head .row { flex-wrap: wrap; gap: 8px; }
+  .grid-2 { grid-template-columns: minmax(0, 1fr) !important; }
+  .card { padding: 20px 18px; }
+  .katex-display { overflow-x: auto; overflow-y: hidden; padding-bottom: 4px; }
+  .ann-line { margin: 0 -8px; padding: 2px 8px; }
+  .pin-pop { width: min(300px, 78vw); }
+
+  /* worksheet + images never overflow */
+  .worksheet { width: 100%; }
+  img { max-width: 100%; }
+
+  /* ask the class */
+  .composer { padding: 20px 18px; margin-top: 24px; }
+  .composer-attach { grid-template-columns: 1fr; }
+  .composer-foot { flex-direction: column; align-items: stretch; }
+  .composer-actions { margin-left: 0; justify-content: flex-end; }
+
+  /* topic map: keep the wide map, scroll it sideways */
+  .tmap-hint { display: block; margin: 8px 0 0; color: var(--muted); }
+  .tmap-scroll { overflow-x: auto; padding-bottom: 16px; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; }
+  .tmap { margin-top: 12px; zoom: .72; } /* a bit smaller so the whole unit is about two screens wide */
+  .tmap-node { scroll-snap-align: start; }
+  /* teacher: capture + review stack, actions are full-width thumb targets */
+  .teacher-review-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  /* while correcting the transcription, the photo stays pinned under the nav (smaller) so the teacher can compare */
+  .teacher-review-grid > div:first-child { display: contents; } /* lets the photo stay pinned for the whole review */
+  .teacher-review-grid { row-gap: 12px; }
+  /* line editor: type + buttons on top, the full-width field underneath */
+  .editline { grid-template-columns: minmax(0, 1fr) auto !important; grid-template-areas: "type tools" "field field"; row-gap: 6px; }
+  .editline > select { grid-area: type; grid-column: auto !important; }
+  .editline > .row { grid-area: tools; }
+  .editline > input, .editline > math-field { grid-area: field; width: 100%; }
+  .photo-frame.sticky-ref { align-self: start; position: sticky; top: 110px; z-index: 6; background: var(--surface); padding: 8px; box-shadow: 0 6px 0 -5px var(--ink); }
+  .photo-frame.sticky-ref > img { max-height: 26vh; width: 100%; object-fit: contain; }
+  .teacher-actions .pill.primary { width: 100%; justify-content: center; height: 50px; }
+  .dropzone .row { flex-wrap: wrap; justify-content: center; }
+}

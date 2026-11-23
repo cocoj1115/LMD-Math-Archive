@@ -140,7 +140,7 @@ export function Capture() {
         <div className="teacher-review-grid" style={{ marginTop: 30 }}>
           <div>
             <h2>Preview material</h2>
-            <div className="photo-frame">{photo && <img src={photo} alt="Uploaded classroom material" />}</div>
+            <div className={`photo-frame${stage === 'review' ? ' sticky-ref' : ''}`}>{photo && <img src={photo} alt="Uploaded classroom material" />}</div>
             <div className="row" style={{ marginTop: 10 }}>
               <button className="pill sm" disabled={stage === 'reading'} onClick={async () => photo && selectPhoto(await rotateDataUrl(photo))}>
                 ↻ Rotate image
