@@ -162,4 +162,6 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 - Graph-paper grid is very faint (rgba(9,102,223,.035)).
 
 ## Navigation
-- One sticky row on white with a black rule under it: wordmark · section tabs (active = black pill) · compact pill search · round initial avatar (opens a small menu with name, class and "Switch user") · black "Ask a question" pill.
+- One sticky row on white with a black rule under it: wordmark · section tabs · compact pill search · round initial avatar (opens a small menu with name, class and "Switch user") · black "+ Ask a question" pill.
+- **Where you are vs. what you can do look different**: the current tab is bold text with a black underline; the black filled pill is reserved for the main action (+ Ask a question / + Capture board).
+- The wordmark "Chalkback" is set in Pinyon Script (calligraphic); everything else stays Inter / DM Mono.

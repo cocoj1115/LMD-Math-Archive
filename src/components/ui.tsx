@@ -117,9 +117,9 @@ export function Shell({ children, nav = true }: { children: ReactNode; nav?: boo
                 )}
               </div>
               {teacher ? (
-                <Link className="pill primary" to="/t/capture">Capture board</Link>
+                <Link className="pill primary cta" to="/t/capture"><PlusIcon /> Capture board</Link>
               ) : (
-                <Link className="pill primary" to="/discussion/new">Ask a question</Link>
+                <Link className="pill primary cta" to="/discussion/new"><PlusIcon /> Ask a question</Link>
               )}
             </>
           )}
@@ -127,6 +127,14 @@ export function Shell({ children, nav = true }: { children: ReactNode; nav?: boo
       </header>
       <main className="page">{children}</main>
     </>
+  )
+}
+
+function PlusIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+      <path d="M7 1v12M1 7h12" />
+    </svg>
   )
 }
 

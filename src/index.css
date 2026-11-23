@@ -645,3 +645,15 @@ section > h2, .section-head, .materials-head, .spread.section, .spread.no-print.
 .me-name { font-weight: 600; font-size: 18px; letter-spacing: -0.03em; }
 .me-menu .mono { color: var(--muted); margin-bottom: 8px; }
 .topbar .pill.primary { height: 42px; }
+
+/* Wordmark in a calligraphic script */
+.wordmark { font-family: 'Pinyon Script', cursive; font-weight: 400; font-size: 40px; letter-spacing: 0; line-height: 1; padding-top: 4px; }
+/* Tabs = where you are (underline). The black pill is kept only for the main action. */
+.tabs-inline .tab { border-radius: 0; padding: 0 12px; height: 72px; border: 0; position: relative; }
+.tabs-inline .tab:hover { border: 0; }
+.tabs-inline .tab::after { content: ''; position: absolute; left: 12px; right: 12px; bottom: -1px; height: 3px; background: transparent; }
+.tabs-inline .tab:hover::after { background: rgba(0,0,0,.25); }
+.tabs-inline .tab.active { background: transparent; color: var(--ink); font-weight: 600; }
+.tabs-inline .tab.active::after { background: var(--ink); }
+.tabs-inline .tab.active .count { background: var(--ink); color: #fff; }
+.pill.cta { display: inline-flex; align-items: center; gap: 8px; }
