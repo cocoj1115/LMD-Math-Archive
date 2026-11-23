@@ -135,6 +135,7 @@ export interface Material {
   starred?: boolean
   extra?: string
   thumb?: string
+  description?: string
 }
 
 /** All materials for the given topics: teacher notes + the original class handouts, newest first. */
@@ -151,6 +152,7 @@ export function useMaterials(topicIds: string[]): Material[] {
       date: n.created_at,
       starred: bookmarks.includes(n.id),
       thumb: n.photo_url ?? n.figure ?? undefined,
+      description: n.description ?? undefined,
       extra: n.student_work.length ? plural(n.student_work.length, 'classmate example') : undefined,
     }))
   const handouts: Material[] = topicIds
@@ -174,6 +176,7 @@ export function MaterialRow({ m, showTopic = false }: { m: Material; showTopic?:
         <div className="title">
           {m.title} {m.starred && <span title="Bookmarked">★</span>}
         </div>
+        {m.description && <div className="desc">{m.description}</div>}
         <div className="kind">
           {m.kind}
           {m.extra && ` · ${m.extra}`}
@@ -359,7 +362,7 @@ export function Search() {
   const q = (params.get('q') || '').trim().toLowerCase()
   const hit = (...xs: (string | null | undefined)[]) => !!q && xs.some((x) => x?.toLowerCase().includes(q))
   const topics = TOPICS.filter((t) => hit(t.name, t.summary))
-  const ns = notes.filter((n) => hit(n.title, n.kind, ...n.lines.map((l) => l.value), topicById(n.topic)?.name))
+  const ns = notes.filter((n) => hit(n.title, n.kind, n.description, ...n.lines.map((l) => l.value), topicById(n.topic)?.name))
   const ps = posts.filter((p) => hit(p.title, p.body, topicById(p.topic)?.name))
   return (
     <Shell>

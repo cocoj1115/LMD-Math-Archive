@@ -18,6 +18,7 @@ export function NotePage() {
   const corrected = n.original_lines && JSON.stringify(n.original_lines.map((l) => [l.type, l.value])) !== JSON.stringify(n.lines.map((l) => [l.type, l.value]))
   const related = posts.filter((p) => p.note_id === n.id)
   const marked = bookmarks.includes(n.id)
+  const hasLines = n.lines.length > 0
 
   return (
     <Shell>
@@ -27,7 +28,7 @@ export function NotePage() {
       <div className="page-head">
         <h1 style={{ marginTop: 12 }}>{n.title}</h1>
         <div className="row no-print">
-          {n.photo_url && (
+          {n.photo_url && hasLines && (
             <button className={`pill photo-btn${showPhoto ? ' on' : ''}`} onClick={() => setShowPhoto((v) => !v)} aria-pressed={showPhoto}>
               <CameraIcon /> {showPhoto ? 'Hide original photo' : 'See original photo'}
             </button>
@@ -40,24 +41,27 @@ export function NotePage() {
           <Link className="pill" to={`/print/${n.id}`}>Print preview</Link>
         </div>
       </div>
+      {n.description && <p className="sub note-description">{n.description}</p>}
 
-      <div className={n.photo_url && showPhoto ? 'grid-2' : ''} style={{ marginTop: 22 }}>
-        {n.photo_url && showPhoto && (
+      <div className={n.photo_url && showPhoto && hasLines ? 'grid-2' : ''} style={{ marginTop: 22 }}>
+        {n.photo_url && (showPhoto || !hasLines) && (
           <div>
-            <h2>Original photo</h2>
+            <h2>{hasLines ? 'Original photo' : 'Original classroom material'}</h2>
             <div className="photo-frame">
-              <PinImage src={n.photo_url} alt="Original board photo" material={n.id} image="photo" topic={n.topic} noteId={n.id} />
+              <PinImage src={n.photo_url} alt={hasLines ? 'Original board photo' : n.title} material={n.id} image="photo" topic={n.topic} noteId={n.id} />
             </div>
           </div>
         )}
-        <div>
-          {n.photo_url && showPhoto && <h2>Notes</h2>}
-          <div className="card" style={{ viewTransitionName: `mat-${n.id}` }}>
-            {n.figure && <PinImage className="note-figure" src={n.figure} alt={`Diagram for ${n.title}`} material={n.id} image="figure" topic={n.topic} noteId={n.id} />}
-            <AnnotatableLines lines={n.lines} material={n.id} topic={n.topic} noteId={n.id} />
-            {n.diagram && <p className="muted" style={{ fontSize: 15 }}>Diagram on the board: {n.diagram}</p>}
+        {hasLines ? (
+          <div>
+            {n.photo_url && showPhoto && <h2>Notes</h2>}
+            <div className="card" style={{ viewTransitionName: `mat-${n.id}` }}>
+              {n.figure && <PinImage className="note-figure" src={n.figure} alt={`Diagram for ${n.title}`} material={n.id} image="figure" topic={n.topic} noteId={n.id} />}
+              <AnnotatableLines lines={n.lines} material={n.id} topic={n.topic} noteId={n.id} />
+              {n.diagram && <p className="muted" style={{ fontSize: 15 }}>Diagram on the board: {n.diagram}</p>}
+            </div>
           </div>
-        </div>
+        ) : !n.photo_url ? <div className="empty">This material has no image or transcription yet.</div> : null}
       </div>
 
       <div className="row no-print" style={{ marginTop: 16 }}>

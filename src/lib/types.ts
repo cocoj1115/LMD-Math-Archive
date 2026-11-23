@@ -19,6 +19,7 @@ export interface Note {
   topic: string
   title: string
   kind: string // 'Board notes' | 'Slides' | 'Handout' | 'Class notes'
+  description?: string | null
   lesson?: string | null
   lines: Line[]
   original_lines?: Line[] | null
