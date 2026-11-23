@@ -160,3 +160,6 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 - "This week" stays a small black tag. The home arrow is the zine's dashed curve. Don't copy the portfolio's signature marks (circle stickers, looped arrows).
 - **Topic map** is drawn as a map on the graph paper: each topic is a small zine page (its duotone + its drawing), dashed curved arrows show what builds on what, and this week's topics sit in an outlined column with the black "This week" tag.
 - Graph-paper grid is very faint (rgba(9,102,223,.035)).
+
+## Navigation
+- One sticky row on white with a black rule under it: wordmark · section tabs (active = black pill) · compact pill search · round initial avatar (opens a small menu with name, class and "Switch user") · black "Ask a question" pill.

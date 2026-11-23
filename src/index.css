@@ -625,3 +625,23 @@ section > h2, .section-head, .materials-head, .spread.section, .spread.no-print.
 .tmap-art svg { max-height: 110px; }
 .tmap-name { font-size: 22px; font-weight: 600; letter-spacing: -0.04em; line-height: 1.05; }
 .tmap-node .mono { color: var(--muted); }
+
+/* ---------- Navigation: one row, sticky ---------- */
+.topbar-wrap { position: sticky; top: 0; z-index: 40; background: var(--surface); border-bottom: 1px solid var(--ink); }
+.topbar-wrap + .header-rule { display: none; }
+.topbar { height: 72px; gap: 14px; }
+.wordmark { font-size: 26px; margin-right: 18px; }
+.tabs-inline { display: flex; gap: 4px; }
+.tabs-inline .tab { height: 40px; padding: 0 16px; font-size: 16px; border: 1px solid transparent; background: transparent; box-shadow: none; }
+.tabs-inline .tab:hover { border-color: var(--ink); transform: none; box-shadow: none; }
+.tabs-inline .tab.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.tabs-inline .tab.active .count { background: #fff; color: var(--ink); }
+.topbar .searchbar { flex: 0 0 220px; height: 40px; border-radius: var(--radius-pill); padding: 0 14px; gap: 8px; }
+.topbar .searchbar input { font-size: 15px; }
+.me { position: relative; }
+.me-btn { width: 40px; height: 40px; border-radius: 50%; border: var(--line); background: var(--tone-bg, #fff5a3); font-weight: 600; font-size: 16px; cursor: pointer; background: #fff584; }
+.me-btn:hover { box-shadow: 3px 3px 0 var(--ink); }
+.me-menu { position: absolute; right: 0; top: 50px; width: 220px; padding: 16px; background: var(--surface); border: var(--line); border-radius: 16px; box-shadow: var(--shadow-hover); display: flex; flex-direction: column; gap: 6px; align-items: flex-start; z-index: 50; }
+.me-name { font-weight: 600; font-size: 18px; letter-spacing: -0.03em; }
+.me-menu .mono { color: var(--muted); margin-bottom: 8px; }
+.topbar .pill.primary { height: 42px; }

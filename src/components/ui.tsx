@@ -52,69 +52,79 @@ export function Shell({ children, nav = true }: { children: ReactNode; nav?: boo
   const path = loc.pathname
   const inArchive = ['/archive', '/folder/', '/topic/', '/note/', '/search'].some((p) => path === p || path.startsWith(p))
 
+  const [menu, setMenu] = useState(false)
   return (
     <>
-      <header className="topbar no-print">
-        <Link to={session ? '/archive' : '/'} className="wordmark">
-          {APP_NAME}
-        </Link>
-        {session && nav && (
-          <form
-            className="searchbar"
-            role="search"
-            onSubmit={(e) => {
-              e.preventDefault()
-              navigate(`/search?q=${encodeURIComponent(q.trim())}`)
-            }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <circle cx="11" cy="11" r="7" />
-              <path d="M20 20l-4-4" strokeLinecap="round" />
-            </svg>
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search notes, concepts, questions" aria-label="Search" />
-          </form>
-        )}
-        {!(session && nav) && <span style={{ marginLeft: 'auto' }} />}
-        {session && nav && (
-          <div className="row" style={{ gap: 10, flexWrap: 'nowrap' }}>
-            <button
-              className="btn-outline"
-              title={`${teacher ? 'Teacher' : 'Student'} · ${session.name} · ${session.classCode}`}
-              onClick={() => {
-                signOut()
-                navigate('/')
-              }}
-            >
-              {session.name} · Switch
-            </button>
-            {teacher ? (
-              <Link className="btn-solid" to="/t/capture">Capture board</Link>
-            ) : (
-              <Link className="btn-solid" to="/discussion/new">Ask a question</Link>
-            )}
-          </div>
-        )}
-      </header>
-      <div className="header-rule" />
-      {session && nav && (
-        <nav className="tabsrow no-print" aria-label="Sections">
-          {teacher ? (
+      <header className="topbar-wrap no-print">
+        <div className="topbar">
+          <Link to={session ? '/archive' : '/'} className="wordmark">
+            {APP_NAME}
+          </Link>
+          {session && nav && (
+            <nav className="tabs-inline" aria-label="Sections">
+              {teacher ? (
+                <>
+                  <NavLink className={() => `tab${inArchive ? ' active' : ''}`} to="/archive">Class archive</NavLink>
+                  <NavLink className={tab} to="/t/capture">Board notes</NavLink>
+                  <NavLink className={tab} to="/t/questions">
+                    Questions {unanswered > 0 && <span className="count">{unanswered}</span>}
+                  </NavLink>
+                </>
+              ) : (
+                <>
+                  <NavLink className={tab} to="/map">Topic map</NavLink>
+                  <NavLink className={() => `tab${inArchive ? ' active' : ''}`} to="/archive">Class archive</NavLink>
+                  <NavLink className={tab} to="/discussion">Discussion</NavLink>
+                </>
+              )}
+            </nav>
+          )}
+          <span style={{ flex: 1 }} />
+          {session && nav && (
             <>
-              <NavLink className={() => `tab${inArchive ? ' active' : ''}`} to="/archive">Class archive</NavLink>
-              <NavLink className={tab} to="/t/capture">Board notes</NavLink>
-              <NavLink className={tab} to="/t/questions">
-                Questions {unanswered > 0 && <span className="count">{unanswered}</span>}
-              </NavLink>
-            </>
-          ) : (
-            <>
-              <NavLink className={tab} to="/map">Topic map</NavLink>
-              <NavLink className={() => `tab${inArchive ? ' active' : ''}`} to="/archive">Class archive</NavLink>
-              <NavLink className={tab} to="/discussion">Discussion</NavLink>
+              <form
+                className="searchbar"
+                role="search"
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  navigate(`/search?q=${encodeURIComponent(q.trim())}`)
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="M20 20l-4-4" strokeLinecap="round" />
+                </svg>
+                <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search" aria-label="Search notes, concepts, questions" />
+              </form>
+              <div className="me">
+                <button className="me-btn" onClick={() => setMenu((v) => !v)} aria-expanded={menu} aria-label={`${session.name}, account menu`}>
+                  {session.name.slice(0, 1).toUpperCase()}
+                </button>
+                {menu && (
+                  <div className="me-menu" onMouseLeave={() => setMenu(false)}>
+                    <div className="me-name">{session.name}</div>
+                    <div className="mono sm">{teacher ? 'Teacher' : 'Student'} · {session.classCode}</div>
+                    <button
+                      className="pill sm"
+                      onClick={() => {
+                        signOut()
+                        navigate('/')
+                      }}
+                    >
+                      Switch user
+                    </button>
+                  </div>
+                )}
+              </div>
+              {teacher ? (
+                <Link className="pill primary" to="/t/capture">Capture board</Link>
+              ) : (
+                <Link className="pill primary" to="/discussion/new">Ask a question</Link>
+              )}
             </>
           )}
-        </nav>
-      )}
+        </div>
+      </header>
       <main className="page">{children}</main>
     </>
   )
