@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { ArtWindow, ConceptBadge } from '../components/Art'
-import { DUOTONES, tone, type ArtKind, type Duotone } from '../lib/content'
+import { APP_NAME, DUOTONES, tone, type ArtKind, type Duotone } from '../lib/content'
 import { Shell } from '../components/ui'
 import { useApp } from '../lib/app'
 import type { Role } from '../lib/types'
@@ -88,45 +88,98 @@ export function Start() {
   )
 }
 
-const STEPS = [
-  { kicker: 'Your class', title: 'Class archive', body: 'Find the worksheets, examples, and board notes from class.', art: 'unit-circle', bg: '#E6E6E6', ink: '#002BFF' },
-  { kicker: 'Choose', title: 'A topic', body: 'Open the lesson you’re working on or catching up on.', art: 'triangles', bg: '#FFF584', ink: '#0966DF' },
-  { kicker: 'Find your', title: 'Next step', body: 'Follow a worked example, try the class worksheet, or ask the class when you’re stuck.', art: 'sine', bg: '#EECED8', ink: '#DD0C00' },
-] as const
+/*
+ * Onboarding: rebuilt 1:1 from Figma "Wire-frame" → V3 / Welcome / 1–3 (nodes 40:66, 40:100, 40:120).
+ * Positions and sizes are the Figma values on a 1120×760 artboard, scaled to fit the window.
+ * Each page uses a different duotone from the Design Research Zine.
+ */
+interface Btn { label: string; to: string; x: number; w: number; solid?: boolean }
+interface Step {
+  line1: string
+  strip: string
+  desc: string
+  bg: string
+  ink: string
+  box: { left: number; top: number; w: number; h: number; rw: number; rot: number }
+  txt: { left: number; top: number; w: number; h: number }
+  buttons: Btn[]
+}
+
+const STEPS: Step[] = [
+  {
+    line1: 'YOUR CLASS', strip: 'CLASS ARCHIVE', desc: 'Find the worksheets and examples you used in class.',
+    bg: '#E6E6E6', ink: '#002BFF',
+    box: { left: 55.01, top: 330.47, w: 509.97, h: 96.07, rw: 508, rot: -1.48 },
+    txt: { left: 67.01, top: 330.78, w: 485.8, h: 88.45 },
+    buttons: [{ label: 'Skip intro', to: '/archive', x: 853, w: 116 }, { label: 'Next  →', to: '/welcome/2', x: 981, w: 99, solid: true }],
+  },
+  {
+    line1: 'CHOOSE', strip: 'A TOPIC', desc: 'Open the lesson you’re working on or catching up on.',
+    bg: '#EECED8', ink: '#DD0C00',
+    box: { left: 54.09, top: 330.4, w: 269.82, h: 96.2, rw: 266, rot: 2.87 },
+    txt: { left: 66.43, top: 331, w: 245.5, h: 88.01 },
+    buttons: [
+      { label: '← Back', to: '/welcome/1', x: 744, w: 97 },
+      { label: 'Skip intro', to: '/archive', x: 853, w: 116 },
+      { label: 'Next  →', to: '/welcome/3', x: 981, w: 99, solid: true },
+    ],
+  },
+  {
+    line1: 'FIND YOUR', strip: 'NEXT STEP', desc: 'Follow a worked example or try the class worksheet.',
+    bg: '#D8EDF2', ink: '#0B8246',
+    box: { left: 54.73, top: 331.19, w: 356.54, h: 94.62, rw: 354, rot: -1.89 },
+    txt: { left: 66.72, top: 331.59, w: 332.32, h: 86.83 },
+    buttons: [{ label: '← Back', to: '/welcome/2', x: 788, w: 97 }, { label: 'Browse topics  →', to: '/archive', x: 897, w: 183, solid: true }],
+  },
+]
+
+function useFitScale(w: number, h: number) {
+  const calc = () => Math.min(window.innerWidth / w, window.innerHeight / h)
+  const [scale, setScale] = useState(calc)
+  useEffect(() => {
+    const on = () => setScale(calc())
+    window.addEventListener('resize', on)
+    return () => window.removeEventListener('resize', on)
+  })
+  return scale
+}
 
 export function Welcome() {
   const n = Math.min(3, Math.max(1, Number(useParams().step) || 1))
   const s = STEPS[n - 1]
+  const scale = useFitScale(1120, 760)
+  const ink = { color: s.ink }
   return (
-    <Shell nav={false}>
-      <div className="spread" style={{ marginTop: 28 }}>
-        <span className="mono">{n} of 3</span>
-        <Link className="linkbtn" to="/archive">
-          Skip intro
-        </Link>
-      </div>
-      <div className="hero inside" style={{ marginTop: 56, minHeight: 380, padding: '56px 48px' }}>
-        <div className="mono">{s.kicker}</div>
-        <h1 style={{ fontSize: 80 }}>{s.title}</h1>
-        <p style={{ fontSize: 22, maxWidth: 480 }}>{s.body}</p>
-        <ArtWindow kind={s.art} color={{ bg: s.bg, ink: s.ink }} className="hero-art" />
-      </div>
-      <div className="row" style={{ marginTop: 40 }}>
-        {n > 1 && (
-          <Link className="pill" to={`/welcome/${n - 1}`}>
-            ← Back
+    <div className="wel" style={{ background: s.bg }}>
+      <div className="wel-stage" style={{ transform: `translate(-50%, -50%) scale(${scale})` }}>
+        <Link to="/archive" className="wel-brand" style={ink}>{APP_NAME.toUpperCase()}</Link>
+        <p className="wel-meta" style={ink}>WELCOME</p>
+        <p className="wel-count" style={ink}>{n} of 3</p>
+        <p className="wel-line1" style={ink}>{s.line1}</p>
+        <div className="wel-rot" style={{ left: s.box.left, top: s.box.top, width: s.box.w, height: s.box.h }}>
+          <div style={{ width: s.box.rw, height: 83, background: s.ink, transform: `rotate(${s.box.rot}deg)` }} />
+        </div>
+        <div className="wel-rot" style={{ left: s.txt.left, top: s.txt.top, width: s.txt.w, height: s.txt.h }}>
+          <p className="wel-strip" style={{ transform: `rotate(${s.box.rot}deg)` }}>{s.strip}</p>
+        </div>
+        <p className="wel-desc" style={ink}>{s.desc}</p>
+        {/* Zine margin / coordinate plot (exported from Figma) */}
+        <svg className="wel-plot" width="200" height="148" viewBox="0 0 200 148" fill="none" stroke={s.ink} strokeWidth="1.6" aria-hidden="true">
+          <path d="M5 73H194M97 4V142" />
+          <path d="M149 73C149 101.7 125.7 125 97 125C68.3 125 45 101.7 45 73C45 44.3 68.3 21 97 21C125.7 21 149 44.3 149 73Z" />
+          <path d="M97 73L98.5 71.5M134 73V70.9M100.8 69.2L103.8 66.2M106.1 63.9L109.1 60.9M111.3 58.7L114.4 55.6M116.6 53.4L119.7 50.3M121.9 48.1L124.9 45.1M127.2 42.8L130.2 39.8M132.5 37.5L134 36V38.1M134 41.3V45.5M134 48.7V52.9M134 56.1V60.3M134 63.5V67.7" />
+        </svg>
+        {s.buttons.map((b) => (
+          <Link
+            key={b.label}
+            to={b.to}
+            className="wel-btn"
+            style={{ left: b.x, width: b.w, borderColor: s.ink, background: b.solid ? s.ink : '#fff', color: b.solid ? '#fff' : s.ink }}
+          >
+            {b.label}
           </Link>
-        )}
-        {n < 3 ? (
-          <Link className="pill primary" to={`/welcome/${n + 1}`}>
-            Next →
-          </Link>
-        ) : (
-          <Link className="pill primary" to="/archive">
-            Browse topics →
-          </Link>
-        )}
+        ))}
       </div>
-    </Shell>
+    </div>
   )
 }

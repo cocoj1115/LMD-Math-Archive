@@ -335,6 +335,25 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 .entry-form .entry-btn { grid-column: 1 / -1; }
 .entry-btn { width: 100%; justify-content: center; margin-top: 4px; }
 
+/* Onboarding — 1:1 with Figma V3 / Welcome (1120×760 artboard, scaled to fit) */
+.wel { position: fixed; inset: 0; overflow: hidden; }
+.wel-stage { position: absolute; left: 50%; top: 50%; width: 1120px; height: 760px; transform-origin: center; }
+.wel-stage > * { position: absolute; margin: 0; white-space: nowrap; line-height: normal; }
+.wel-brand { left: 40px; top: 22px; font: 700 23px var(--font-sans); text-decoration: none; }
+.wel-meta { left: 878px; top: 27px; font: 400 14px var(--font-mono); }
+.wel-count { left: 56px; top: 221px; font: 400 16px var(--font-sans); }
+.wel-line1 { left: 56px; top: 258px; font: 700 64px var(--font-sans); letter-spacing: -2.56px; }
+.wel-rot { display: flex; align-items: center; justify-content: center; }
+.wel-strip { margin: 0; font: 700 63px var(--font-sans); letter-spacing: -2.52px; color: #fff; white-space: nowrap; line-height: normal; }
+.wel-desc { left: 56px; top: 450px; font: 400 19px var(--font-mono); }
+.wel-plot { left: 854px; top: 88px; }
+.wel-btn {
+  top: 610px; height: 44px; border: 1px solid; border-radius: 22px; padding: 0 15px; display: flex; align-items: center;
+  font: 700 18px var(--font-sans); text-decoration: none; white-space: pre; box-sizing: border-box;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.wel-btn:hover { transform: translate(-3px, -3px); box-shadow: 3px 3px 0 currentColor; }
+
 /* Print */
 @media print {
   body { background: #fff; }
