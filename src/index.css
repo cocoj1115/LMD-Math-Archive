@@ -391,3 +391,20 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 }
 .print-sheet { background: #fff; border: var(--line); border-radius: 6px; padding: 48px 56px; color: #111; max-width: 816px; margin: 24px auto; }
 .print-sheet .write-space { height: 80px; border-bottom: 1px dashed #aaa; margin-bottom: 8px; }
+
+/* ---------- Class archive: this week + previous weeks ---------- */
+.art-window .aw-title { margin-left: 8px; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; color: var(--ink); letter-spacing: .02em; }
+.gcard.thisweek { margin-top: 12px; min-height: 380px; }
+.gcard.thisweek .aw-link { position: absolute; display: block; text-decoration: none; transition: transform .12s ease; }
+.gcard.thisweek .aw-link .art-window { position: static; width: 100%; }
+.gcard.thisweek .aw-link.first { width: 31%; right: 40px; top: -12px; }
+.gcard.thisweek .aw-link.second { width: 28%; right: 34%; top: 120px; transform: rotate(-3deg); }
+.gcard.thisweek .aw-link:hover { transform: translate(-2px, -2px); }
+.gcard.thisweek .aw-link.second:hover { transform: rotate(-3deg) translate(-2px, -2px); }
+.gcard.thisweek .aw-link:hover .art-window { box-shadow: 8px 8px 0 var(--hover-fill); }
+.section-head { margin: 64px 0 20px; }
+.section-head h2 { margin: 0 0 6px; }
+.folders { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.folder.plain { height: 200px; }
+.folder.plain .fweek { position: absolute; left: 20px; top: 46px; font-family: var(--font-mono); font-size: 11.5px; text-transform: uppercase; }
+.folder.plain .fname { top: 74px; font-weight: 400; font-size: 28px; }

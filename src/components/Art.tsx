@@ -266,13 +266,14 @@ export function ConceptBadge({ kind, size = 56, labels = false }: { kind: ArtKin
  * Gumroad-style "app window": white title bar with three dots, concept-coloured body,
  * 2px black outline and a hard shadow. Used for illustrations on cards and page heroes.
  */
-export function ArtWindow({ kind, color, className, style }: { kind: ArtKind; color: Duotone; className?: string; style?: React.CSSProperties }) {
+export function ArtWindow({ kind, color, className, style, title }: { kind: ArtKind; color: Duotone; className?: string; style?: React.CSSProperties; title?: string }) {
   return (
-    <div className={`art-window ${className ?? ''}`} style={{ ...tone(color), ...style }} aria-hidden="true">
+    <div className={`art-window ${className ?? ''}`} style={{ ...tone(color), ...style }} aria-hidden={title ? undefined : true}>
       <div className="aw-bar">
         <i />
         <i />
         <i />
+        {title && <span className="aw-title">{title}</span>}
       </div>
       <div className="aw-body">
         <Art kind={kind} width="100%" />

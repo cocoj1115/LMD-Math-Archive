@@ -118,3 +118,7 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 - Every duotone pair has its ink on its own background at large text sizes (headings, tags). Body text is always black on white or on `--bg`.
 - Concept colour is never the only cue: concept names always appear as text too.
 - Focus states use a 2px brand-blue outline.
+
+## Class archive home
+- **This week** is the only card with illustrations. Each illustration window is one topic: its title bar names the topic and lesson (e.g. "Law of Sines · 5.1"), and clicking it opens that topic. An illustration must show that topic's actual math, never decoration.
+- **Previous weeks** are plain folders with no illustrations, newest first, each labelled with its week.

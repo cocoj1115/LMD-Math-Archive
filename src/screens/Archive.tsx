@@ -15,51 +15,75 @@ function useFolderNotes(folderId: string) {
 
 const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`
 
-/** Gumroad-style card: title top-left, text bottom-left, illustration window on the right */
-function ConceptCard({ id }: { id: string }) {
-  const f = folderById(id)!
-  const notes = useFolderNotes(id)
+/** This week: a wide card whose two illustration windows are the two topics themselves (labelled + clickable). */
+function ThisWeek() {
+  const f = folderById('solving-triangles')!
+  const notes = useFolderNotes(f.id)
   const fresh = notes.some(isNew)
-  const triangles = id === 'solving-triangles'
+  const sines = topicById('law-of-sines')!
+  const cosines = topicById('law-of-cosines')!
   return (
-    <Link to={`/folder/${id}`} className={`gcard${triangles ? ' wide' : ''}`}>
+    <div className="gcard wide thisweek">
       <div>
-        {triangles && <span className="tag solid" style={{ marginBottom: 14, display: 'inline-flex' }}>This week</span>}
+        <span className="tag solid" style={{ marginBottom: 14, display: 'inline-flex' }}>This week</span>
         <h3>{f.name}</h3>
       </div>
-      {triangles ? (
-        <>
-          <ArtWindow kind="sines" color={topicById('law-of-sines')!.color} />
-          <ArtWindow kind="cosines" color={topicById('law-of-cosines')!.color} className="second" />
-        </>
-      ) : (
-        <ArtWindow kind={f.art} color={f.color} />
-      )}
+      <Link to={`/topic/${sines.id}`} className="aw-link second" aria-label={`Open ${sines.name}`}>
+        <ArtWindow kind="sines" color={sines.color} title={`${sines.name} · 5.1`} />
+      </Link>
+      <Link to={`/topic/${cosines.id}`} className="aw-link first" aria-label={`Open ${cosines.name}`}>
+        <ArtWindow kind="cosines" color={cosines.color} title={`${cosines.name} · 5.3`} />
+      </Link>
       <div className="gfoot">
-        {triangles ? 'Law of Sines and Law of Cosines: worked examples, class worksheets, and board notes.' : topicById(f.topics[0])?.summary}
+        Worked examples, class worksheets, and board notes for Lessons 5.1 and 5.3.
         <span className="mono">
-          {triangles ? `2 topics · ${plural(notes.length, 'note')}` : plural(notes.length, 'file')}
-          {fresh && ' · new board notes'}
+          2 topics · {plural(notes.length, 'board note')}
+          {fresh && ' · new'}
         </span>
+        <Link to={`/folder/${f.id}`} className="pill" style={{ marginTop: 18, display: 'inline-flex' }}>Open folder →</Link>
       </div>
+    </div>
+  )
+}
+
+/** Earlier units: plain folders (no illustration), newest first. */
+const PREVIOUS: { id: string; week: string }[] = [
+  { id: 'trig-graphs', week: 'Week of Nov 16' },
+  { id: 'special-angles', week: 'Week of Nov 9' },
+  { id: 'unit-circle', week: 'Week of Nov 2' },
+  { id: 'radians-degrees', week: 'Week of Oct 26' },
+]
+
+function PlainFolder({ id, week }: { id: string; week: string }) {
+  const f = folderById(id)!
+  const notes = useFolderNotes(id)
+  return (
+    <Link to={`/folder/${id}`} className="folder plain" style={tone(f.color)}>
+      <span className="fweek">{week}</span>
+      <span className="fname">{f.name}</span>
+      <span className="fcount">{plural(notes.length, 'file')} →</span>
     </Link>
   )
 }
 
 export function Archive() {
   const { session, error } = useApp()
-  const order = ['solving-triangles', 'radians-degrees', 'unit-circle', 'trig-graphs', 'special-angles']
   return (
     <Shell>
       <h1>Class archive</h1>
       <p className="sub">
-        Everything from class, by topic.
+        Everything from class, by week and topic.
         {session?.role === 'teacher' && ' Board notes you publish appear in their topic.'}
       </p>
       {error && <div className="banner warn">Could not load class data: {error}</div>}
-      <div className="bento">
-        {order.map((id) => (
-          <ConceptCard key={id} id={id} />
+      <ThisWeek />
+      <div className="section-head">
+        <h2>Previous weeks</h2>
+        <p className="muted">Earlier units. Open a folder to review its notes and worksheets.</p>
+      </div>
+      <div className="folders">
+        {PREVIOUS.map((p) => (
+          <PlainFolder key={p.id} {...p} />
         ))}
       </div>
     </Shell>
