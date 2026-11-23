@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Dictate } from '../components/Dictate'
 import { PhotoInput } from '../components/PhotoInput'
-import { NoteLines, Shell, timeAgo } from '../components/ui'
+import { NoteLines, Shell } from '../components/ui'
 import { useApp } from '../lib/app'
 import { TOPICS, tone, topicById } from '../lib/content'
 import { transcribe } from '../lib/ocr'
@@ -24,7 +24,7 @@ export function PostCard({ p, open: openInit = false, teacherTools }: { p: Post;
     <article className="post" id={`post-${p.id}`}>
       <div className="mono sm row" style={{ gap: 8 }}>
         <span className="tag tone" style={tone(t?.color)}>{t?.name ?? p.topic}</span>
-        {p.role === 'teacher' ? 'Teacher' : 'Student'}
+        {p.role === 'teacher' && 'Teacher'}
         {note && (
           <>
             {' '}· about <Link to={`/note/${note.id}`}>{note.title}</Link>
@@ -51,7 +51,7 @@ export function PostCard({ p, open: openInit = false, teacherTools }: { p: Post;
         </div>
       )}
       <div className="mono sm" style={{ marginTop: 10 }}>
-        {p.author_name} · {timeAgo(p.created_at)} {p.voice && '· recorded by voice'} · {mine.length} repl{mine.length === 1 ? 'y' : 'ies'}
+        {p.author_name} · {mine.length} repl{mine.length === 1 ? 'y' : 'ies'}
       </div>
 
       {isAuthor && p.share_status === 'asked' && (
@@ -72,7 +72,6 @@ export function PostCard({ p, open: openInit = false, teacherTools }: { p: Post;
           {mine.map((r) => (
             <div key={r.id} className={`reply${r.role === 'teacher' ? ' teacher' : ''}`}>
               <strong>{r.role === 'teacher' ? `${r.author_name} (teacher)` : r.author_name}</strong>
-              <span className="muted"> · {timeAgo(r.created_at)}</span>
               <div style={{ whiteSpace: 'pre-wrap' }}>{r.body}</div>
             </div>
           ))}
@@ -130,7 +129,7 @@ export function Discussion() {
       <div className="spread" style={{ alignItems: 'flex-end' }}>
         <div>
           <h1>Class discussion</h1>
-          <p className="sub" style={{ marginBottom: 0 }}>{topic ? topicById(topic)?.name : 'All topics'}</p>
+          {topic && <p className="sub" style={{ marginBottom: 0 }}>{topicById(topic)?.name}</p>}
         </div>
         {session?.role === 'student' && (
           <Link className="pill primary" to={`/discussion/new${topic ? `?topic=${topic}` : ''}`}>New post</Link>
@@ -144,7 +143,7 @@ export function Discussion() {
           </button>
         ))}
       </div>
-      {list.length === 0 ? <div className="panel">No posts yet. Be the first to ask.</div> : list.map((p) => <PostCard key={p.id} p={p} open={p.id === focus} />)}
+      {list.length === 0 ? <div className="panel">No posts yet.</div> : list.map((p) => <PostCard key={p.id} p={p} open={p.id === focus} />)}
     </Shell>
   )
 }
@@ -200,7 +199,6 @@ export function NewPost() {
   return (
     <Shell>
       <h1>New post</h1>
-      <p className="sub">Ask about the step that’s confusing you. Classmates and your teacher can reply.</p>
       <div className="grid-2" style={{ gridTemplateColumns: '1.2fr 1fr', alignItems: 'start' }}>
         <div className="card">
           <div className="grid-2" style={{ gap: 16 }}>
@@ -251,13 +249,13 @@ export function NewPost() {
               )}
               {photoLines && photoLines.length > 0 && (
                 <div className="inset" style={{ marginTop: 10 }}>
-                  <div className="mono sm" style={{ marginBottom: 8 }}>Typed version (helps your teacher read it)</div>
+                  <div className="mono sm" style={{ marginBottom: 8 }}>Typed version</div>
                   <NoteLines lines={photoLines} />
                 </div>
               )}
             </>
           ) : (
-            <PhotoInput onPhoto={onPhoto} uploadLabel="Upload photo" cameraLabel="Use camera" dropzone hint="Just the problem you’re stuck on — leave your name out." />
+            <PhotoInput onPhoto={onPhoto} uploadLabel="Upload photo" cameraLabel="Use camera" dropzone hint="Leave your name out." />
           )}
         </div>
       </div>

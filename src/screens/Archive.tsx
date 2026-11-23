@@ -20,8 +20,6 @@ const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`
 /** This week: a wide card whose two illustration windows are the two topics themselves (labelled + clickable). */
 function ThisWeek() {
   const f = folderById('solving-triangles')!
-  const notes = useFolderNotes(f.id)
-  const fresh = notes.some(isNew)
   const sines = topicById('law-of-sines')!
   const cosines = topicById('law-of-cosines')!
   return (
@@ -37,10 +35,6 @@ function ThisWeek() {
         <ArtWindow kind="cosines" color={cosines.color} title={`${cosines.name} · 5.3`} />
       </div>
       <div className="gfoot">
-        <span className="mono">
-          2 topics · {plural(notes.length, 'board note')}
-          {fresh && ' · new'}
-        </span>
         <Link to={`/folder/${f.id}`} className="pill" style={{ marginTop: 18, display: 'inline-flex' }}>Open folder →</Link>
       </div>
     </div>
@@ -248,7 +242,7 @@ export function TopicMap() {
         <div>
           <div style={{ fontSize: 22, letterSpacing: '-0.02em' }}>{t.name}</div>
           <div className="mono sm" style={{ marginTop: 4, color: 'var(--muted)' }}>
-            {t.lesson ?? 'Review'} {q > 0 && `· ${q} question${q > 1 ? 's' : ''}`}
+            {t.lesson} {q > 0 && `${t.lesson ? '· ' : ''}${plural(q, 'question')}`}
           </div>
         </div>
       </Link>
@@ -258,7 +252,6 @@ export function TopicMap() {
   return (
     <Shell>
       <h1>Topic map</h1>
-      <p className="sub">How this unit’s topics connect. Choose one to see its class materials.</p>
       <div className="card stack">
         <div className="mono sm">Earlier in the unit</div>
         <div className="row">
@@ -313,7 +306,7 @@ export function Search() {
       )}
       {ns.length > 0 && (
         <>
-          <h2 style={{ marginTop: 32 }}>Class notes</h2>
+          <h2 style={{ marginTop: 32 }}>Materials</h2>
           {ns.map((n) => (
             <NoteRow key={n.id} n={n} />
           ))}

@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
-import { Back, NoteLines, Shell, timeAgo } from '../components/ui'
+import { Back, NoteLines, Shell } from '../components/ui'
 import { useApp } from '../lib/app'
-import { APP_NAME, folderById, tone, topicById } from '../lib/content'
+import { APP_NAME, folderById, topicById } from '../lib/content'
 
 export function NotePage() {
   const { id = '' } = useParams()
@@ -41,23 +41,18 @@ export function NotePage() {
           <Link className="pill" to={`/print/${n.id}`}>Print preview</Link>
         </div>
       </div>
-      <div className="row" style={{ marginTop: 12 }}>
-        {t && <span className="tag tone" style={tone(t.color)}>{t.name}</span>}
-        {!n.builtIn && <span className="tag">Board photo · {timeAgo(n.created_at)}</span>}
-        {!n.builtIn && <span className="tag solid">Checked by teacher</span>}
-      </div>
 
       <div className={n.photo_url && showPhoto ? 'grid-2' : ''} style={{ marginTop: 22 }}>
         {n.photo_url && showPhoto && (
           <div>
-            <h2>Original board photo</h2>
+            <h2>Original photo</h2>
             <div className="photo-frame">
               <img src={n.photo_url} alt="Original board photo" />
             </div>
           </div>
         )}
         <div>
-          {n.photo_url && showPhoto && <h2>Checked notes</h2>}
+          {n.photo_url && showPhoto && <h2>Notes</h2>}
           <div className="card">
             {n.figure && <img className="note-figure" src={n.figure} alt={`Diagram for ${n.title}`} />}
             <NoteLines lines={n.lines} />
@@ -150,9 +145,6 @@ export function PrintPreview() {
         <div className="write-space" />
         <div className="write-space" />
         <div className="write-space" />
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, marginTop: 18 }}>
-          {APP_NAME} · {n.kind} · version of {date}
-        </div>
       </div>
     </Shell>
   )

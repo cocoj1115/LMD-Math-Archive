@@ -129,3 +129,6 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 - Folder → (topics, if the unit has more than one) → one list of materials, newest first → open a material → Ask the class a question / Print.
 - Class questions sit below the materials, because discussion is not a teacher material.
 - **Board notes always link to their original photo.** In a list they carry an "Original photo" tag (camera icon); on the note page a "See original photo" button opens the photo beside the checked notes. The photos for the built-in mock board notes are stand-ins made by `scripts/board-photos.py`; replace them with real board photos when you have them.
+
+## Microcopy
+- No meta words that don't help the student act: no "checked by teacher", "updated 10 hours ago", "recorded by voice", counts on the this-week card, "Be the first…", or subtitles that restate the heading. Keep labels that help find things (lesson numbers, material kind, topic, "Original photo") and the privacy hint "Leave your name out."

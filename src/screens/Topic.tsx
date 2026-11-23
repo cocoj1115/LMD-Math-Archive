@@ -22,7 +22,7 @@ export function TopicPage() {
         <div className="mono sm">{t.lesson}</div>
         <h1>{t.name}</h1>
         <p className="sub">{t.summary}</p>
-        <ArtWindow kind={t.art} color={t.color} className="hero-art" title={`${t.name} · ${t.lesson?.replace('LESSON ', '')}`} />
+        <ArtWindow kind={t.art} color={t.color} className="hero-art" />
       </div>
       <h2 style={{ marginTop: 36 }}>Class materials</h2>
       {materials.length ? materials.map((m) => <MaterialRow key={m.id} m={m} />) : <div className="panel">Nothing here yet.</div>}
@@ -116,7 +116,7 @@ export function Worksheet() {
       </div>
       <img className="worksheet" src={ws.pages[p - 1]} alt={`${ws.title}, page ${p}`} />
       <div className="row no-print" style={{ justifyContent: 'center', marginTop: 18 }}>
-        <Link className="pill primary" to={`/discussion/new?topic=${id}`}>Stuck? Ask the class a question</Link>
+        <Link className="pill primary" to={`/discussion/new?topic=${id}`}>Ask the class a question</Link>
       </div>
     </Shell>
   )
