@@ -16,18 +16,20 @@ export function TopicPage() {
   const q = posts.filter((p) => p.topic === id)
   return (
     <Shell>
-      <div className="crumb mono sm">
+      <div className="crumb">
         <Link to="/archive">Class archive</Link> &nbsp;/&nbsp; <Link to="/folder/solving-triangles">Solving triangles</Link> &nbsp;/&nbsp; {t.name}
       </div>
       <div className="hero">
-        <div className="mono sm">{t.lesson}</div>
+        <div className="eyebrow" style={{ marginTop: 0 }}>{t.lesson?.replace('LESSON', 'Lesson')}</div>
         <h1>{t.name}</h1>
         <p className="sub">{t.summary}</p>
         <ArtWindow kind={t.art} color={t.color} className="hero-art" />
       </div>
-      <h2 style={{ marginTop: 36 }}>Class materials</h2>
-      {materials.length ? materials.map((m) => <MaterialRow key={m.id} m={m} />) : <div className="panel">Nothing here yet.</div>}
-      <div className="spread" style={{ marginTop: 36 }}>
+      <section className="section">
+        <h2>Class materials</h2>
+        {materials.length ? materials.map((m) => <MaterialRow key={m.id} m={m} />) : <div className="empty">Nothing here yet.</div>}
+      </section>
+      <div className="spread section">
         <h2>Class questions</h2>
         <Link className="pill primary" to={`/discussion/new?topic=${id}`}>Ask the class a question</Link>
       </div>
@@ -39,7 +41,10 @@ export function TopicPage() {
           <span>→</span>
         </Link>
       ) : (
-        <div className="panel">No questions yet.</div>
+        <div className="empty">
+          <strong>No questions yet.</strong>
+          Stuck on a line or a spot in a material? Open it and ask right there.
+        </div>
       )}
     </Shell>
   )

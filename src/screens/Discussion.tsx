@@ -128,16 +128,13 @@ export function Discussion() {
 
   return (
     <Shell>
-      <div className="spread" style={{ alignItems: 'flex-end' }}>
-        <div>
-          <h1>Class discussion</h1>
-          {topic && <p className="sub" style={{ marginBottom: 0 }}>{topicById(topic)?.name}</p>}
-        </div>
+      <div className="page-head">
+        <h1>Class discussion</h1>
         {session?.role === 'student' && (
           <Link className="pill primary" to={`/discussion/new${topic ? `?topic=${topic}` : ''}`}>New post</Link>
         )}
       </div>
-      <div className="row" style={{ margin: '22px 0' }}>
+      <div className="row" style={{ margin: '32px 0 24px' }}>
         <button className={`pill sm${!topic ? ' primary' : ''}`} onClick={() => setParams({})}>All</button>
         {TOPICS.map((t) => (
           <button key={t.id} className={`pill sm chip${topic === t.id ? ' primary' : ''}`} style={tone(t.color)} onClick={() => setParams({ topic: t.id })}>
@@ -145,7 +142,12 @@ export function Discussion() {
           </button>
         ))}
       </div>
-      {list.length === 0 ? <div className="panel">No posts yet.</div> : list.map((p) => <PostCard key={p.id} p={p} open={p.id === focus} />)}
+      {list.length === 0 ? (
+        <div className="empty">
+          <strong>No questions yet.</strong>
+          Ask from any class material, or start a new post.
+        </div>
+      ) : list.map((p) => <PostCard key={p.id} p={p} open={p.id === focus} />)}
     </Shell>
   )
 }
@@ -209,11 +211,11 @@ export function NewPost() {
     <Shell>
       <h1>New post</h1>
       {anchor && <AnchorPreview p={{ id: 'draft', anchor } as Post} />}
-      <div className="grid-2" style={{ gridTemplateColumns: '1.2fr 1fr', alignItems: 'start' }}>
+      <div className="grid-2" style={{ gridTemplateColumns: '1.2fr 1fr', alignItems: 'start', marginTop: 40 }}>
         <div className="card">
           <div className="grid-2" style={{ gap: 16 }}>
             <label className="field">
-              <span>1. Math concept</span>
+              <span>Topic</span>
               <select className="text" value={topic} onChange={(e) => { setTopic(e.target.value); setNoteId('') }}>
                 {TOPICS.map((t) => (
                   <option key={t.id} value={t.id}>{t.name}</option>
@@ -221,7 +223,7 @@ export function NewPost() {
               </select>
             </label>
             <label className="field">
-              <span>Class notes it’s about (optional)</span>
+              <span>Material (optional)</span>
               <select className="text" value={noteId} onChange={(e) => setNoteId(e.target.value)}>
                 <option value="">—</option>
                 {topicNotes.map((n) => (
@@ -231,11 +233,11 @@ export function NewPost() {
             </label>
           </div>
           <label className="field">
-            <span>2. Your question</span>
+            <span>Your question</span>
             <input className="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Why do I get a negative number for c²?" />
           </label>
           <label className="field">
-            <span>What is unclear? Which step?</span>
+            <span>Details (optional)</span>
             <textarea className="text" value={body} onChange={(e) => setBody(e.target.value)} placeholder="I got to step 2 and then…" />
           </label>
           <Dictate
@@ -245,7 +247,7 @@ export function NewPost() {
         </div>
 
         <div className="card">
-          <h2>3. Photo of your work <span className="muted" style={{ fontWeight: 400 }}>(optional)</span></h2>
+          <div className="field-label">Photo of your work (optional)</div>
           {photo ? (
             <>
               <div className="photo-frame">

@@ -22,18 +22,17 @@ function ThisWeek() {
   const cosines = topicById('law-of-cosines')!
   return (
     <div className="gcard wide thisweek">
-      <div>
-        <span className="tag solid" style={{ marginBottom: 14, display: 'inline-flex' }}>This week</span>
+      <div className="tw-text">
+        <span className="tag solid">This week</span>
         <h3>{f.name}</h3>
+        <p>Lessons 5.1 and 5.3</p>
+        <Link to={`/folder/${f.id}`} className="pill">Open folder →</Link>
       </div>
       <div className="aw-link second">
         <ArtWindow kind="sines" color={sines.color} title={`${sines.name} · 5.1`} />
       </div>
       <div className="aw-link first">
         <ArtWindow kind="cosines" color={cosines.color} title={`${cosines.name} · 5.3`} />
-      </div>
-      <div className="gfoot">
-        <Link to={`/folder/${f.id}`} className="pill" style={{ marginTop: 18, display: 'inline-flex' }}>Open folder →</Link>
       </div>
     </div>
   )
@@ -150,17 +149,20 @@ export function useMaterials(topicIds: string[]): Material[] {
 export function MaterialRow({ m, showTopic = false }: { m: Material; showTopic?: boolean }) {
   const t = topicById(m.topic)
   return (
-    <Link to={m.to} className="listcard" style={tone(t?.color)}>
+    <Link to={m.to} className="listcard material" style={tone(t?.color)}>
+      {t && <ConceptBadge kind={t.art} size={56} />}
       <div style={{ flex: 1 }}>
         <div className="title">
           {m.title} {m.starred && <span title="Bookmarked">★</span>}
         </div>
-        {m.extra && <div className="mono sm" style={{ marginTop: 4, color: 'var(--muted)' }}>{m.extra}</div>}
+        <div className="kind">
+          {m.kind}
+          {m.extra && ` · ${m.extra}`}
+        </div>
       </div>
       <div className="row">
-        <span className="tag">{m.kind}</span>
         {showTopic && t && <span className="tag tone">{t.name}</span>}
-        <span>→</span>
+        <span aria-hidden="true">→</span>
       </div>
     </Link>
   )
@@ -187,50 +189,52 @@ export function Folder() {
   const shown = only ? materials.filter((m) => m.topic === only) : materials
   return (
     <Shell>
-      <div className="crumb mono sm">
+      <div className="crumb">
         <Link to="/archive">Class archive</Link> &nbsp;/&nbsp; {f.name}
       </div>
-      <h1 style={{ marginTop: 10 }}>{f.name}</h1>
+      <h1>{f.name}</h1>
       {multi && (
-        <>
-          <h2 style={{ marginTop: 28 }}>Topics</h2>
-          <div className="grid-2">
-            {f.topics.map((tid) => {
-              const t = topicById(tid)!
-              return (
-                <Link key={tid} to={`/topic/${tid}`} className="card topic-card" style={tone(t.color)}>
-                  <div className="mono sm">{t.lesson}</div>
+        <div className="section-first topic-cards">
+          {f.topics.map((tid) => {
+            const t = topicById(tid)!
+            return (
+              <Link key={tid} to={`/topic/${tid}`} className="topic-card2">
+                <div>
+                  <div className="lesson">{t.lesson?.replace('LESSON', 'Lesson')}</div>
                   <h3>{t.name}</h3>
-                  <p>{t.summary}</p>
-                  <span className="pill">Open topic →</span>
-                </Link>
-              )
-            })}
-          </div>
+                </div>
+                <ArtWindow kind={t.art} color={t.color} />
+                <p>{t.summary}</p>
+              </Link>
+            )
+          })}
+        </div>
+      )}
+      <section className={multi ? 'section' : 'section-first'}>
+        {multi && (
           <div className="materials-head">
-          <h2>All materials</h2>
-          <div className="filter-row" role="group" aria-label="Filter by topic">
-            <button type="button" className={`pill sm${only === null ? ' primary' : ''}`} aria-pressed={only === null} onClick={() => setOnly(null)}>
-              All
-            </button>
-            {f.topics.map((tid) => {
-              const t = topicById(tid)!
-              return (
-                <button key={tid} type="button" className={`pill sm chip${only === tid ? ' primary' : ''}`} style={tone(t.color)} aria-pressed={only === tid} onClick={() => setOnly(tid)}>
-                  {t.name}
-                </button>
-              )
-            })}
+            <h2>All materials</h2>
+            <div className="filter-row" role="group" aria-label="Filter by topic">
+              <button type="button" className={`pill sm${only === null ? ' primary' : ''}`} aria-pressed={only === null} onClick={() => setOnly(null)}>
+                All
+              </button>
+              {f.topics.map((tid) => {
+                const t = topicById(tid)!
+                return (
+                  <button key={tid} type="button" className={`pill sm chip${only === tid ? ' primary' : ''}`} style={tone(t.color)} aria-pressed={only === tid} onClick={() => setOnly(tid)}>
+                    {t.name}
+                  </button>
+                )
+              })}
+            </div>
           </div>
-          </div>
-        </>
-      )}
-      {!multi && <div style={{ height: 20 }} />}
-      {shown.length === 0 ? (
-        <div className="panel">Nothing here yet.</div>
-      ) : (
-        shown.map((m) => <MaterialRow key={m.id} m={m} showTopic={multi} />)
-      )}
+        )}
+        {shown.length === 0 ? (
+          <div className="empty">Nothing here yet.</div>
+        ) : (
+          shown.map((m) => <MaterialRow key={m.id} m={m} showTopic={multi && !only} />)
+        )}
+      </section>
     </Shell>
   )
 }

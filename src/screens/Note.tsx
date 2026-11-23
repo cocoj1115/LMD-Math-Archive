@@ -21,13 +21,11 @@ export function NotePage() {
 
   return (
     <Shell>
-      <div className="spread" style={{ alignItems: 'flex-end' }}>
-        <div>
-          <h1>{n.title}</h1>
-          <p className="sub" style={{ marginBottom: 0 }}>
-            <Link to="/archive">Class archive</Link> &nbsp;/&nbsp; {f && <Link to={`/folder/${f.id}`}>{f.name}</Link>} &nbsp;/&nbsp; {t && f && f.topics.length > 1 && (<><Link to={`/topic/${t.id}`}>{t.name}</Link> &nbsp;/&nbsp; </>)}{n.kind}
-          </p>
-        </div>
+      <div className="crumb">
+        <Link to="/archive">Class archive</Link> &nbsp;/&nbsp; {f && <Link to={`/folder/${f.id}`}>{f.name}</Link>} &nbsp;/&nbsp; {t && f && f.topics.length > 1 && (<><Link to={`/topic/${t.id}`}>{t.name}</Link> &nbsp;/&nbsp; </>)}{n.kind}
+      </div>
+      <div className="page-head">
+        <h1 style={{ marginTop: 12 }}>{n.title}</h1>
         <div className="row no-print">
           {n.photo_url && (
             <button className={`pill photo-btn${showPhoto ? ' on' : ''}`} onClick={() => setShowPhoto((v) => !v)} aria-pressed={showPhoto}>
@@ -91,7 +89,7 @@ export function NotePage() {
         </>
       )}
 
-      <div className="spread no-print" style={{ marginTop: 36 }}>
+      <div className="spread no-print section">
         <h2>Questions about these notes</h2>
         {!teacher && (
           <Link className="pill primary" to={`/discussion/new?topic=${n.topic}&note=${n.id}`}>
@@ -109,7 +107,10 @@ export function NotePage() {
           </Link>
         ))
       ) : (
-        <div className="panel no-print">No questions yet.</div>
+        <div className="empty no-print">
+          <strong>No questions yet.</strong>
+          {teacher ? 'Students can ask about any line or spot.' : 'Hover a line and press ?, or click a spot on an image.'}
+        </div>
       )}
     </Shell>
   )

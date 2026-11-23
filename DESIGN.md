@@ -138,3 +138,12 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 - Lines with questions get a dotted underline and a black count bubble; pins stay on the image. Clicking either shows the questions there.
 - Anchored questions are normal posts, so they appear in Class discussion with an "About" strip (the quoted line, or a crop of the image around the pin) that links back to the exact spot.
 - The general "Ask a question" / "Ask the class a question" entry points stay for questions that aren't about one spot.
+
+## Layout rhythm and type (UI pass, Nov 22)
+- Spacing steps: 12 (breadcrumb → title), 40 (title → first block), 64 (between sections). Use `.section` / `.section-first`, not inline margins.
+- Type scale: page title 56px · section 28px · card title 30–44px · body 17px · small 15px. All regular weight.
+- Small labels are sentence case in Inter, never uppercase mono (breadcrumbs, tags, months, lesson numbers). DM Mono stays only inside illustrations.
+- One breadcrumb style everywhere (`.crumb`), above the page title.
+- Material rows carry the topic's concept tile on the left and the kind ("Board notes", "Handout") under the title; a topic chip appears only in lists that mix topics.
+- Empty states are dashed boxes that say what to do next.
+- Concept drawings no longer include the decorative glyph row (⊕ ◐ ⊘ ⊙); it had no meaning.
