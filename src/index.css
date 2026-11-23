@@ -430,3 +430,11 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 .unit-card:hover .unit-shape { filter: drop-shadow(4px 4px 0 var(--ink)); }
 .unit-name { font-size: 30px; line-height: 1.05; letter-spacing: var(--track-tight); }
 .unit-foot { display: flex; align-items: center; justify-content: space-between; font-size: 20px; }
+
+/* Folder / topic pages */
+.crumb { margin-top: 36px; }
+.topic-card { text-decoration: none; display: flex; flex-direction: column; gap: 6px; background: var(--surface); }
+.topic-card h3 { font-size: 30px; margin: 4px 0 0; }
+.topic-card p { margin: 0 0 12px; color: var(--muted); }
+.topic-card .pill { align-self: flex-start; }
+.topic-card:hover { transform: var(--lift); box-shadow: var(--shadow-hover); }

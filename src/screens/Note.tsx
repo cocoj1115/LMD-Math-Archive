@@ -24,7 +24,7 @@ export function NotePage() {
         <div>
           <h1>{n.title}</h1>
           <p className="sub" style={{ marginBottom: 0 }}>
-            <Link to="/archive">Class archive</Link> &nbsp;/&nbsp; {f && <Link to={`/folder/${f.id}`}>{f.name}</Link>} &nbsp;/&nbsp; {n.kind}
+            <Link to="/archive">Class archive</Link> &nbsp;/&nbsp; {f && <Link to={`/folder/${f.id}`}>{f.name}</Link>} &nbsp;/&nbsp; {t && f && f.topics.length > 1 && (<><Link to={`/topic/${t.id}`}>{t.name}</Link> &nbsp;/&nbsp; </>)}{n.kind}
           </p>
         </div>
         <div className="row no-print">

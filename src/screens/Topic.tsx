@@ -3,43 +3,29 @@ import { Back, RichText, Shell, TeX, Triangle } from '../components/ui'
 import { useApp } from '../lib/app'
 import { ArtWindow } from '../components/Art'
 import { EXAMPLES, WORKSHEETS, topicById } from '../lib/content'
-import { NoteRow } from './Archive'
+import { MaterialRow, useMaterials } from './Archive'
 
 export function TopicPage() {
   const { id = '' } = useParams()
-  const { notes, posts } = useApp()
+  const { posts } = useApp()
   const t = topicById(id)
+  const materials = useMaterials([id])
   if (!t) return <Navigate to="/archive" replace />
   if (t.folder !== 'solving-triangles') return <Navigate to={`/folder/${t.folder}`} replace />
-  const ex = EXAMPLES[id]
-  const ws = WORKSHEETS[id]
-  const board = notes.filter((n) => n.topic === id)
   const q = posts.filter((p) => p.topic === id)
   return (
     <Shell>
-      <Back to="/folder/solving-triangles">All topics</Back>
+      <div className="crumb mono sm">
+        <Link to="/archive">Class archive</Link> &nbsp;/&nbsp; <Link to="/folder/solving-triangles">Solving triangles</Link> &nbsp;/&nbsp; {t.name}
+      </div>
       <div className="hero">
-        <div className="mono sm">Solving triangles / {t.lesson}</div>
+        <div className="mono sm">{t.lesson}</div>
         <h1>{t.name}</h1>
         <p className="sub">{t.summary}</p>
-        <ArtWindow kind={t.art} color={t.color} className="hero-art" />
+        <ArtWindow kind={t.art} color={t.color} className="hero-art" title={`${t.name} · ${t.lesson?.replace('LESSON ', '')}`} />
       </div>
-      <div className="grid-2" style={{ marginTop: 32 }}>
-        <Link to={`/example/${id}`} className="card" style={{ textDecoration: 'none' }}>
-          <div className="mono sm">Worked example</div>
-          <h3 style={{ marginTop: 8 }}>{ex.title}</h3>
-          <p>Diagram and a step-by-step example.</p>
-          <span className="pill">Open →</span>
-        </Link>
-        <Link to={`/worksheet/${id}/1`} className="card" style={{ textDecoration: 'none' }}>
-          <div className="mono sm">Class worksheet</div>
-          <h3 style={{ marginTop: 8 }}>{ws.title}</h3>
-          <p>The original two-page handout.</p>
-          <span className="pill">Open →</span>
-        </Link>
-      </div>
-      <h2 style={{ marginTop: 36 }}>Board notes from class</h2>
-      {board.length ? board.map((n) => <NoteRow key={n.id} n={n} />) : <div className="panel">No board notes for this topic yet.</div>}
+      <h2 style={{ marginTop: 36 }}>Class materials</h2>
+      {materials.length ? materials.map((m) => <MaterialRow key={m.id} m={m} />) : <div className="panel">Nothing here yet.</div>}
       <div className="spread" style={{ marginTop: 36 }}>
         <h2>Class questions</h2>
         <Link className="pill primary" to={`/discussion/new?topic=${id}`}>Ask the class a question</Link>

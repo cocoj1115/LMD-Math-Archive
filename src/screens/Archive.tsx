@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { ArtWindow, ConceptBadge } from '../components/Art'
-import { Shell, timeAgo } from '../components/ui'
+import { Shell } from '../components/ui'
 import { useApp } from '../lib/app'
-import { TOPICS, folderById, tone, topicById } from '../lib/content'
+import { TOPICS, WORKSHEETS, folderById, tone, topicById } from '../lib/content'
 import type { Note } from '../lib/types'
 
 const isNew = (n: Note) => !n.builtIn && Date.now() - new Date(n.created_at).getTime() < 3 * 86400_000
@@ -121,72 +121,108 @@ export function Archive() {
   )
 }
 
-export function NoteRow({ n }: { n: Note }) {
-  const { bookmarks } = useApp()
-  const t = topicById(n.topic)
+/** One item in the archive. Every kind of class material (board notes, handouts, slides…) is listed the same way. */
+export interface Material {
+  id: string
+  to: string
+  title: string
+  kind: string
+  topic: string
+  date?: string
+  fresh?: boolean
+  starred?: boolean
+  extra?: string
+}
+
+/** All materials for the given topics: teacher notes + the original class handouts, newest first. */
+export function useMaterials(topicIds: string[]): Material[] {
+  const { notes, bookmarks } = useApp()
+  const fromNotes: Material[] = notes
+    .filter((n) => topicIds.includes(n.topic))
+    .map((n) => ({
+      id: n.id,
+      to: `/note/${n.id}`,
+      title: n.title,
+      kind: n.kind,
+      topic: n.topic,
+      date: n.created_at,
+      fresh: isNew(n),
+      starred: bookmarks.includes(n.id),
+      extra: n.student_work.length ? plural(n.student_work.length, 'classmate example') : undefined,
+    }))
+  const handouts: Material[] = topicIds
+    .filter((id) => WORKSHEETS[id])
+    .map((id) => ({ id: `ws-${id}`, to: `/worksheet/${id}/1`, title: WORKSHEETS[id].title, kind: 'Handout', topic: id, date: '2026-11-19T15:00:00Z' }))
+  return [...fromNotes, ...handouts].sort((x, y) => (y.date ?? '').localeCompare(x.date ?? ''))
+}
+
+export function MaterialRow({ m, showTopic = false }: { m: Material; showTopic?: boolean }) {
+  const t = topicById(m.topic)
   return (
-    <Link to={`/note/${n.id}`} className="listcard" style={tone(t?.color)}>
-      {t && <ConceptBadge kind={t.art} size={52} />}
+    <Link to={m.to} className="listcard" style={tone(t?.color)}>
       <div style={{ flex: 1 }}>
         <div className="title">
-          {n.title} {bookmarks.includes(n.id) && <span title="Bookmarked">★</span>}
+          {m.title} {m.starred && <span title="Bookmarked">★</span>}
         </div>
-        <div className="mono sm" style={{ marginTop: 4, color: 'var(--muted)' }}>
-          {n.kind}
-          {!n.builtIn && ` · ${timeAgo(n.created_at)}`}
-          {n.student_work.length > 0 && ` · ${plural(n.student_work.length, 'classmate example')}`}
-        </div>
+        {m.extra && <div className="mono sm" style={{ marginTop: 4, color: 'var(--muted)' }}>{m.extra}</div>}
       </div>
       <div className="row">
-        {t && <span className="tag tone">{t.name}</span>}
-        {isNew(n) && <span className="tag solid">New</span>}
+        <span className="tag">{m.kind}</span>
+        {showTopic && t && <span className="tag tone">{t.name}</span>}
+        {m.fresh && <span className="tag solid">New</span>}
         <span>→</span>
       </div>
     </Link>
   )
 }
 
+/** Kept for search / other lists: a note shown as a material row. */
+export function NoteRow({ n }: { n: Note }) {
+  const { bookmarks } = useApp()
+  return (
+    <MaterialRow
+      showTopic
+      m={{ id: n.id, to: `/note/${n.id}`, title: n.title, kind: n.kind, topic: n.topic, fresh: isNew(n), starred: bookmarks.includes(n.id) }}
+    />
+  )
+}
+
 export function Folder() {
   const { id = '' } = useParams()
   const f = folderById(id)
-  const notes = useFolderNotes(id)
+  const materials = useMaterials(f?.topics ?? [])
   if (!f) return <Shell><h1>Folder not found</h1></Shell>
-  const triangles = id === 'solving-triangles'
+  const multi = f.topics.length > 1
   return (
     <Shell>
-      <div className="hero">
-        <div className="mono sm">
-          <Link to="/archive">Class archive</Link> &nbsp;/&nbsp; {f.name}
-        </div>
-        <h1>{f.name}</h1>
-        <p className="sub">{triangles ? 'Law of Sines and Law of Cosines — this week’s topics.' : topicById(f.topics[0])?.summary}</p>
-        <ArtWindow kind={f.art} color={f.color} className="hero-art" />
+      <div className="crumb mono sm">
+        <Link to="/archive">Class archive</Link> &nbsp;/&nbsp; {f.name}
       </div>
-      <div style={{ height: 40 }} />
-      {triangles && (
+      <h1 style={{ marginTop: 10 }}>{f.name}</h1>
+      {multi && (
         <>
-          <h2>Topics</h2>
-          {f.topics.map((tid) => {
-            const t = topicById(tid)!
-            return (
-              <Link key={tid} to={`/topic/${tid}`} className="listcard" style={tone(t.color)}>
-                <ConceptBadge kind={t.art} size={64} />
-                <div style={{ flex: 1 }}>
-                  <div className="mono sm" style={{ color: 'var(--muted)' }}>{t.lesson}</div>
-                  <div className="title" style={{ fontSize: 26 }}>{t.name}</div>
-                  <div className="muted">{t.summary}</div>
-                </div>
-                <span className="pill">Open topic →</span>
-              </Link>
-            )
-          })}
-          <h2 style={{ marginTop: 40 }}>Board notes from class</h2>
+          <h2 style={{ marginTop: 28 }}>Topics</h2>
+          <div className="grid-2">
+            {f.topics.map((tid) => {
+              const t = topicById(tid)!
+              return (
+                <Link key={tid} to={`/topic/${tid}`} className="card topic-card" style={tone(t.color)}>
+                  <div className="mono sm">{t.lesson}</div>
+                  <h3>{t.name}</h3>
+                  <p>{t.summary}</p>
+                  <span className="pill">Open topic →</span>
+                </Link>
+              )
+            })}
+          </div>
+          <h2 style={{ marginTop: 40 }}>All materials</h2>
         </>
       )}
-      {notes.length === 0 ? (
-        <div className="panel">No board notes yet. They appear here after the teacher publishes them.</div>
+      {!multi && <div style={{ height: 20 }} />}
+      {materials.length === 0 ? (
+        <div className="panel">Nothing here yet.</div>
       ) : (
-        notes.map((n) => <NoteRow key={n.id} n={n} />)
+        materials.map((m) => <MaterialRow key={m.id} m={m} showTopic={multi} />)
       )}
     </Shell>
   )
