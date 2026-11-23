@@ -209,74 +209,74 @@ export function NewPost() {
 
   return (
     <Shell>
-      <h1>New post</h1>
-      {anchor && <AnchorPreview p={{ id: 'draft', anchor } as Post} />}
-      <div className="grid-2" style={{ gridTemplateColumns: '1.2fr 1fr', alignItems: 'start', marginTop: 40 }}>
-        <div className="card">
-          <div className="grid-2" style={{ gap: 16 }}>
-            <label className="field">
-              <span>Topic</span>
-              <select className="text" value={topic} onChange={(e) => { setTopic(e.target.value); setNoteId('') }}>
-                {TOPICS.map((t) => (
-                  <option key={t.id} value={t.id}>{t.name}</option>
-                ))}
-              </select>
-            </label>
-            <label className="field">
-              <span>Material (optional)</span>
-              <select className="text" value={noteId} onChange={(e) => setNoteId(e.target.value)}>
-                <option value="">—</option>
-                {topicNotes.map((n) => (
-                  <option key={n.id} value={n.id}>{n.title}</option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <label className="field">
-            <span>Your question</span>
-            <input className="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Why do I get a negative number for c²?" />
-          </label>
-          <label className="field">
-            <span>Details (optional)</span>
-            <textarea className="text" value={body} onChange={(e) => setBody(e.target.value)} placeholder="I got to step 2 and then…" />
-          </label>
-          <Dictate
-            onText={(t) => setBody((b) => (b ? `${b} ${t}` : t))}
-            onUsed={() => setVoice(true)}
-          />
-        </div>
-
-        <div className="card">
-          <div className="field-label">Photo of your work (optional)</div>
-          {photo ? (
-            <>
-              <div className="photo-frame">
-                <img src={photo} alt="Your paper attempt" />
-              </div>
-              <div className="row" style={{ marginTop: 10 }}>
-                <button className="pill sm" onClick={() => { setPhoto(null); setPhotoLines(null) }}>Remove photo</button>
-              </div>
-              {reading && (
-                <p className="row"><span className="spinner" /> Reading your work…</p>
-              )}
-              {photoLines && photoLines.length > 0 && (
-                <div className="inset" style={{ marginTop: 10 }}>
-                  <div className="mono sm" style={{ marginBottom: 8 }}>Typed version</div>
-                  <NoteLines lines={photoLines} />
-                </div>
-              )}
-            </>
-          ) : (
-            <PhotoInput onPhoto={onPhoto} uploadLabel="Upload photo" cameraLabel="Use camera" dropzone hint="Leave your name out." />
-          )}
-        </div>
+      <div className="crumb">
+        <Link to="/discussion">Class discussion</Link> &nbsp;/&nbsp; New post
       </div>
-      {err && <div className="banner warn">{err}</div>}
-      <div className="row" style={{ marginTop: 22 }}>
-        <button className="pill" onClick={() => navigate(-1)}>Cancel</button>
-        <button className="pill primary" onClick={submit} disabled={busy}>
-          {busy ? 'Posting…' : 'Post question'}
-        </button>
+      <h1 style={{ marginTop: 12 }}>Ask the class</h1>
+      <div className="composer">
+        {anchor && <AnchorPreview p={{ id: 'draft', anchor } as Post} />}
+        <label className="field">
+          <span>Your question</span>
+          <input className="text big" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Why do I get a negative number for c²?" autoFocus />
+        </label>
+        <label className="field">
+          <span>Where did you get stuck? (optional)</span>
+          <textarea className="text" value={body} onChange={(e) => setBody(e.target.value)} placeholder="I got to step 2 and then…" />
+        </label>
+
+        <div className="composer-attach">
+          <div className="attach-photo">
+            {photo ? (
+              <div className="attached">
+                <img src={photo} alt="Your paper attempt" />
+                <div>
+                  <div className="mono sm">Photo of your work</div>
+                  {reading && <p className="row" style={{ margin: '6px 0 0' }}><span className="spinner" /> Reading your work…</p>}
+                  <button className="linkbtn sm" onClick={() => { setPhoto(null); setPhotoLines(null) }}>Remove</button>
+                </div>
+              </div>
+            ) : (
+              <PhotoInput onPhoto={onPhoto} uploadLabel="Upload photo" cameraLabel="Use camera" dropzone hint="Leave your name out." />
+            )}
+          </div>
+          <div className="attach-voice">
+            <div className="mono sm" style={{ marginBottom: 10 }}>Or say it out loud</div>
+            <Dictate onText={(t) => setBody((b) => (b ? `${b} ${t}` : t))} onUsed={() => setVoice(true)} />
+          </div>
+        </div>
+        {photoLines && photoLines.length > 0 && (
+          <div className="inset" style={{ marginTop: 12 }}>
+            <div className="mono sm" style={{ marginBottom: 8 }}>Typed version</div>
+            <NoteLines lines={photoLines} />
+          </div>
+        )}
+
+        <div className="composer-foot">
+          <label className="field inline">
+            <span>Topic</span>
+            <select className="text" value={topic} onChange={(e) => { setTopic(e.target.value); setNoteId('') }}>
+              {TOPICS.map((t) => (
+                <option key={t.id} value={t.id}>{t.name}</option>
+              ))}
+            </select>
+          </label>
+          <label className="field inline">
+            <span>Material</span>
+            <select className="text" value={noteId} onChange={(e) => setNoteId(e.target.value)}>
+              <option value="">None</option>
+              {topicNotes.map((n) => (
+                <option key={n.id} value={n.id}>{n.title}</option>
+              ))}
+            </select>
+          </label>
+          <div className="row composer-actions">
+            <button className="pill" onClick={() => navigate(-1)}>Cancel</button>
+            <button className="pill primary" onClick={submit} disabled={busy}>
+              {busy ? 'Posting…' : 'Post question'}
+            </button>
+          </div>
+        </div>
+        {err && <div className="banner warn" style={{ marginTop: 12 }}>{err}</div>}
       </div>
     </Shell>
   )
