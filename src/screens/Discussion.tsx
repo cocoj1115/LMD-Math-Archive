@@ -22,7 +22,7 @@ export function PostCard({ p, open: openInit = false, teacherTools }: { p: Post;
   const isAuthor = p.author_id === session?.deviceId
 
   return (
-    <article className="post" id={`post-${p.id}`}>
+    <article className={`post${mine.length ? '' : ' open-q'}`} id={`post-${p.id}`}>
       <div className="mono sm row" style={{ gap: 8 }}>
         <span className="tag tone" style={tone(t?.color)}>{t?.name ?? p.topic}</span>
         {p.role === 'teacher' && 'Teacher'}

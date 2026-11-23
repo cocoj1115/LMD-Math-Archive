@@ -61,7 +61,7 @@ function SpotThread({ posts }: { posts: Post[] }) {
       {posts.map((p) => {
         const n = replies.filter((r) => r.post_id === p.id).length
         return (
-          <Link key={p.id} to={`/discussion?post=${p.id}`} className="spot-q">
+          <Link key={p.id} to={`/discussion?post=${p.id}`} className={`spot-q${n ? '' : ' open-q'}`}>
             <span>{p.title}</span>
             <span className="mono sm">{p.author_name} · {n} repl{n === 1 ? 'y' : 'ies'} →</span>
           </Link>
@@ -73,10 +73,11 @@ function SpotThread({ posts }: { posts: Post[] }) {
 
 /** Note text where every line can be asked about. */
 export function AnnotatableLines({ lines, material, topic, noteId }: { lines: Line[]; material: string; topic: string; noteId?: string | null }) {
-  const { posts, session } = useApp()
+  const { posts, session, replies } = useApp()
   const [params] = useSearchParams()
   const focus = params.get('focus')
   const here = posts.filter((p) => sameSpot(p.anchor, material))
+  const answered = (qs: Post[]) => qs.every((p) => replies.some((r) => r.post_id === p.id))
   const focused = here.find((p) => p.id === focus)
   const [asking, setAsking] = useState<number | null>(null)
   const [open, setOpen] = useState<number | null>(focused && focused.anchor?.kind === 'line' ? focused.anchor.index : null)
@@ -93,7 +94,7 @@ export function AnnotatableLines({ lines, material, topic, noteId }: { lines: Li
               <div className={`note-line ${l.type}`}>{l.type === 'math' ? <TeX tex={l.value} display /> : l.value}</div>
               <div className="ann-tools no-print">
                 {qs.length > 0 && (
-                  <button className="ann-count" onClick={() => { setOpen(open === i ? null : i); setAsking(null) }} aria-label={`${qs.length} question${qs.length > 1 ? 's' : ''} about this line`}>
+                  <button className={`ann-count${answered(qs) ? '' : ' open-q'}`} onClick={() => { setOpen(open === i ? null : i); setAsking(null) }} aria-label={`${qs.length} question${qs.length > 1 ? 's' : ''} about this line`}>
                     {qs.length}
                   </button>
                 )}
@@ -126,7 +127,7 @@ export function AnnotatableLines({ lines, material, topic, noteId }: { lines: Li
 
 /** An image where a click drops a pin and opens a question box. */
 export function PinImage({ src, alt, material, image, topic, noteId, className }: { src: string; alt: string; material: string; image: string; topic: string; noteId?: string | null; className?: string }) {
-  const { posts, session } = useApp()
+  const { posts, session, replies } = useApp()
   const [params] = useSearchParams()
   const focus = params.get('focus')
   const pins = posts.filter((p) => sameSpot(p.anchor, material, image))
@@ -157,7 +158,7 @@ export function PinImage({ src, alt, material, image, topic, noteId, className }
           return (
             <div key={p.id} className="pin-at" style={{ left: `${a.x}%`, top: `${a.y}%` }}>
               <button
-                className={`pin${open === p.id ? ' on' : ''}`}
+                className={`pin${open === p.id ? ' on' : ''}${replies.some((r) => r.post_id === p.id) ? '' : ' open-q'}`}
                 onClick={(e) => { e.stopPropagation(); setOpen(open === p.id ? null : p.id); setDraft(null) }}
                 aria-label={`Question: ${p.title}`}
               >

@@ -103,8 +103,8 @@ img { max-width: 100%; }
 .header-rule { height: 1px; background: var(--ink); }
 .brand { font-weight: 700; font-size: 22px; letter-spacing: var(--track-tight); text-decoration: none; display: inline-flex; align-items: center; gap: 10px; }
 .brand-mark { width: 14px; height: 14px; border-radius: 50%; background: var(--brand); display: inline-block; }
-.mono { font-family: var(--font-sans); font-size: 15px; letter-spacing: 0; }
-.mono.sm { font-size: 14px; }
+.mono { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0; }
+.mono.sm { font-size: 12.5px; }
 .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .spread { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
 .stack > * + * { margin-top: 12px; }
@@ -118,7 +118,7 @@ h2, .h2 { font-size: 28px; font-weight: 400; margin: 0 0 20px; letter-spacing: -
 h3 { font-size: 30px; font-weight: 400; margin: 0 0 10px; letter-spacing: -0.025em; line-height: 1.1; }
 .sub { font-size: 18px; margin: 0 0 32px; color: var(--muted); }
 .sub a { color: var(--ink); }
-.eyebrow { font-size: 15px; color: var(--muted); margin-top: 22px; }
+.eyebrow { font-family: var(--font-mono); font-size: 13px; color: var(--muted); margin-top: 22px; }
 p { line-height: 1.5; }
 .muted { color: var(--muted); }
 .display { font-size: 84px; font-weight: 700; letter-spacing: -0.06em; line-height: 0.9; text-transform: uppercase; }
@@ -164,10 +164,10 @@ a.card:hover, .lift:hover { transform: var(--lift); box-shadow: var(--shadow-hov
 .listcard + .listcard { margin-top: 12px; }
 .listcard:hover { transform: var(--lift); box-shadow: var(--shadow-hover); }
 .listcard .title { font-size: 22px; letter-spacing: -0.02em; }
-.listcard .kind { font-size: 15px; color: var(--muted); margin-top: 4px; }
+.listcard .kind { font-family: var(--font-mono); font-size: 13px; color: var(--muted); margin-top: 6px; }
 
 .tag {
-  display: inline-flex; align-items: center; gap: 6px; font-size: 13px; line-height: 1;
+  display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 12px; line-height: 1;
   border: var(--line); border-radius: var(--radius-pill); padding: 6px 12px; background: var(--surface); white-space: nowrap;
 }
 .tag.solid { background: var(--brand); color: #fff; border-color: var(--brand); }
@@ -201,7 +201,7 @@ a.card:hover, .lift:hover { transform: var(--lift); box-shadow: var(--shadow-hov
 .hero > :not(.hero-art) { max-width: calc(100% - 400px); }
 .hero h1 { margin: 10px 0 12px; max-width: 560px; }
 .hero .sub { max-width: 520px; margin-bottom: 0; }
-.hero .hero-art { position: absolute; right: 40px; top: -12px; width: 330px; } /* overflows slightly */
+.hero .hero-art { position: absolute; right: 40px; top: 36px; width: 330px; } /* inside a folder: stays inside */
 .hero.inside .hero-art { top: 50%; transform: translateY(-50%); width: 320px; } /* onboarding: stays inside */
 
 /* Gumroad cards */
@@ -394,7 +394,7 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 .print-sheet .write-space { height: 80px; border-bottom: 1px dashed #aaa; margin-bottom: 8px; }
 
 /* ---------- Class archive: this week + previous weeks ---------- */
-.art-window .aw-title { margin-left: 8px; font-size: 12px; color: var(--ink); }
+.art-window .aw-title { margin-left: 8px; font-family: var(--font-mono); font-size: 11px; color: var(--ink); }
 .gcard.thisweek { margin-top: 36px; min-height: 380px; }
 .gcard.thisweek .aw-link { position: absolute; display: block; text-decoration: none; transition: transform .12s ease; }
 .gcard.thisweek .aw-link .art-window { position: static; width: 100%; }
@@ -423,7 +423,7 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 .shelf { display: flex; gap: 40px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 6px 8px 14px 0; }
 .shelf::-webkit-scrollbar { display: none; }
 .shelf-group { flex: none; display: flex; flex-direction: column; gap: 12px; scroll-snap-align: start; }
-.shelf-month { font-size: 15px; color: var(--muted); padding-bottom: 10px; border-bottom: var(--line); }
+.shelf-month { font-family: var(--font-mono); font-size: 13px; color: var(--muted); padding-bottom: 10px; border-bottom: var(--line); }
 .shelf-row { display: flex; gap: 20px; }
 .unit-card {
   position: relative; width: 300px; height: 200px; flex: none; display: flex; flex-direction: column; justify-content: space-between;
@@ -438,7 +438,7 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 .unit-foot { display: flex; align-items: center; justify-content: space-between; font-size: 20px; }
 
 /* Folder / topic pages */
-.crumb { margin: 48px 0 0; font-size: 15px; color: var(--muted); }
+.crumb { margin: 48px 0 0; font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
 .crumb a { color: var(--ink); text-decoration: none; border-bottom: 1px solid rgba(0,0,0,.25); }
 .crumb a:hover { border-color: var(--ink); }
 .crumb + h1 { margin-top: 12px; }
@@ -523,9 +523,9 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 }
 .topic-card2:hover { transform: var(--lift); box-shadow: var(--shadow-hover); }
 .topic-card2 h3 { font-size: 34px; margin: 6px 0 0; max-width: 48%; }
-.topic-card2 .lesson { font-size: 15px; color: var(--muted); }
+.topic-card2 .lesson { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
 .topic-card2 p { margin: 0; max-width: 46%; font-size: 17px; line-height: 1.45; }
-.topic-card2 .art-window { position: absolute; right: -12px; top: 28px; width: 50%; }
+.topic-card2 .art-window { position: absolute; right: 28px; top: 28px; width: 46%; }
 
 /* empty states */
 .empty { background: transparent; border: 1px dashed rgba(0,0,0,.35); border-radius: var(--radius-card); padding: 28px; color: var(--muted); }
@@ -534,7 +534,27 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 .gcard.thisweek { justify-content: center; min-height: 360px; }
 .tw-text { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; max-width: 36%; }
 .tw-text h3 { font-size: 44px; margin: 0; max-width: none; }
-.tw-text p { margin: 0 0 10px; font-size: 18px; color: var(--muted); }
+.tw-text p { margin: 0 0 10px; font-family: var(--font-mono); font-size: 14px; color: var(--muted); }
 .gcard.thisweek + section .section-head { margin-top: 72px; }
 
 .field-label { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+
+/* ---------- Zine language ---------- */
+/* Dashed = still open (no reply yet). Solid = answered. */
+.post.open-q { border-style: dashed; }
+.spot-q.open-q { border-style: dashed; }
+.ann-count.open-q { background: var(--surface); color: var(--ink); border-style: dashed; }
+.ann-ask { border-style: dashed; }
+.ann-ask:hover { border-style: solid; }
+.pin.open-q { background: var(--surface); color: var(--ink); border: 2px dashed var(--ink); box-shadow: none; }
+.pin.open-q.on { background: var(--hover-fill); color: #fff; border: 2px solid #fff; }
+.pin.draft { border-style: dashed; }
+.quick-ask { border-style: dashed; box-shadow: none; }
+
+/* Home: margin marks + dashed arrow, like the zine's loose doodles */
+.zine-head { position: relative; }
+.zine-marks { position: absolute; left: 610px; top: 62px; display: flex; gap: 14px; align-items: center; z-index: 2; }
+.zine-arrow { position: absolute; left: 350px; top: 66px; width: 240px; height: 150px; overflow: visible; pointer-events: none; z-index: 2; }
+.zine-arrow path { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-dasharray: 6 6; stroke-linecap: round; }
+.zine-arrow path.tip { stroke-dasharray: none; stroke-linejoin: round; }
+@media (max-width: 900px) { .zine-marks, .zine-arrow { display: none; } }

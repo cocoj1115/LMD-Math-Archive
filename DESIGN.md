@@ -142,8 +142,13 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 ## Layout rhythm and type (UI pass, Nov 22)
 - Spacing steps: 12 (breadcrumb → title), 40 (title → first block), 64 (between sections). Use `.section` / `.section-first`, not inline margins.
 - Type scale: page title 56px · section 28px · card title 30–44px · body 17px · small 15px. All regular weight.
-- Small labels are sentence case in Inter, never uppercase mono (breadcrumbs, tags, months, lesson numbers). DM Mono stays only inside illustrations.
+- Small labels (breadcrumbs, tags, months, lesson numbers, material kind) are DM Mono in sentence case, like the zine's running heads. Never all caps.
 - One breadcrumb style everywhere (`.crumb`), above the page title.
 - Material rows carry the topic's concept tile on the left and the kind ("Board notes", "Handout") under the title; a topic chip appears only in lists that mix topics.
 - Empty states are dashed boxes that say what to do next.
 - Concept drawings no longer include the decorative glyph row (⊕ ◐ ⊘ ⊙); it had no meaning.
+
+## Zine language in the app
+- **Dashed = still open, solid = answered.** A question with no reply has a dashed outline (discussion card, spot list, pin, line count bubble); once someone replies it turns solid. The "?" ask button and the quick-ask box are dashed too.
+- **Loose margin marks** (◎ ✳ and a dashed curved arrow) only on the home page, never boxed.
+- **Inside a folder, illustrations stay inside their frame** (topic cards, topic hero). The slight overflow is only for the home page cards.

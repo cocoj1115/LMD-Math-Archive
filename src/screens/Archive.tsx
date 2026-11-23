@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
-import { ArtWindow, ConceptBadge } from '../components/Art'
+import { ArtWindow, Asterisk, ConceptBadge, Target } from '../components/Art'
 import { Shell } from '../components/ui'
 import { useApp } from '../lib/app'
 import { TOPICS, WORKSHEETS, folderById, tone, topicById } from '../lib/content'
@@ -105,7 +105,18 @@ export function Archive() {
   const { error } = useApp()
   return (
     <Shell>
-      <h1>Class archive</h1>
+      <div className="zine-head">
+        <h1>Class archive</h1>
+        {/* zine margin marks: loose doodles, no frame */}
+        <span className="zine-marks" aria-hidden="true">
+          <Target size={30} />
+          <Asterisk size={28} />
+        </span>
+        <svg className="zine-arrow" viewBox="0 0 240 150" aria-hidden="true">
+          <path d="M232 10 C 140 0, 40 30, 20 132" />
+          <path d="M10 120 L20 136 L31 121" className="tip" />
+        </svg>
+      </div>
       {error && <div className="banner warn">Could not load class data: {error}</div>}
       <ThisWeek />
       <PreviousWeeks />
