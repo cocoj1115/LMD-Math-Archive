@@ -433,7 +433,7 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 }
 .unit-card > * { position: relative; }
 .unit-card .unit-shape { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; transition: filter .12s ease; }
-.unit-card .unit-shape path { fill: var(--tone-bg); stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: miter; }
+.unit-card .unit-shape path { fill: var(--tone-bg); stroke: var(--ink); stroke-width: 1; shape-rendering: geometricPrecision; stroke-linejoin: miter; }
 .unit-card:hover { transform: var(--lift); }
 .unit-card:hover .unit-shape { filter: drop-shadow(4px 4px 0 var(--ink)); }
 .unit-name { font-size: 30px; line-height: 1.05; letter-spacing: var(--track-tight); }
