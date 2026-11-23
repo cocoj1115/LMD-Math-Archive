@@ -19,7 +19,7 @@ export function TopicPage() {
       <div className="crumb">
         <Link to="/archive">Class archive</Link> &nbsp;/&nbsp; <Link to="/folder/solving-triangles">Solving triangles</Link> &nbsp;/&nbsp; {t.name}
       </div>
-      <div className="hero">
+      <div className="hero" style={{ viewTransitionName: `topic-${id}` }}>
         <div className="eyebrow" style={{ marginTop: 0 }}>{t.lesson?.replace('LESSON', 'Lesson')}</div>
         <h1>{t.name}</h1>
         <p className="sub">{t.summary}</p>
@@ -120,7 +120,9 @@ export function Worksheet() {
           )}
         </div>
       </div>
+      <div style={{ viewTransitionName: p === 1 ? `mat-ws-${id}` : undefined }}>
       <PinImage key={p} className="worksheet" src={ws.pages[p - 1]} alt={`${ws.title}, page ${p}`} material={`ws-${id}`} image={`p${p}`} topic={id} />
+      </div>
       <div className="row no-print" style={{ justifyContent: 'center', marginTop: 18 }}>
         <Link className="pill primary" to={`/discussion/new?topic=${id}`}>Ask the class a question</Link>
       </div>

@@ -52,7 +52,7 @@ export function NotePage() {
         )}
         <div>
           {n.photo_url && showPhoto && <h2>Notes</h2>}
-          <div className="card">
+          <div className="card" style={{ viewTransitionName: `mat-${n.id}` }}>
             {n.figure && <PinImage className="note-figure" src={n.figure} alt={`Diagram for ${n.title}`} material={n.id} image="figure" topic={n.topic} noteId={n.id} />}
             <AnnotatableLines lines={n.lines} material={n.id} topic={n.topic} noteId={n.id} />
             {n.diagram && <p className="muted" style={{ fontSize: 15 }}>Diagram on the board: {n.diagram}</p>}

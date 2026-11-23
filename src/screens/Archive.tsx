@@ -162,7 +162,7 @@ export function useMaterials(topicIds: string[]): Material[] {
 export function MaterialRow({ m, showTopic = false }: { m: Material; showTopic?: boolean }) {
   const t = topicById(m.topic)
   return (
-    <Link to={m.to} className="listcard material" style={tone(t?.color)}>
+    <Link to={m.to} className="listcard material" style={{ ...tone(t?.color), viewTransitionName: `mat-${m.id}` }}>
       {m.thumb ? (
         <span className={`thumb-mini kind-${m.kind.toLowerCase().replace(/\s+/g, '-')}`}>
           <img src={m.thumb} alt="" />
@@ -241,7 +241,7 @@ export function Folder() {
           {f.topics.map((tid) => {
             const t = topicById(tid)!
             return (
-              <Link key={tid} to={`/topic/${tid}`} className="topic-card2">
+              <Link key={tid} to={`/topic/${tid}`} className="topic-card2" style={{ viewTransitionName: `topic-${tid}` }}>
                 <div>
                   <div className="lesson">{t.lesson?.replace('LESSON', 'Lesson')}</div>
                   <h3>{t.name}</h3>

@@ -167,10 +167,14 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 - The wordmark "Chalkback" is set in Helvetica Neue Medium (−0.04em), falling back to Helvetica/Arial; everything else stays Inter / DM Mono.
 
 ## Motion
-- Tokens: `--ease-out` cubic-bezier(.2,.8,.2,1) for things that move into place; `--ease-spring` cubic-bezier(.34,1.56,.64,1) for things that pop; 140 / 240 / 420 ms.
-- **Hover**: cards and pills rise with a small spring while the hard shadow grows. **Press**: pushed back flat into the paper (80 ms). Previous-week folders tilt a little on hover.
+- Tokens: `--ease-out` cubic-bezier(.2,.8,.2,1) for everything; 180 / 300 / 480 ms. **No overshoot or bounce anywhere.**
+- **Hover**: cards and pills rise slightly while the hard shadow grows. **Press**: pushed back flat into the paper (120 ms). Previous-week folders tilt a little on hover.
 - **Nav underline** grows from the centre.
-- **One entrance per page**: content rises once, list rows follow in a short cascade; on the home page the two topic windows settle into their tilt and the dashed arrow fades in. No other ambient motion.
-- **Things that open** (quick-ask box, spot thread, pin popover, account menu) grow from where you clicked. Pins drop onto the page; the question-count bubble pops.
-- **Arriving from the discussion** at a line or pin briefly highlights it (yellow flash / blue ring) so the eye finds it.
+- **Page transitions** use the View Transitions API (`src/components/ViewTransitions.tsx` wraps every in-app link):
+  - The nav bar has its own transition name and never moves.
+  - Text never slides on page entry; the page cross-fades (old out 220 ms, new in 320 ms).
+  - **Card expands**: a clicked card grows into the header of the next page and shrinks back on Back. Pairs: folder topic card ↔ topic header (`topic-<id>`), material row ↔ material page body (`mat-<id>`). Inside the morph, old content fades out before the new fades in, so text never doubles up.
+  - List rows fade in one after another; nothing else animates on entry except the home windows settling into their tilt.
+- **Things that open** (quick-ask box, spot thread, pin popover, account menu) fade and grow slightly from where you clicked. Pins drop a few pixels onto the page.
+- **Arriving from the discussion** at a line or pin briefly highlights it (yellow flash / blue ring).
 - `prefers-reduced-motion` turns all of it off.

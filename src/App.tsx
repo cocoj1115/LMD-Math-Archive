@@ -1,6 +1,7 @@
 import { lazy, Suspense, type ReactNode } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppProvider, useApp } from './lib/app'
+import { ViewTransitions } from './components/ViewTransitions'
 import type { Role } from './lib/types'
 import { Archive, Folder, Search, TopicMap } from './screens/Archive'
 import { Discussion, NewPost } from './screens/Discussion'
@@ -41,6 +42,7 @@ export default function App() {
   return (
     <AppProvider>
       <BrowserRouter>
+        <ViewTransitions />
         <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<Start />} />
