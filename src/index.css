@@ -826,9 +826,14 @@ section > h2, .section-head, .materials-head, .spread.section, .spread.no-print.
   .gcard.thisweek { min-height: 0; padding: 24px 20px; display: block; }
   .tw-text { max-width: none; }
   .tw-text h3 { font-size: 34px; }
-  .gcard.thisweek .aw-link { position: relative; display: inline-block; vertical-align: top; width: calc(50% - 8px) !important; right: auto !important; top: auto !important; margin-top: 20px; }
-  .gcard.thisweek .aw-link.first { margin-right: 12px; }
-  .gcard.thisweek .aw-link.second { transform: rotate(-2deg); }
+  /* the two topic windows as a small fanned stack of papers under the text */
+  .gcard.thisweek { padding-bottom: 268px; }
+  .gcard.thisweek .aw-link { position: absolute; width: 64% !important; top: auto !important; }
+  /* Law of Sines (5.1) in front, lower left; Law of Cosines behind it, higher right, title bar still visible */
+  .gcard.thisweek .aw-link.second { left: 16px; right: auto !important; bottom: 16px; transform: rotate(-3deg); z-index: 2; }
+  .gcard.thisweek .aw-link.first { right: 16px !important; left: auto; bottom: 66px; transform: rotate(4deg); z-index: 1; }
+  @keyframes settle-a { from { opacity: 0; transform: translateY(16px) rotate(0deg); } to { opacity: 1; transform: rotate(-3deg); } }
+  @keyframes settle-b { from { opacity: 0; transform: translateY(16px) rotate(0deg); } to { opacity: 1; transform: rotate(4deg); } }
   .gcard.thisweek .gfoot { display: none; }
   .unit-card { width: 250px; height: 170px; padding: 36px 18px 16px; }
   .unit-name { font-size: 24px; }
@@ -876,6 +881,22 @@ section > h2, .section-head, .materials-head, .spread.section, .spread.no-print.
   .tmap-scroll { overflow-x: auto; padding-bottom: 16px; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; }
   .tmap { margin-top: 12px; zoom: .72; } /* a bit smaller so the whole unit is about two screens wide */
   .tmap-node { scroll-snap-align: start; }
+  /* entry: role cards — picture first, then the words at full width */
+  .entry { margin: 28px auto 64px; }
+  .entry-roles { gap: 24px; }
+  .entry-roles .gcard { min-height: 0; padding: 0 0 24px; display: flex; flex-direction: column; overflow: hidden; }
+  .entry-roles .gcard h3 { font-size: 38px; max-width: none; margin: 18px 22px 14px; }
+  .checks { max-width: none; margin: 0 22px; gap: 10px; }
+  .checks li { font-size: 16px; }
+  .scene { position: relative; order: -1; top: auto; right: auto; bottom: auto; width: auto; height: 196px; background: var(--tone-bg, #f6f6f3); border-bottom: var(--line); }
+  .role-block:nth-child(1) .scene { background: #fffbd6; }
+  .role-block:nth-child(2) .scene { background: #eef7f9; }
+  .scene .scene-main { top: 40px; left: 50%; right: auto; width: 62%; transform: translateX(-50%) rotate(-2deg); }
+  .scene .scene-note { top: 14px; left: 18px; right: auto; }
+  .scene .scene-tile { right: 16px; bottom: 14px; transform: rotate(8deg); }
+  .scene .scene-tile svg { width: 54px; height: 54px; }
+  .role-card.selected, .gcard.role.selected { padding: 0 0 24px; }
+
   /* teacher: capture + review stack, actions are full-width thumb targets */
   .teacher-review-grid { grid-template-columns: minmax(0, 1fr) !important; }
   /* while correcting the transcription, the photo stays pinned under the nav (smaller) so the teacher can compare */
