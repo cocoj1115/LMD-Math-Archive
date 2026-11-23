@@ -89,7 +89,7 @@ export function AnnotatableLines({ lines, material, topic, noteId }: { lines: Li
         const qs = here.filter((p) => p.anchor?.kind === 'line' && p.anchor.index === i)
         const active = asking === i || open === i
         return (
-          <div key={i} id={`line-${i}`} className={`ann-line${active ? ' active' : ''}${qs.length ? ' has-q' : ''}`}>
+          <div key={i} id={`line-${i}`} className={`ann-line${active ? ' active' : ''}${qs.length ? ' has-q' : ''}${focused && qs.includes(focused) ? ' arrive' : ''}`}>
             <div className="ann-row">
               <div className={`note-line ${l.type}`}>{l.type === 'math' ? <TeX tex={l.value} display /> : l.value}</div>
               <div className="ann-tools no-print">

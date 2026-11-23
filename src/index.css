@@ -41,6 +41,12 @@
   --radius-input: 4px;
   --shadow-hover: 4px 4px 0 var(--ink);
   --lift: translate(-4px, -4px);
+  /* motion */
+  --ease-out: cubic-bezier(.2, .8, .2, 1);      /* quick start, soft landing */
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1); /* small overshoot, for things that pop */
+  --t-fast: 140ms;
+  --t-med: 240ms;
+  --t-slow: 420ms;
   --page-w: 1160px;
   --gutter: 40px;
 }
@@ -556,7 +562,7 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 .quick-ask { border-style: dashed; box-shadow: none; }
 
 /* Home: margin marks + dashed arrow, like the zine's loose doodles */
-.zine-head { position: relative; }
+.zine-head { position: relative; z-index: 3; }
 .zine-marks { position: absolute; left: 610px; top: 62px; display: flex; gap: 14px; align-items: center; z-index: 2; }
 .zine-arrow { position: absolute; left: 350px; top: 66px; width: 240px; height: 150px; overflow: visible; pointer-events: none; z-index: 2; }
 .zine-arrow path { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-dasharray: 6 6; stroke-linecap: round; }
@@ -669,3 +675,64 @@ section > h2, .section-head, .materials-head, .spread.section, .spread.no-print.
 /* Navigation bar in DM Mono (the wordmark keeps its own face) */
 .topbar .tab, .topbar .searchbar input, .topbar .me-btn, .topbar .me-menu, .topbar .me-menu .pill, .topbar .pill.cta { font-family: var(--font-mono); letter-spacing: -0.02em; }
 .topbar .tab.active, .topbar .me-btn, .topbar .me-name { font-weight: 500; } /* DM Mono ships 400/500 only */
+/* ================= Motion ================= */
+/* 1. Hover lift: springy rise, hard shadow grows with it. Press: pushed back into the paper. */
+.pill, .btn-outline, .btn-solid, .listcard, a.card, .lift, a.gcard, .role-card, .round-btn, .topic-card, .topic-card2, .tmap-node, .unit-card, .folder, .spot-q, .anchor-preview, .me-btn, .ann-ask, .ann-count, .pin {
+  transition: transform var(--t-med) var(--ease-spring), box-shadow var(--t-med) var(--ease-out), background-color var(--t-fast) ease, color var(--t-fast) ease, border-color var(--t-fast) ease;
+}
+.pill:active, .btn-outline:active, .btn-solid:active, .listcard:active, a.card:active, a.gcard:active, .round-btn:active:not(:disabled),
+.topic-card2:active, .tmap-node:active, .unit-card:active, .spot-q:active, .anchor-preview:active, .role-card:active {
+  transform: translate(0, 0) scale(.985); box-shadow: 0 0 0 var(--ink); transition-duration: 80ms;
+}
+.unit-card .unit-shape { transition: filter var(--t-med) var(--ease-out); }
+.unit-card:hover { transform: translate(-3px, -5px) rotate(-1deg); }
+
+/* 2. Nav: the underline grows from the centre instead of blinking on */
+.tabs-inline .tab::after { transform: scaleX(0); transition: transform var(--t-med) var(--ease-out), background-color var(--t-fast) ease; }
+.tabs-inline .tab:hover::after, .tabs-inline .tab.active::after { transform: scaleX(1); }
+
+/* 3. One page entrance: content rises once, list rows follow in a short cascade */
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.page-enter > * { animation: rise var(--t-slow) var(--ease-out) both; }
+.page-enter > *:nth-child(2) { animation-delay: 40ms; }
+.page-enter > *:nth-child(3) { animation-delay: 80ms; }
+.page-enter > *:nth-child(n+4) { animation-delay: 120ms; }
+.page-enter .listcard { animation: rise var(--t-slow) var(--ease-out) both; }
+.page-enter .listcard:nth-child(2) { animation-delay: 160ms; } .page-enter .listcard:nth-child(3) { animation-delay: 200ms; }
+.page-enter .listcard:nth-child(4) { animation-delay: 240ms; } .page-enter .listcard:nth-child(n+5) { animation-delay: 280ms; }
+/* home: the two windows settle into their tilt */
+@keyframes settle-a { from { opacity: 0; transform: translateY(24px) rotate(2deg); } to { opacity: 1; transform: rotate(-3deg); } }
+@keyframes settle-b { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+.page-enter .gcard.thisweek .aw-link.second { animation: settle-a 620ms var(--ease-spring) 160ms both; }
+.page-enter .gcard.thisweek .aw-link.first { animation: settle-b 620ms var(--ease-spring) 60ms both; }
+/* the dashed arrow draws itself */
+@keyframes draw { from { stroke-dashoffset: 240; } to { stroke-dashoffset: 0; } }
+.zine-arrow path:not(.tip) { stroke-dasharray: 6 6; }
+.page-enter .zine-arrow { animation: rise 600ms var(--ease-out) 300ms both; }
+.page-enter .tmap-lines .dash { animation: rise 500ms var(--ease-out) 260ms both; }
+
+/* 4. Things that open: grow from where you clicked */
+@keyframes pop-in { from { opacity: 0; transform: scale(.94) translateY(-6px); } to { opacity: 1; transform: none; } }
+.quick-ask, .spot-thread, .pin-pop, .me-menu { animation: pop-in var(--t-med) var(--ease-spring) both; transform-origin: top left; }
+.pin-pop.left, .me-menu { transform-origin: top right; }
+/* a pin drops onto the page */
+@keyframes pin-drop { 0% { transform: translateY(-18px) scale(.6); opacity: 0; } 70% { transform: translateY(2px) scale(1.06); opacity: 1; } 100% { transform: none; } }
+.pin { animation: pin-drop 360ms var(--ease-spring) both; }
+/* count bubble pops when a question is added */
+@keyframes bubble { 0% { transform: scale(.3); } 70% { transform: scale(1.18); } 100% { transform: scale(1); } }
+.ann-count { animation: bubble 320ms var(--ease-spring) both; }
+/* "?" button eases in on hover */
+.ann-ask { transform: scale(.85); transition: opacity var(--t-fast) ease, transform var(--t-med) var(--ease-spring); }
+.ann-line:hover .ann-ask, .ann-line.active .ann-ask { transform: scale(1); }
+/* original photo slides in beside the notes */
+.photo-frame { animation: rise var(--t-slow) var(--ease-out) both; }
+
+/* 5. Arriving at a spot from the discussion: brief highlight so the eye finds it */
+@keyframes arrive { 0%, 30% { background: #fff584; } 100% { background: transparent; } }
+.ann-line.arrive { animation: arrive 1.6s ease-out 300ms both; }
+.pin.on { animation: pin-drop 360ms var(--ease-spring) both, ring 1.2s ease-out 400ms 2; }
+@keyframes ring { 0% { box-shadow: 0 0 0 0 rgba(0,43,255,.45); } 100% { box-shadow: 0 0 0 14px rgba(0,43,255,0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: 1ms !important; }
+}

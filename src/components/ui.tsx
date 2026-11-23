@@ -125,7 +125,7 @@ export function Shell({ children, nav = true }: { children: ReactNode; nav?: boo
           )}
         </div>
       </header>
-      <main className="page">{children}</main>
+      <main key={loc.pathname} className="page page-enter">{children}</main>
     </>
   )
 }

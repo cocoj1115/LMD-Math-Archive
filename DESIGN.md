@@ -165,3 +165,12 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 - One sticky row on white with a black rule under it: wordmark · section tabs · compact pill search · round initial avatar (opens a small menu with name, class and "Switch user") · black "+ Ask a question" pill.
 - **Where you are vs. what you can do look different**: the current tab is bold text with a black underline; the black filled pill is reserved for the main action (+ Ask a question / + Capture board).
 - The wordmark "Chalkback" is set in Helvetica Neue Medium (−0.04em), falling back to Helvetica/Arial; everything else stays Inter / DM Mono.
+
+## Motion
+- Tokens: `--ease-out` cubic-bezier(.2,.8,.2,1) for things that move into place; `--ease-spring` cubic-bezier(.34,1.56,.64,1) for things that pop; 140 / 240 / 420 ms.
+- **Hover**: cards and pills rise with a small spring while the hard shadow grows. **Press**: pushed back flat into the paper (80 ms). Previous-week folders tilt a little on hover.
+- **Nav underline** grows from the centre.
+- **One entrance per page**: content rises once, list rows follow in a short cascade; on the home page the two topic windows settle into their tilt and the dashed arrow fades in. No other ambient motion.
+- **Things that open** (quick-ask box, spot thread, pin popover, account menu) grow from where you clicked. Pins drop onto the page; the question-count bubble pops.
+- **Arriving from the discussion** at a line or pin briefly highlights it (yellow flash / blue ring) so the eye finds it.
+- `prefers-reduced-motion` turns all of it off.
