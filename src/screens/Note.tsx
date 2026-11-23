@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
+import { AnnotatableLines, PinImage } from '../components/Annotate'
 import { Back, NoteLines, Shell } from '../components/ui'
 import { useApp } from '../lib/app'
 import { APP_NAME, folderById, topicById } from '../lib/content'
@@ -47,15 +48,15 @@ export function NotePage() {
           <div>
             <h2>Original photo</h2>
             <div className="photo-frame">
-              <img src={n.photo_url} alt="Original board photo" />
+              <PinImage src={n.photo_url} alt="Original board photo" material={n.id} image="photo" topic={n.topic} noteId={n.id} />
             </div>
           </div>
         )}
         <div>
           {n.photo_url && showPhoto && <h2>Notes</h2>}
           <div className="card">
-            {n.figure && <img className="note-figure" src={n.figure} alt={`Diagram for ${n.title}`} />}
-            <NoteLines lines={n.lines} />
+            {n.figure && <PinImage className="note-figure" src={n.figure} alt={`Diagram for ${n.title}`} material={n.id} image="figure" topic={n.topic} noteId={n.id} />}
+            <AnnotatableLines lines={n.lines} material={n.id} topic={n.topic} noteId={n.id} />
             {n.diagram && <p className="muted" style={{ fontSize: 15 }}>Diagram on the board: {n.diagram}</p>}
           </div>
         </div>

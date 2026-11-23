@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { AnchorPreview } from '../components/Annotate'
 import { Dictate } from '../components/Dictate'
 import { PhotoInput } from '../components/PhotoInput'
 import { NoteLines, Shell } from '../components/ui'
@@ -25,13 +26,14 @@ export function PostCard({ p, open: openInit = false, teacherTools }: { p: Post;
       <div className="mono sm row" style={{ gap: 8 }}>
         <span className="tag tone" style={tone(t?.color)}>{t?.name ?? p.topic}</span>
         {p.role === 'teacher' && 'Teacher'}
-        {note && (
+        {note && !p.anchor && (
           <>
             {' '}· about <Link to={`/note/${note.id}`}>{note.title}</Link>
           </>
         )}
       </div>
       <h3 style={{ margin: '8px 0 6px' }}>{p.title}</h3>
+      <AnchorPreview p={p} />
       {p.body && <p style={{ margin: '0 0 10px', whiteSpace: 'pre-wrap' }}>{p.body}</p>}
       {p.photo_url && (
         <div className="row" style={{ alignItems: 'flex-start' }}>
@@ -154,6 +156,13 @@ export function NewPost() {
   const [params] = useSearchParams()
   const [topic, setTopic] = useState(params.get('topic') || 'law-of-cosines')
   const [noteId, setNoteId] = useState(params.get('note') || '')
+  const anchor = (() => {
+    try {
+      return params.get('anchor') ? (JSON.parse(params.get('anchor')!) as Post['anchor']) : null
+    } catch {
+      return null
+    }
+  })()
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [voice, setVoice] = useState(false)
@@ -188,7 +197,7 @@ export function NewPost() {
     setErr(null)
     try {
       const photo_url = photo ? await uploadPhoto(photo) : null
-      const id = await addPost({ topic, note_id: noteId || null, title: title.trim(), body: body.trim(), photo_url, photo_lines: photoLines, voice })
+      const id = await addPost({ topic, note_id: noteId || null, title: title.trim(), body: body.trim(), photo_url, photo_lines: photoLines, voice, anchor })
       navigate(`/discussion?post=${id}`)
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e))
@@ -199,6 +208,7 @@ export function NewPost() {
   return (
     <Shell>
       <h1>New post</h1>
+      {anchor && <AnchorPreview p={{ id: 'draft', anchor } as Post} />}
       <div className="grid-2" style={{ gridTemplateColumns: '1.2fr 1fr', alignItems: 'start' }}>
         <div className="card">
           <div className="grid-2" style={{ gap: 16 }}>

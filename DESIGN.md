@@ -128,7 +128,13 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 - The archive holds one kind of thing: **materials**. A material can be board notes, a handout, slides, class notes, or anything else the teacher adds. Its kind is a small label, never a separate section.
 - Folder → (topics, if the unit has more than one) → one list of materials, newest first → open a material → Ask the class a question / Print.
 - Class questions sit below the materials, because discussion is not a teacher material.
-- **Board notes always link to their original photo.** In a list they carry an "Original photo" tag (camera icon); on the note page a "See original photo" button opens the photo beside the checked notes. The photos for the built-in mock board notes are stand-ins made by `scripts/board-photos.py`; replace them with real board photos when you have them.
+- **Board notes always link to their original photo.** On the note page a "See original photo" button opens the photo beside the checked notes. The photos for the built-in mock board notes are stand-ins made by `scripts/board-photos.py`; replace them with real board photos when you have them.
 
 ## Microcopy
 - No meta words that don't help the student act: no "checked by teacher", "updated 10 hours ago", "recorded by voice", counts on the this-week card, "Be the first…", or subtitles that restate the heading. Keep labels that help find things (lesson numbers, material kind, topic, "Original photo") and the privacy hint "Leave your name out."
+
+## Asking questions (student side)
+- **Annotate where you're stuck.** On a note, hovering a line shows a "?" button; on any image (worksheet page, original board photo, worked-example diagram) a click drops a numbered pin. Either opens a small box: type the question and Post, or "Add a photo or voice" to open the full form with the spot kept.
+- Lines with questions get a dotted underline and a black count bubble; pins stay on the image. Clicking either shows the questions there.
+- Anchored questions are normal posts, so they appear in Class discussion with an "About" strip (the quoted line, or a crop of the image around the pin) that links back to the exact spot.
+- The general "Ask a question" / "Ask the class a question" entry points stay for questions that aren't about one spot.

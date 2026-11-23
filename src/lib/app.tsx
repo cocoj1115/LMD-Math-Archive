@@ -36,7 +36,7 @@ interface AppValue {
     diagram?: string
     photo_url?: string
   }): Promise<string>
-  addPost(p: Pick<Post, 'topic' | 'note_id' | 'title' | 'body' | 'photo_url' | 'photo_lines' | 'voice'>): Promise<string>
+  addPost(p: Pick<Post, 'topic' | 'note_id' | 'title' | 'body' | 'photo_url' | 'photo_lines' | 'voice'> & { anchor?: Post['anchor'] }): Promise<string>
   addReply(postId: string, body: string): Promise<void>
   setShareStatus(postId: string, status: Post['share_status']): Promise<void>
   addStudentWork(noteId: string, post: Post, caption: string): Promise<void>

@@ -1,4 +1,5 @@
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import { PinImage } from '../components/Annotate'
 import { Back, RichText, Shell, TeX, Triangle } from '../components/ui'
 import { useApp } from '../lib/app'
 import { ArtWindow } from '../components/Art'
@@ -114,7 +115,7 @@ export function Worksheet() {
           )}
         </div>
       </div>
-      <img className="worksheet" src={ws.pages[p - 1]} alt={`${ws.title}, page ${p}`} />
+      <PinImage key={p} className="worksheet" src={ws.pages[p - 1]} alt={`${ws.title}, page ${p}`} material={`ws-${id}`} image={`p${p}`} topic={id} />
       <div className="row no-print" style={{ justifyContent: 'center', marginTop: 18 }}>
         <Link className="pill primary" to={`/discussion/new?topic=${id}`}>Ask the class a question</Link>
       </div>
