@@ -131,7 +131,7 @@ export function PrintPreview() {
       </div>
       <h1 className="no-print">Print preview</h1>
       <div className="print-sheet">
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: 12 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-ui)', fontSize: 12 }}>
           <span>{APP_NAME.toUpperCase()}</span>
           <span>{t?.name} · {date}</span>
         </div>

@@ -142,7 +142,7 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 ## Layout rhythm and type (UI pass, Nov 22)
 - Spacing steps: 12 (breadcrumb → title), 40 (title → first block), 64 (between sections). Use `.section` / `.section-first`, not inline margins.
 - Type scale: page title 56px · section 28px · card title 30–44px · body 17px · small 15px. All regular weight.
-- Small labels (breadcrumbs, tags, months, lesson numbers, material kind) are DM Mono in sentence case, like the zine's running heads. Never all caps.
+- Interface chrome (nav tabs, pills/buttons, tags, breadcrumbs, small labels like lesson numbers, material kind, months) uses Helvetica Neue (`--font-ui`), sentence case, never all caps. DM Mono stays only inside illustrations and the onboarding copy.
 - One breadcrumb style everywhere (`.crumb`), above the page title.
 - Material rows carry the topic's concept tile on the left and the kind ("Board notes", "Handout") under the title; a topic chip appears only in lists that mix topics.
 - Empty states are dashed boxes that say what to do next.
