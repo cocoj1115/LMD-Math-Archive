@@ -23,7 +23,7 @@ function ThisWeek() {
   return (
     <div className="gcard wide thisweek">
       <div className="tw-text">
-        <span className="tag solid">This week</span>
+        <span className="sticker" aria-label="This week">This<br />week</span>
         <h3>{f.name}</h3>
         <p>Lessons 5.1 and 5.3</p>
         <Link to={`/folder/${f.id}`} className="pill">Open folder →</Link>
@@ -112,9 +112,10 @@ export function Archive() {
           <Target size={30} />
           <Asterisk size={28} />
         </span>
+        {/* hand-drawn arrow with a small loop, like the designer's portfolio */}
         <svg className="zine-arrow" viewBox="0 0 240 150" aria-hidden="true">
-          <path d="M232 10 C 140 0, 40 30, 20 132" />
-          <path d="M10 120 L20 136 L31 121" className="tip" />
+          <path d="M232 14 C 190 4, 150 8, 128 26 C 112 40, 118 58, 134 52 C 150 46, 138 26, 118 32 C 80 44, 40 70, 24 132" />
+          <path d="M12 118 L24 136 L37 121" className="tip" />
         </svg>
       </div>
       {error && <div className="banner warn">Could not load class data: {error}</div>}
