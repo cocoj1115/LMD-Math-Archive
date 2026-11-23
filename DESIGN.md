@@ -128,3 +128,4 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 - The archive holds one kind of thing: **materials**. A material can be board notes, a handout, slides, class notes, or anything else the teacher adds. Its kind is a small label, never a separate section.
 - Folder → (topics, if the unit has more than one) → one list of materials, newest first → open a material → Ask the class a question / Print.
 - Class questions sit below the materials, because discussion is not a teacher material.
+- **Board notes always link to their original photo.** In a list they carry an "Original photo" tag (camera icon); on the note page a "See original photo" button opens the photo beside the checked notes. The photos for the built-in mock board notes are stand-ins made by `scripts/board-photos.py`; replace them with real board photos when you have them.

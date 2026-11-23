@@ -28,6 +28,11 @@ export function NotePage() {
           </p>
         </div>
         <div className="row no-print">
+          {n.photo_url && (
+            <button className={`pill photo-btn${showPhoto ? ' on' : ''}`} onClick={() => setShowPhoto((v) => !v)} aria-pressed={showPhoto}>
+              <CameraIcon /> {showPhoto ? 'Hide original photo' : 'See original photo'}
+            </button>
+          )}
           {!teacher && (
             <button className="pill" onClick={() => toggleBookmark(n.id)} aria-pressed={marked}>
               {marked ? '★ Bookmarked' : '☆ Bookmark'}
@@ -62,11 +67,6 @@ export function NotePage() {
       </div>
 
       <div className="row no-print" style={{ marginTop: 16 }}>
-        {n.photo_url && (
-          <button className="pill sm" onClick={() => setShowPhoto((v) => !v)}>
-            {showPhoto ? 'Hide board photo' : 'Show original board photo'}
-          </button>
-        )}
         {teacher && corrected && (
           <button className="pill sm" onClick={() => setShowOriginal((v) => !v)}>
             {showOriginal ? 'Hide' : 'Show'} AI transcription before your corrections
@@ -155,5 +155,14 @@ export function PrintPreview() {
         </div>
       </div>
     </Shell>
+  )
+}
+
+export function CameraIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 8h4l2-3h6l2 3h4v11H3z" />
+      <circle cx="12" cy="13" r="3.5" />
+    </svg>
   )
 }

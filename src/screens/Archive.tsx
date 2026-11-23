@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { ArtWindow, ConceptBadge } from '../components/Art'
 import { Shell } from '../components/ui'
+import { CameraIcon } from './Note'
 import { useApp } from '../lib/app'
 import { TOPICS, WORKSHEETS, folderById, tone, topicById } from '../lib/content'
 import type { Note } from '../lib/types'
@@ -132,6 +133,7 @@ export interface Material {
   fresh?: boolean
   starred?: boolean
   extra?: string
+  photo?: boolean
 }
 
 /** All materials for the given topics: teacher notes + the original class handouts, newest first. */
@@ -149,6 +151,7 @@ export function useMaterials(topicIds: string[]): Material[] {
       fresh: isNew(n),
       starred: bookmarks.includes(n.id),
       extra: n.student_work.length ? plural(n.student_work.length, 'classmate example') : undefined,
+      photo: !!n.photo_url,
     }))
   const handouts: Material[] = topicIds
     .filter((id) => WORKSHEETS[id])
@@ -167,6 +170,11 @@ export function MaterialRow({ m, showTopic = false }: { m: Material; showTopic?:
         {m.extra && <div className="mono sm" style={{ marginTop: 4, color: 'var(--muted)' }}>{m.extra}</div>}
       </div>
       <div className="row">
+        {m.photo && (
+          <span className="tag photo-tag" title="Has the original board photo">
+            <CameraIcon size={13} /> Original photo
+          </span>
+        )}
         <span className="tag">{m.kind}</span>
         {showTopic && t && <span className="tag tone">{t.name}</span>}
         {m.fresh && <span className="tag solid">New</span>}
@@ -182,7 +190,7 @@ export function NoteRow({ n }: { n: Note }) {
   return (
     <MaterialRow
       showTopic
-      m={{ id: n.id, to: `/note/${n.id}`, title: n.title, kind: n.kind, topic: n.topic, fresh: isNew(n), starred: bookmarks.includes(n.id) }}
+      m={{ id: n.id, to: `/note/${n.id}`, title: n.title, kind: n.kind, topic: n.topic, fresh: isNew(n), starred: bookmarks.includes(n.id), photo: !!n.photo_url }}
     />
   )
 }
