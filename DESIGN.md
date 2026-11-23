@@ -155,6 +155,6 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 - **Material rows show the material itself**: a small thumbnail of the board photo, the worksheet's first page, or the worked-example diagram. Materials with no picture get a thin line drawing of their kind (slides, page). No coloured tiles or hard shadows in lists.
 
 ## Base and type (after the designer's portfolio, Nov 22)
-- Background is pure white (#FFFFFF). Structure comes from 1–1.5px black lines, not grey fills.
+- Background is white graph paper: #FFFFFF with a faint blue 28px grid (rgba(9,102,223,.07)), like a math notebook. Structure comes from 1–1.5px black lines, not grey fills.
 - Headings are Inter 600 with very tight tracking (−0.055em titles, −0.04em sections). Section headings sit on a full-width black rule.
-- "This week" is a rotated circle sticker. The home arrow is a thin hand-drawn arrow with a small loop. These are the only playful marks; keep everything else quiet.
+- "This week" stays a small black tag. The home arrow is the zine's dashed curve. Don't copy the portfolio's signature marks (circle stickers, looped arrows).

@@ -6,7 +6,7 @@
  */
 :root {
   /* base */
-  --bg: #ffffff; /* pure white, like the designer's portfolio; structure comes from black lines */
+  --bg: #ffffff; /* white graph paper (grid on body) — a math notebook */
   --surface: #ffffff;
   --ink: #000000;
   --muted: rgba(0, 0, 0, 0.55);
@@ -47,7 +47,10 @@
 * { box-sizing: border-box; }
 html, body, #root { margin: 0; min-height: 100%; }
 body {
-  background: var(--bg);
+  background-color: var(--bg);
+  /* faint blue graph-paper grid, like a math notebook */
+  background-image: linear-gradient(rgba(9, 102, 223, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(9, 102, 223, 0.07) 1px, transparent 1px);
+  background-size: 28px 28px;
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: 17px;
@@ -555,7 +558,7 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 .zine-head { position: relative; }
 .zine-marks { position: absolute; left: 610px; top: 62px; display: flex; gap: 14px; align-items: center; z-index: 2; }
 .zine-arrow { position: absolute; left: 350px; top: 66px; width: 240px; height: 150px; overflow: visible; pointer-events: none; z-index: 2; }
-.zine-arrow path { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.zine-arrow path { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-dasharray: 6 6; stroke-linecap: round; }
 .zine-arrow path.tip { stroke-dasharray: none; stroke-linejoin: round; }
 @media (max-width: 900px) { .zine-marks, .zine-arrow { display: none; } }
 
@@ -602,3 +605,4 @@ section > h2, .section-head, .materials-head, .spread.section, .spread.no-print.
 }
 .gcard.thisweek { overflow: visible; }
 .ann-line:hover, .ann-line.active { background: #f6f6f3; }
+@media print { body { background-image: none; } }
