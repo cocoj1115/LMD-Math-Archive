@@ -121,4 +121,5 @@ Small decorations: `<Glyphs />` (⊕ ◐ ⊘ ⊙), `<Target />` (concentric circ
 
 ## Class archive home
 - **This week** is the only card with illustrations. Each illustration window is one topic: its title bar names the topic and lesson (e.g. "Law of Sines · 5.1"), and clicking it opens that topic. An illustration must show that topic's actual math, never decoration.
-- **Previous weeks** are plain folders with no illustrations, newest first, each labelled with its week.
+- **Previous weeks** is a horizontal shelf grouped by month (no exact dates). Newest is on the left; scroll right (or use the arrow buttons) to go back in time. Cards are plain white cards with no illustrations.
+- **Navigation**: under the header line there are only section pills: Topic map · Class archive · Discussion for students, and Class archive · Board notes · Questions for teachers. Concepts are reached through the archive, not the nav.

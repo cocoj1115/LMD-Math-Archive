@@ -1,8 +1,7 @@
 import katex from 'katex'
 import { Fragment, useMemo, useState, type ReactNode } from 'react'
 import { Link, NavLink, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { Art } from './Art'
-import { APP_NAME, TOPICS, folderById, tone, topicById } from '../lib/content'
+import { APP_NAME } from '../lib/content'
 import { useApp } from '../lib/app'
 import type { Line } from '../lib/types'
 
@@ -40,38 +39,6 @@ export function NoteLines({ lines, highlightUncertain = false }: { lines: Line[]
 }
 
 /* ---------- Shell: Gumroad-style two-row navigation ---------- */
-function ConceptTab({ topicId, active }: { topicId: string; active: boolean }) {
-  const { notes, posts } = useApp()
-  const t = topicById(topicId)!
-  const f = folderById(t.folder)!
-  const triangles = t.folder === 'solving-triangles'
-  const own = notes.filter((n) => n.topic === topicId)
-  const q = posts.filter((p) => p.topic === topicId).length
-  return (
-    <div className={`ctab${active ? ' active' : ''}`}>
-      <NavLink to={triangles ? `/topic/${topicId}` : `/folder/${f.id}`} className="ctab-link">
-        {t.name}
-      </NavLink>
-      <div className="ctab-menu" style={tone(t.color)}>
-        {triangles ? (
-          <>
-            <Link to={`/topic/${topicId}`}>All {t.name}</Link>
-            <Link to={`/example/${topicId}`}>Worked example</Link>
-            <Link to={`/worksheet/${topicId}/1`}>Class worksheet</Link>
-          </>
-        ) : (
-          <Link to={`/folder/${f.id}`}>All {t.name}</Link>
-        )}
-        {own.slice(0, 4).map((n) => (
-          <Link key={n.id} to={`/note/${n.id}`}>{n.title}</Link>
-        ))}
-        <Link to={`/discussion?topic=${topicId}`}>Questions{q ? ` (${q})` : ''}</Link>
-        <Art kind={t.art} className="ctab-art" />
-      </div>
-    </div>
-  )
-}
-
 export function Shell({ children, nav = true }: { children: ReactNode; nav?: boolean }) {
   const { session, signOut, posts, replies } = useApp()
   const navigate = useNavigate()
@@ -81,11 +48,9 @@ export function Shell({ children, nav = true }: { children: ReactNode; nav?: boo
   const teacher = session?.role === 'teacher'
   const unanswered = posts.filter((p) => p.role === 'student' && !replies.some((r) => r.post_id === p.id && r.role === 'teacher')).length
   const tab = ({ isActive }: { isActive: boolean }) => `tab${isActive ? ' active' : ''}`
-  // which concept is "current" for the active tab state
+  // "Class archive" stays active anywhere inside the archive (folders, topics, notes, search)
   const path = loc.pathname
-  const currentTopic = TOPICS.find(
-    (t) => path.endsWith(`/${t.id}`) || path.includes(`/${t.id}/`) || (t.folder !== 'solving-triangles' && path === `/folder/${t.folder}`),
-  )?.id
+  const inArchive = ['/archive', '/folder/', '/topic/', '/note/', '/search'].some((p) => path === p || path.startsWith(p))
 
   return (
     <>
@@ -130,15 +95,12 @@ export function Shell({ children, nav = true }: { children: ReactNode; nav?: boo
           </div>
         )}
       </header>
+      <div className="header-rule" />
       {session && nav && (
         <nav className="tabsrow no-print" aria-label="Sections">
-          <NavLink className={tab} to="/archive" end>All</NavLink>
-          {TOPICS.map((t) => (
-            <ConceptTab key={t.id} topicId={t.id} active={currentTopic === t.id} />
-          ))}
-          <span className="tabs-sep" />
           {teacher ? (
             <>
+              <NavLink className={() => `tab${inArchive ? ' active' : ''}`} to="/archive">Class archive</NavLink>
               <NavLink className={tab} to="/t/capture">Board notes</NavLink>
               <NavLink className={tab} to="/t/questions">
                 Questions {unanswered > 0 && <span className="count">{unanswered}</span>}
@@ -146,13 +108,13 @@ export function Shell({ children, nav = true }: { children: ReactNode; nav?: boo
             </>
           ) : (
             <>
-              <NavLink className={tab} to="/discussion">Discussion</NavLink>
               <NavLink className={tab} to="/map">Topic map</NavLink>
+              <NavLink className={() => `tab${inArchive ? ' active' : ''}`} to="/archive">Class archive</NavLink>
+              <NavLink className={tab} to="/discussion">Discussion</NavLink>
             </>
           )}
         </nav>
       )}
-      <div className="header-rule" />
       <main className="page">{children}</main>
     </>
   )

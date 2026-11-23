@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { ArtWindow, ConceptBadge } from '../components/Art'
 import { Shell, timeAgo } from '../components/ui'
@@ -35,7 +36,6 @@ function ThisWeek() {
         <ArtWindow kind="cosines" color={cosines.color} title={`${cosines.name} · 5.3`} />
       </Link>
       <div className="gfoot">
-        Worked examples, class worksheets, and board notes for Lessons 5.1 and 5.3.
         <span className="mono">
           2 topics · {plural(notes.length, 'board note')}
           {fresh && ' · new'}
@@ -46,46 +46,76 @@ function ThisWeek() {
   )
 }
 
-/** Earlier units: plain folders (no illustration), newest first. */
-const PREVIOUS: { id: string; week: string }[] = [
-  { id: 'trig-graphs', week: 'Week of Nov 16' },
-  { id: 'special-angles', week: 'Week of Nov 9' },
-  { id: 'unit-circle', week: 'Week of Nov 2' },
-  { id: 'radians-degrees', week: 'Week of Oct 26' },
+/** Earlier units: a horizontal shelf grouped by month (no exact dates), newest on the left — scroll right to go back in time. */
+const PREVIOUS: { month: string; ids: string[] }[] = [
+  { month: 'November', ids: ['trig-graphs', 'special-angles'] },
+  { month: 'October', ids: ['unit-circle', 'radians-degrees'] },
 ]
 
-function PlainFolder({ id, week }: { id: string; week: string }) {
+function UnitCard({ id }: { id: string }) {
   const f = folderById(id)!
   const notes = useFolderNotes(id)
   return (
-    <Link to={`/folder/${id}`} className="folder plain" style={tone(f.color)}>
-      <span className="fweek">{week}</span>
-      <span className="fname">{f.name}</span>
-      <span className="fcount">{plural(notes.length, 'file')} →</span>
+    <Link to={`/folder/${id}`} className="unit-card" style={tone(f.color)}>
+      <span className="unit-name">{f.name}</span>
+      <span className="unit-foot">
+        <span className="tag tone">{plural(notes.length, 'file')}</span>
+        <span aria-hidden="true">→</span>
+      </span>
     </Link>
   )
 }
 
+function PreviousWeeks() {
+  const shelf = useRef<HTMLDivElement>(null)
+  const [edge, setEdge] = useState({ start: true, end: false })
+  const update = () => {
+    const el = shelf.current
+    if (!el) return
+    setEdge({ start: el.scrollLeft < 4, end: el.scrollLeft + el.clientWidth > el.scrollWidth - 4 })
+  }
+  useEffect(() => {
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+  const go = (dir: 1 | -1) => shelf.current?.scrollBy({ left: dir * 360, behavior: 'smooth' })
+  return (
+    <section>
+      <div className="section-head">
+        <div>
+          <h2>Previous weeks</h2>
+          <p className="muted">Scroll back to earlier units.</p>
+        </div>
+        <div className="row" style={{ gap: 8 }}>
+          <button className="round-btn" onClick={() => go(-1)} disabled={edge.start} aria-label="Newer">←</button>
+          <button className="round-btn" onClick={() => go(1)} disabled={edge.end} aria-label="Earlier">→</button>
+        </div>
+      </div>
+      <div className="shelf" ref={shelf} onScroll={update}>
+        {PREVIOUS.map((g) => (
+          <div key={g.month} className="shelf-group">
+            <span className="shelf-month">{g.month}</span>
+            <div className="shelf-row">
+              {g.ids.map((id) => (
+                <UnitCard key={id} id={id} />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 export function Archive() {
-  const { session, error } = useApp()
+  const { error } = useApp()
   return (
     <Shell>
       <h1>Class archive</h1>
-      <p className="sub">
-        Everything from class, by week and topic.
-        {session?.role === 'teacher' && ' Board notes you publish appear in their topic.'}
-      </p>
       {error && <div className="banner warn">Could not load class data: {error}</div>}
       <ThisWeek />
-      <div className="section-head">
-        <h2>Previous weeks</h2>
-        <p className="muted">Earlier units. Open a folder to review its notes and worksheets.</p>
-      </div>
-      <div className="folders">
-        {PREVIOUS.map((p) => (
-          <PlainFolder key={p.id} {...p} />
-        ))}
-      </div>
+      <PreviousWeeks />
     </Shell>
   )
 }
