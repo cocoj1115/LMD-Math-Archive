@@ -111,7 +111,7 @@ const STEPS: Step[] = [
     bg: '#E6E6E6', ink: '#002BFF',
     box: { left: 55.01, top: 330.47, w: 509.97, h: 96.07, rw: 508, rot: -1.48 },
     txt: { left: 67.01, top: 330.78, w: 485.8, h: 88.45 },
-    buttons: [{ label: 'Skip intro', to: '/archive', x: 853, w: 116 }, { label: 'Next  →', to: '/welcome/2', x: 981, w: 99, solid: true }],
+    buttons: [{ label: 'Next  →', to: '/welcome/2', x: 981, w: 99, solid: true }],
   },
   {
     line1: 'CHOOSE', strip: 'A TOPIC', desc: 'Open the lesson you’re working on or catching up on.',
@@ -119,8 +119,7 @@ const STEPS: Step[] = [
     box: { left: 54.09, top: 330.4, w: 269.82, h: 96.2, rw: 266, rot: 2.87 },
     txt: { left: 66.43, top: 331, w: 245.5, h: 88.01 },
     buttons: [
-      { label: '← Back', to: '/welcome/1', x: 744, w: 97 },
-      { label: 'Skip intro', to: '/archive', x: 853, w: 116 },
+      { label: '← Back', to: '/welcome/1', x: 872, w: 97 },
       { label: 'Next  →', to: '/welcome/3', x: 981, w: 99, solid: true },
     ],
   },
@@ -155,12 +154,11 @@ export function Welcome() {
   const { session } = useApp()
   const ink = { color: s.ink }
 
-  // keyboard: → next, ← back, Esc skip
+  // keyboard: → next, ← back
   useEffect(() => {
     const on = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight') navigate(n < 3 ? `/welcome/${n + 1}` : '/archive')
       if (e.key === 'ArrowLeft' && n > 1) navigate(`/welcome/${n - 1}`)
-      if (e.key === 'Escape') navigate('/archive')
     }
     window.addEventListener('keydown', on)
     return () => window.removeEventListener('keydown', on)
@@ -168,10 +166,14 @@ export function Welcome() {
 
   return (
     <div className="wel-page">
-      <header className="wel-top">
+      {/* same top bar + rule as every other page, so the wordmark never moves */}
+      <header className="topbar">
         <span className="wordmark">{APP_NAME}</span>
-        <Link to="/archive" className="linkbtn">Skip intro</Link>
       </header>
+      <div className="header-rule" />
+      <div className="wel-main">
+      {/* greeting sits outside the frame, always in ink */}
+      <p className="wel-brand">Hi{session?.name && session.name !== 'Student' ? `, ${session.name}` : ''}, welcome to {APP_NAME}</p>
       {/* the onboarding page is shown as a big "screen" on the normal page background */}
       <div className="wel-screen">
         <div className="wel-bar">
@@ -186,21 +188,19 @@ export function Welcome() {
           </div>
         </div>
         <div className="wel-body" ref={body} style={{ background: s.bg }}>
-      {/* key={n} replays the entrance animation on every step */}
+      {/* key={n} replays the entrance animation on every step (text only; shapes stay put) */}
       <div key={n} className="wel-stage" style={{ transform: `scale(${scale})` }}>
-        <p className="wel-brand" style={ink}>Hi{session?.name && session.name !== 'Student' ? `, ${session.name}` : ''}</p>
-        <p className="wel-meta" style={ink}>WELCOME</p>
         <p className="wel-count" style={ink}>{n} of 3</p>
         <p className="wel-line1" style={ink}>{s.line1}</p>
-        <div className="wel-rot" style={{ left: s.box.left, top: s.box.top, width: s.box.w, height: s.box.h }}>
+        <div className="wel-rot wel-box" style={{ left: s.box.left, top: s.box.top, width: s.box.w, height: s.box.h }}>
           <div style={{ width: s.box.rw, height: 83, background: s.ink, transform: `rotate(${s.box.rot}deg)` }} />
         </div>
-        <div className="wel-rot" style={{ left: s.txt.left, top: s.txt.top, width: s.txt.w, height: s.txt.h }}>
+        <div className="wel-rot wel-striptxt" style={{ left: s.txt.left, top: s.txt.top, width: s.txt.w, height: s.txt.h }}>
           <p className="wel-strip" style={{ transform: `rotate(${s.box.rot}deg)` }}>{s.strip}</p>
         </div>
         <p className="wel-desc" style={ink}>{s.desc}</p>
         {/* Zine margin / coordinate plot (exported from Figma) */}
-        <svg className="wel-plot draw" width="200" height="148" viewBox="0 0 200 148" fill="none" stroke={s.ink} strokeWidth="1.6" aria-hidden="true">
+        <svg className="wel-plot" width="200" height="148" viewBox="0 0 200 148" fill="none" stroke={s.ink} strokeWidth="1.6" aria-hidden="true">
           <path d="M5 73H194M97 4V142" />
           <path d="M149 73C149 101.7 125.7 125 97 125C68.3 125 45 101.7 45 73C45 44.3 68.3 21 97 21C125.7 21 149 44.3 149 73Z" />
           <path d="M97 73L98.5 71.5M134 73V70.9M100.8 69.2L103.8 66.2M106.1 63.9L109.1 60.9M111.3 58.7L114.4 55.6M116.6 53.4L119.7 50.3M121.9 48.1L124.9 45.1M127.2 42.8L130.2 39.8M132.5 37.5L134 36V38.1M134 41.3V45.5M134 48.7V52.9M134 56.1V60.3M134 63.5V67.7" />
@@ -217,6 +217,7 @@ export function Welcome() {
         ))}
       </div>
         </div>
+      </div>
       </div>
     </div>
   )

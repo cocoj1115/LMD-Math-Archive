@@ -336,14 +336,14 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 .entry-btn { width: 100%; justify-content: center; margin-top: 4px; }
 
 /* Onboarding — 1:1 with Figma V3 / Welcome (1120×760 artboard, scaled to fit) */
-.wel-page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 40px 32px; box-sizing: border-box; }
-.wel-top { width: var(--wel-w); display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.wel-page { min-height: 100vh; display: flex; flex-direction: column; }
+.wel-main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 40px 32px; box-sizing: border-box; }
 .wel-screen {
   /* as big as possible while the whole screen (title bar + 1120×760 page) fits in the window */
   width: var(--wel-w);
   background: var(--surface); border: 2px solid var(--ink); border-radius: 18px; box-shadow: 10px 10px 0 var(--ink); overflow: hidden;
 }
-:root { --wel-w: min(1320px, calc(100vw - 80px), calc((100vh - 64px - 40px - 70px) * 1120 / 760)); }
+:root { --wel-w: min(1080px, calc(100vw - 80px), calc((100vh - 85px - 56px - 40px - 12px - 70px - 60px) * 1120 / 760)); }
 .wel-bar { height: 36px; border-bottom: 2px solid var(--ink); display: flex; align-items: center; gap: 8px; padding: 0 16px; background: var(--surface); }
 .wel-bar i { width: 11px; height: 11px; border-radius: 50%; background: #dd0c00; }
 .wel-bar i:nth-child(2) { background: #ef6801; }
@@ -351,23 +351,18 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 .wel-progress { margin-left: auto; display: flex; gap: 6px; }
 .wel-progress span { width: 54px; height: 8px; border-radius: 4px; border: 1.5px solid var(--ink); background: var(--surface); transition: background .3s ease; }
 
-/* entrance animation on each step */
+/* entrance animation on each step — text only, the coloured box, plot and buttons stay still */
 @keyframes wel-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
-@keyframes wel-stamp { 0% { opacity: 0; transform: scale(1.25); } 60% { opacity: 1; transform: scale(.97); } 100% { transform: scale(1); } }
 @keyframes wel-fade { from { opacity: 0; } to { opacity: 1; } }
-@keyframes wel-draw { from { stroke-dashoffset: 700; } to { stroke-dashoffset: 0; } }
 .wel-stage .wel-count { animation: wel-fade .4s ease both; }
 .wel-stage .wel-line1 { animation: wel-rise .5s cubic-bezier(.2,.8,.2,1) .05s both; }
-.wel-stage .wel-rot { animation: wel-stamp .45s cubic-bezier(.2,.8,.2,1) .3s both; }
-.wel-stage .wel-desc { animation: wel-rise .5s ease .5s both; }
-.wel-stage .wel-btn { animation: wel-fade .4s ease .65s both; }
-.wel-plot.draw path { stroke-dasharray: 700; animation: wel-draw 1.4s ease .2s both; }
-@media (prefers-reduced-motion: reduce) { .wel-stage *, .wel-plot.draw path { animation: none !important; } }
+.wel-stage .wel-striptxt { animation: wel-rise .5s cubic-bezier(.2,.8,.2,1) .2s both; }
+.wel-stage .wel-desc { animation: wel-rise .5s ease .35s both; }
+@media (prefers-reduced-motion: reduce) { .wel-stage * { animation: none !important; } }
 .wel-body { position: relative; width: 100%; aspect-ratio: 1120 / 760; overflow: hidden; }
 .wel-stage { position: absolute; left: 0; top: 0; width: 1120px; height: 760px; transform-origin: top left; }
 .wel-stage > * { position: absolute; margin: 0; white-space: nowrap; line-height: normal; }
-.wel-brand { left: 40px; top: 22px; font: 700 23px var(--font-sans); }
-.wel-meta { left: 878px; top: 27px; font: 400 14px var(--font-mono); }
+.wel-brand { width: var(--wel-w); margin: 0 0 18px; font: 700 44px var(--font-sans); letter-spacing: -0.03em; line-height: 1.1; color: var(--ink); }
 .wel-count { left: 56px; top: 221px; font: 400 16px var(--font-sans); }
 .wel-line1 { left: 56px; top: 258px; font: 700 64px var(--font-sans); letter-spacing: -2.56px; }
 .wel-rot { display: flex; align-items: center; justify-content: center; }
