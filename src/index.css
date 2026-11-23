@@ -336,8 +336,18 @@ video.cam { width: 100%; border-radius: 12px; background: #000; }
 .entry-btn { width: 100%; justify-content: center; margin-top: 4px; }
 
 /* Onboarding — 1:1 with Figma V3 / Welcome (1120×760 artboard, scaled to fit) */
-.wel { position: fixed; inset: 0; overflow: hidden; }
-.wel-stage { position: absolute; left: 50%; top: 50%; width: 1120px; height: 760px; transform-origin: center; }
+.wel-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 32px 40px; box-sizing: border-box; }
+.wel-screen {
+  /* as big as possible while the whole screen (title bar + 1120×760 page) fits in the window */
+  width: min(1320px, calc(100vw - 80px), calc((100vh - 64px - 40px) * 1120 / 760));
+  background: var(--surface); border: 2px solid var(--ink); border-radius: 18px; box-shadow: 10px 10px 0 var(--ink); overflow: hidden;
+}
+.wel-bar { height: 36px; border-bottom: 2px solid var(--ink); display: flex; align-items: center; gap: 8px; padding: 0 16px; background: var(--surface); }
+.wel-bar i { width: 11px; height: 11px; border-radius: 50%; background: #dd0c00; }
+.wel-bar i:nth-child(2) { background: #ef6801; }
+.wel-bar i:nth-child(3) { background: #0b8246; }
+.wel-body { position: relative; width: 100%; aspect-ratio: 1120 / 760; overflow: hidden; }
+.wel-stage { position: absolute; left: 0; top: 0; width: 1120px; height: 760px; transform-origin: top left; }
 .wel-stage > * { position: absolute; margin: 0; white-space: nowrap; line-height: normal; }
 .wel-brand { left: 40px; top: 22px; font: 700 23px var(--font-sans); text-decoration: none; }
 .wel-meta { left: 878px; top: 27px; font: 400 14px var(--font-mono); }

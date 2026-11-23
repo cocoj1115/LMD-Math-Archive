@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { ArtWindow, ConceptBadge } from '../components/Art'
 import { APP_NAME, DUOTONES, tone, type ArtKind, type Duotone } from '../lib/content'
@@ -133,25 +133,36 @@ const STEPS: Step[] = [
   },
 ]
 
-function useFitScale(w: number, h: number) {
-  const calc = () => Math.min(window.innerWidth / w, window.innerHeight / h)
-  const [scale, setScale] = useState(calc)
+/** Scale the 1120px artboard to the width of the "screen" it sits in */
+function useFitWidth(ref: React.RefObject<HTMLDivElement | null>, w: number) {
+  const [scale, setScale] = useState(1)
   useEffect(() => {
-    const on = () => setScale(calc())
-    window.addEventListener('resize', on)
-    return () => window.removeEventListener('resize', on)
-  })
+    const el = ref.current
+    if (!el) return
+    const ro = new ResizeObserver(() => setScale(el.clientWidth / w))
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [ref, w])
   return scale
 }
 
 export function Welcome() {
   const n = Math.min(3, Math.max(1, Number(useParams().step) || 1))
   const s = STEPS[n - 1]
-  const scale = useFitScale(1120, 760)
+  const body = useRef<HTMLDivElement>(null)
+  const scale = useFitWidth(body, 1120)
   const ink = { color: s.ink }
   return (
-    <div className="wel" style={{ background: s.bg }}>
-      <div className="wel-stage" style={{ transform: `translate(-50%, -50%) scale(${scale})` }}>
+    <div className="wel-page">
+      {/* the onboarding page is shown as a big "screen" on the normal page background */}
+      <div className="wel-screen">
+        <div className="wel-bar">
+          <i />
+          <i />
+          <i />
+        </div>
+        <div className="wel-body" ref={body} style={{ background: s.bg }}>
+      <div className="wel-stage" style={{ transform: `scale(${scale})` }}>
         <Link to="/archive" className="wel-brand" style={ink}>{APP_NAME.toUpperCase()}</Link>
         <p className="wel-meta" style={ink}>WELCOME</p>
         <p className="wel-count" style={ink}>{n} of 3</p>
@@ -179,6 +190,8 @@ export function Welcome() {
             {b.label}
           </Link>
         ))}
+      </div>
+        </div>
       </div>
     </div>
   )
