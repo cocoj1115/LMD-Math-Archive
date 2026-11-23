@@ -305,6 +305,9 @@ export function TopicMap() {
   return (
     <Shell>
       <h1>Topic map</h1>
+      <p className="tmap-hint mono sm">Swipe sideways to see the whole map →</p>
+      {/* on phones the map keeps its shape and scrolls sideways */}
+      <div className="tmap-scroll">
       <div className="tmap">
         <span className="tmap-label mono sm">Earlier in the unit</span>
         <div className="tmap-week">
@@ -350,6 +353,7 @@ export function TopicMap() {
             </Link>
           )
         })}
+      </div>
       </div>
     </Shell>
   )
